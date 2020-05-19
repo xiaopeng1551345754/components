@@ -24,6 +24,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/navcate.vue'], resolve);
     }
+  },
+  '/area': {
+    component: function(resolve) {
+      require(['./routers/area.vue'], resolve);
+    }
   }
 });
 
