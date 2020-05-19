@@ -1,144 +1,63 @@
-<!-- —————————————↓SCSS———————分界线————————————————————————— -->
-<style lang="less" scoped>
-.vue-waterfall-easy-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  .vue-waterfall-easy-scroll {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-  }
-  .vue-waterfall-easy {
-    position: absolute;
-    width: 100%; // 移动端生效
-    @keyframes show-card {
-      0% {
-        transform: scale(0.5);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
-    & > .img-box {
-      position: absolute;
-      box-sizing: border-box;
-      width: 50%; // 移动端生效
-    }
-    & > .img-box.default-card-animation {
-      animation: show-card 0.4s;
-      transition: left 0.6s, top 0.6s;
-      transition-delay: 0.1s;
-    }
-    a {
-      display: block;
-    }
-    a.img-inner-box {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      border-radius: 4px;
-    }
-    .__err__ .img-wraper {
-      background-image: url(data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAAAeAAD/4QMraHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjMtYzAxMSA2Ni4xNDU2NjEsIDIwMTIvMDIvMDYtMTQ6NTY6MjcgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk1M0JCM0QwNkVFNDExRThCNTJCQUQ2RDFGQzg0NzIxIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk1M0JCM0NGNkVFNDExRThCNTJCQUQ2RDFGQzg0NzIxIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTYwRUMyMDE2RUUzMTFFOEJCRTU5RTFDODg1ODgwMjYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTYwRUMyMDI2RUUzMTFFOEJCRTU5RTFDODg1ODgwMjYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/7gAOQWRvYmUAZMAAAAAB/9sAhAAQCwsLDAsQDAwQFw8NDxcbFBAQFBsfFxcXFxcfHhcaGhoaFx4eIyUnJSMeLy8zMy8vQEBAQEBAQEBAQEBAQEBAAREPDxETERUSEhUUERQRFBoUFhYUGiYaGhwaGiYwIx4eHh4jMCsuJycnLis1NTAwNTVAQD9AQEBAQEBAQEBAQED/wAARCACRAJEDASIAAhEBAxEB/8QAZQAAAwEBAQAAAAAAAAAAAAAAAAIDAQQHAQEAAAAAAAAAAAAAAAAAAAAAEAACAQMDBAEFAAMBAAAAAAAAAQIRMQMhQRJRYYEycZHBIkITsdFSYhEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9AAAAAMFnNQWt9kAwkssVbV9CTnKb10XQVtLSyAd5ZuzURW27yfhmX9RlDI+wD4Vf/ZVi41SKCdeNI3YEnOXJtOiBZZr/wBGcMi2Ft7AXjli76PoOcqael0Mpyg9NV0A6QEhNTWl90MBoAAAAAAGGiTlxjXfZAZkycdEqyI3q26sOrd92CTm6bbsA1boh1i3lqPGKiqIZAYklYHY0x6tIDY2B3NdjEBgNJ3NACTxbx0E1TozoYsoqSowI2o06MtjyctGqSItODptsw6NX2YHSaJCXKNd90OAAAAYznnLnJvZWK5pUjRXloiNdwCjk0l9S0YqKohcSpGrvLUcDUBLK23x23FWNtVSAuHch/KXQP5PoBdqq77GJ1XfczFVKjVBcuPk6rXqBQCH8n0D+UugFwZD+bV1oNif5OOzQDyipKjI0cW0/qXYmVVjVXjqAkZcHXZ3OhHNXcthlWNHeOjAoAABDLKs6bISlWl1Busm+42Jfm30At2BmI1gRy+3gpD1XwTy+3gpH1QDASyt8uKdFuJRw1iwOjdBKy+TIutGbK3kAAxtJNuwiywdmA7s/glj9/BV04unQli9l8AWDsBjAhSja6D4pUnTZmZV+afUVOkk+4HUBgAc0bD4v2+fsJGw+L9vn7AVQMEDAjl9vBSHqvgnl9vBSHqvgDJwbfJC8JPSlEO5wTo3qMnUDEqNGz0jXoD08BRSXyBB/m6u2xvFPQ1qjoDAVNxqv1ZuJUnT5BGw9/AFQYAwJZf1+fsJKw+X9fn7CSsB0AAAc7VG13GxP82uoZFSbezFWkkwOgGCBgRy15adDZTaioq7QZPfwZQDFFfPc2MnB0vE1AwCc+WituPjaS4kzU6agPkS9hEVeqJJU0AAh7+ACHv4AqAAwI5X+aXQVKrS7g3WTY2ONZp7IC9AAAJ5lWNf+dSV1XqdL1VGc8lxk47bAUxyqqO60GIpuL5LyuxZNNVVtmAmVfkpbbi1RYAI1QVRYAI1QJ1aRYzdAbJ8Y1I1RZggI1SNxL8uW1NCoAYxckqKiu9Bm0lV23ZFtyfJ+F2Ayyr0K4VSNf8ArUnFcpKO250LRUQABoAYLkhzXdWHMA5u26uNGXF9tx8uOusfYlbTcC6aaqrdTTnTlHVfQrHJF6PRsBwAAC5i9vg0xbgaAIAAxtJVduosskVotWiTcpav6ANKXJ9the27sF9NyuLHTWXsA2OHBd3cYDQAAAAAAAwSeNS1syhgHNRxdJfUK10ujoaTuJLCrp0Amm1Ztdhv6z3Sfkxwmu4leqoBT+1P1f8AkZy4469daEaopllRqPRAH9ZOyp5Fbbu2+xmuyGUJvsAtaaWQUcnSP1Kxwq7dR0krALDGo63Y4GgAAAAAAAAAAAAAAAAAshJ7AAGK6B3YABsNx4gADAAAAAAAAAAAAAf/2Q==);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 50% 50%;
-      img {
-        display: none;
-      }
-    }
-    a.img-wraper {
-      & > img {
-        width: 100%;
-        display: block;
-        border: none;
-      }
-    }
-    .over {
-      position: absolute;
-      width: 100%;
-      text-align: center;
-      font-size: 12px;
-      line-height: 1.6;
-      color: #aaa;
-    }
-  }
-
-  & > .loading.first {
-    bottom: 50%;
-    transform: translate(-50%, 50%);
-  }
-  & > .loading {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 6px;
-    z-index: 999;
-    @keyframes ball-beat {
-      50% {
-        opacity: 0.2;
-        transform: scale(0.75);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    &.ball-beat > .dot {
-      vertical-align: bottom;
-      background-color: #4b15ab;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin: 3px;
-      animation-fill-mode: both;
-      display: inline-block;
-      animation: ball-beat 0.7s 0s infinite linear;
-    }
-    &.ball-beat > .dot:nth-child(2n-1) {
-      animation-delay: 0.35s;
-    }
-  }
-}
-</style>
-
-
 <template>
   <div
     class="vue-waterfall-easy-container"
     :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height }"
   >
     <div class="loading ball-beat" v-show="isPreloading_c" :class="{first:isFirstLoad}">
-      <slot name="loading" :isFirstLoad="isFirstLoad">
-        <div class="dot-box">
-          <div class="dot" v-for="n in loadingDotCount" :key="n" :style="loadingDotStyle"></div>
-        </div>  
-      <slot>
+      <div class="dot-box" :isFirstLoad="isFirstLoad">
+        <div class="dot" v-for="n in loadingDotCount" :key="n" :style="loadingDotStyle"></div>
+      </div>
     </div>
     <div class="vue-waterfall-easy-scroll">
-      <slot name="waterfall-head">
-        <div class="vue-waterfall-easy" :style="isMobile? '' :{width: colWidth*cols+'px',left:'50%', marginLeft: -1*colWidth*cols/2 +'px'}">
-          <div class="img-box" v-for="v in imgsArr_c" :key="v.img" :class="[cardAnimationClass, {__err__: v._error}]"
-        :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : colWidth+'px'}">
-            <div class="img-inner-box">
-              <div class="img-wraper" v-if="v[srcKey]" :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}")>
-                <img :src="v[srcKey]" alt="">
-              </div>
-              <slot :value="v"></slot>
+      <div
+        class="vue-waterfall-easy"
+        :style="isMobile? '' :{width: colWidth*cols+'px',left:'50%', marginLeft: -1*colWidth*cols/2 +'px'}"
+      >
+        <div
+          class="img-box"
+          v-for="v in imgsArr_c"
+          track-by="$index"
+          :key="$index"
+          :class="[cardAnimationClass, {__err__: v._error}]"
+          :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : colWidth+'px'}"
+          :data-index="$index"
+        >
+          <div class="img-inner-box static-box" v-if="v.type==='static'" :data-index="$index">
+            <div
+              class="img-wraper"
+              v-if="v[srcKey]"
+              :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}"
+            >
+              <img :src="v[srcKey]" alt />
             </div>
-            <slot name="waterfall-over"></slot>
+            <div class="img-info">
+              <p class="title">{{v.title}}</p>
+              <p class="desc">{{v.exhibition_name}}</p>
+            </div>
+          </div>
+          <div class="img-inner-box live-box" v-if="v.type==='live'" :data-index="$index">
+            <div
+              class="img-wraper"
+              v-if="v[srcKey]"
+              :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}"
+            >
+              <img :src="v[srcKey]" alt />
+            </div>
+            <div class="play-icon">
+              <img src="../images/play.png" alt="">
+            </div>
+            <div class="img-info">
+              <p class="title">{{v.title}}</p>
+              <p class="desc">{{v.exhibition_name}}</p>
+            </div>
           </div>
         </div>
-      </slot>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "vue-waterfall-easy",
   props: {
@@ -231,7 +150,7 @@ export default {
       LoadingTimer: null,
       isFirstLoad: true, // 首次加载
       over: false, // 结束waterfall加载
-      scrollEl:null // 滚动的div
+      scrollEl: null // 滚动的div
     };
   },
   computed: {
@@ -370,7 +289,7 @@ export default {
           // 更新colsHeightArr
           this.colsHeightArr[minIndex] = minHeight + height;
         }
-        
+
         this.imgBoxEls[i].style.left = left + "px";
         this.imgBoxEls[i].style.top = top + "px";
       }
@@ -398,8 +317,8 @@ export default {
         minHeight - this.reachBottomDistance
       ) {
         this.isPreloading = true;
-        // console.log('scrollReachBottom')
-        this.$emit("scrollReachBottom"); // 滚动触底
+        // console.log('scroll-bottom')
+        this.$emit("scroll-bottom"); // 滚动触底
       }
     },
     scroll() {
@@ -429,10 +348,11 @@ export default {
             targetEl = targetEl.parentNode;
           }
           var index = targetEl.getAttribute("data-index");
-          this.$emit("click", e, {
-            index,
-            value: this.imgsArr_c[index]
-          });
+          this.$emit("click", e, this.imgsArr_c[index]);
+          // this.$emit("click", e, {
+          //   index,
+          //   value: this.imgsArr_c[index]
+          // });
         });
     },
     // ==7== 下拉事件
@@ -460,7 +380,9 @@ export default {
     // other
     loadingMiddle() {
       // 对滚动条宽度造成的不居中进行校正
-      var scrollEl = this.scrollEl = this.$el.querySelector(".vue-waterfall-easy-scroll");
+      var scrollEl = (this.scrollEl = this.$el.querySelector(
+        ".vue-waterfall-easy-scroll"
+      ));
       var scrollbarWidth = scrollEl.offsetWidth - scrollEl.clientWidth;
       this.$el.querySelector(".loading").style.marginLeft =
         -scrollbarWidth / 2 + "px";
@@ -477,3 +399,155 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.vue-waterfall-easy-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .vue-waterfall-easy-scroll {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+  .vue-waterfall-easy {
+    position: absolute;
+    width: 100%; // 移动端生效
+    @keyframes show-card {
+      0% {
+        transform: scale(0.5);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    & > .img-box {
+      position: absolute;
+      box-sizing: border-box;
+      width: 50%; // 移动端生效
+    }
+    & > .img-box.default-card-animation {
+      animation: show-card 0.4s;
+      transition: left 0.6s, top 0.6s;
+      transition-delay: 0.1s;
+    }
+    a {
+      display: block;
+    }
+    .img-inner-box {
+      // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      // border-radius: 4px;
+    }
+    .__err__ .img-wraper {
+      background-image: url(data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAAAeAAD/4QMraHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjMtYzAxMSA2Ni4xNDU2NjEsIDIwMTIvMDIvMDYtMTQ6NTY6MjcgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjk1M0JCM0QwNkVFNDExRThCNTJCQUQ2RDFGQzg0NzIxIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjk1M0JCM0NGNkVFNDExRThCNTJCQUQ2RDFGQzg0NzIxIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTYwRUMyMDE2RUUzMTFFOEJCRTU5RTFDODg1ODgwMjYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTYwRUMyMDI2RUUzMTFFOEJCRTU5RTFDODg1ODgwMjYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/7gAOQWRvYmUAZMAAAAAB/9sAhAAQCwsLDAsQDAwQFw8NDxcbFBAQFBsfFxcXFxcfHhcaGhoaFx4eIyUnJSMeLy8zMy8vQEBAQEBAQEBAQEBAQEBAAREPDxETERUSEhUUERQRFBoUFhYUGiYaGhwaGiYwIx4eHh4jMCsuJycnLis1NTAwNTVAQD9AQEBAQEBAQEBAQED/wAARCACRAJEDASIAAhEBAxEB/8QAZQAAAwEBAQAAAAAAAAAAAAAAAAIDAQQHAQEAAAAAAAAAAAAAAAAAAAAAEAACAQMDBAEFAAMBAAAAAAAAAQIRMQMhQRJRYYEycZHBIkITsdFSYhEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9AAAAAMFnNQWt9kAwkssVbV9CTnKb10XQVtLSyAd5ZuzURW27yfhmX9RlDI+wD4Vf/ZVi41SKCdeNI3YEnOXJtOiBZZr/wBGcMi2Ft7AXjli76PoOcqael0Mpyg9NV0A6QEhNTWl90MBoAAAAAAGGiTlxjXfZAZkycdEqyI3q26sOrd92CTm6bbsA1boh1i3lqPGKiqIZAYklYHY0x6tIDY2B3NdjEBgNJ3NACTxbx0E1TozoYsoqSowI2o06MtjyctGqSItODptsw6NX2YHSaJCXKNd90OAAAAYznnLnJvZWK5pUjRXloiNdwCjk0l9S0YqKohcSpGrvLUcDUBLK23x23FWNtVSAuHch/KXQP5PoBdqq77GJ1XfczFVKjVBcuPk6rXqBQCH8n0D+UugFwZD+bV1oNif5OOzQDyipKjI0cW0/qXYmVVjVXjqAkZcHXZ3OhHNXcthlWNHeOjAoAABDLKs6bISlWl1Busm+42Jfm30At2BmI1gRy+3gpD1XwTy+3gpH1QDASyt8uKdFuJRw1iwOjdBKy+TIutGbK3kAAxtJNuwiywdmA7s/glj9/BV04unQli9l8AWDsBjAhSja6D4pUnTZmZV+afUVOkk+4HUBgAc0bD4v2+fsJGw+L9vn7AVQMEDAjl9vBSHqvgnl9vBSHqvgDJwbfJC8JPSlEO5wTo3qMnUDEqNGz0jXoD08BRSXyBB/m6u2xvFPQ1qjoDAVNxqv1ZuJUnT5BGw9/AFQYAwJZf1+fsJKw+X9fn7CSsB0AAAc7VG13GxP82uoZFSbezFWkkwOgGCBgRy15adDZTaioq7QZPfwZQDFFfPc2MnB0vE1AwCc+WituPjaS4kzU6agPkS9hEVeqJJU0AAh7+ACHv4AqAAwI5X+aXQVKrS7g3WTY2ONZp7IC9AAAJ5lWNf+dSV1XqdL1VGc8lxk47bAUxyqqO60GIpuL5LyuxZNNVVtmAmVfkpbbi1RYAI1QVRYAI1QJ1aRYzdAbJ8Y1I1RZggI1SNxL8uW1NCoAYxckqKiu9Bm0lV23ZFtyfJ+F2Ayyr0K4VSNf8ArUnFcpKO250LRUQABoAYLkhzXdWHMA5u26uNGXF9tx8uOusfYlbTcC6aaqrdTTnTlHVfQrHJF6PRsBwAAC5i9vg0xbgaAIAAxtJVduosskVotWiTcpav6ANKXJ9the27sF9NyuLHTWXsA2OHBd3cYDQAAAAAAAwSeNS1syhgHNRxdJfUK10ujoaTuJLCrp0Amm1Ztdhv6z3Sfkxwmu4leqoBT+1P1f8AkZy4469daEaopllRqPRAH9ZOyp5Fbbu2+xmuyGUJvsAtaaWQUcnSP1Kxwq7dR0krALDGo63Y4GgAAAAAAAAAAAAAAAAAshJ7AAGK6B3YABsNx4gADAAAAAAAAAAAAAf/2Q==);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 50% 50%;
+      img {
+        display: none;
+      }
+    }
+    .img-wraper {
+      & > img {
+        width: 100%;
+        display: block;
+        border: none;
+      }
+    }
+    .over {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #aaa;
+    }
+  }
+
+  & > .loading.first {
+    bottom: 50%;
+    transform: translate(-50%, 50%);
+  }
+  & > .loading {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 6px;
+    z-index: 999;
+    @keyframes ball-beat {
+      50% {
+        opacity: 0.2;
+        transform: scale(0.75);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    &.ball-beat > .dot {
+      vertical-align: bottom;
+      background-color: #4b15ab;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin: 3px;
+      animation-fill-mode: both;
+      display: inline-block;
+      animation: ball-beat 0.7s 0s infinite linear;
+    }
+    &.ball-beat > .dot:nth-child(2n-1) {
+      animation-delay: 0.35s;
+    }
+  }
+}
+.img-inner-box {
+  position: relative;
+  .title {
+    font-size: 18px;
+  }
+  .desc {
+    font-size: 14px;
+  }
+}
+.static-box {
+  .img-info {
+    padding: 20px;
+    background: #ffffff;
+  }
+  .title {
+    color: rgba(0, 0, 0, 1);
+  }
+  .desc {
+    color: rgba(0, 0, 0, 0.45);
+  }
+}
+.live-box {
+  .img-info {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+  }
+  .play-icon{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 55px;
+    height: 55px;
+    transform: translate(-50%,-50%);
+    img{
+      width: 100%;
+    }
+  }
+  .title {
+    color: rgba(255, 255, 255, 1);
+  }
+  .desc {
+    color: rgba(255, 255, 255, 0.45);
+  }
+  
+}
+</style>
+

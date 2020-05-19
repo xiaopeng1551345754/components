@@ -101,9 +101,12 @@ export default {
       console.log(node);
     },
     scrollBottom() {
+      this.list = this.list.concat(this.list)
       console.log("scroll bottom");
     },
-    selectItem() {}
+    selectItem(item) {
+      console.log("item",item);
+    }
   }
 };
 </script>
