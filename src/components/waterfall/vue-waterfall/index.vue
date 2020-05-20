@@ -43,8 +43,11 @@
             >
               <img :src="v[srcKey]" alt />
             </div>
+            <div class="tag doing-tag" v-if="v.status==='doing'">进行中</div>
+            <div class="tag done-tag" v-if="v.status==='done'">结束</div>
+            <div class="tag nostart-tag" v-if="v.status==='nostart'">未开始</div>
             <div class="play-icon">
-              <img src="../images/play.png" alt="">
+              <img src="../images/play.png" alt />
             </div>
             <div class="img-info">
               <p class="title">{{v.title}}</p>
@@ -530,14 +533,14 @@ export default {
     left: 20px;
     bottom: 20px;
   }
-  .play-icon{
+  .play-icon {
     position: absolute;
     left: 50%;
     top: 50%;
     width: 55px;
     height: 55px;
-    transform: translate(-50%,-50%);
-    img{
+    transform: translate(-50%, -50%);
+    img {
       width: 100%;
     }
   }
@@ -547,7 +550,23 @@ export default {
   .desc {
     color: rgba(255, 255, 255, 0.45);
   }
-  
+  .tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0.8;
+    font-size:14px;
+    text-align: center;
+    color: #ffffff;
+    &.doing-tag{
+      background:rgba(46,76,244,1);
+    }
+    &.done-tag,&.nostart-tag{
+      background:rgba(0,0,0,0.45);
+    }
+  }
 }
 </style>
 
