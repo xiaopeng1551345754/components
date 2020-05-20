@@ -1,12 +1,13 @@
 <template>
-  <nav-cate :menu-list="menuList" @select="selectNode"></nav-cate>
+  <nav-cate :event-type="eventType" :menu-list="menuList" @select="selectNode"></nav-cate>
 </template>
 <script>
 export default {
   data() {
     return {
+      eventType:'hover',
       menuList: {
-        level: 1,
+        level: 2,
         list: [
           {
             name: "车分类",

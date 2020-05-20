@@ -29,7 +29,7 @@ export default {
       }
     },
     loadingImg: {
-      type: "",
+      type: String,
       default: ""
     }
   },

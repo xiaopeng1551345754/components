@@ -1,6 +1,6 @@
 <template>
-  <div class="hex-cate">
-    <!-- level=1 -->
+  <div class="hex-cate" @mouseleave="reset">
+    <!-- level：1 只有一级菜单 -->
     <template v-if="level===1">
       <div class="first-menu">
         <a
@@ -10,10 +10,10 @@
           track-by="$index"
           @click="selectLinkMenu(item)"
           class="menu-item"
-        >{{item.name}}</a>
+        >{{item.name | subStringName}}</a>
       </div>
     </template>
-    <!-- level=2 -->
+    <!-- level：2 只有二级菜单 -->
     <template v-if="level===2">
       <div class="first-menu">
         <a
@@ -21,12 +21,12 @@
           v-for="item in list"
           :key="item.id"
           track-by="$index"
-          @click="selectFirstMenu(item,$index)"
+          @click="selectFirstMenu('click',item,$index)"
+          @mouseover="selectFirstMenu('hover',item,$index)"
           :class="{'menu-item':true,'selected':item.selected}"
-        >{{item.name}}</a>
+        >{{item.name | subStringName}}</a>
       </div>
-      <!-- 未选中二级栏目的状态 -->
-      <div class="second-menu" v-if="selectedFirst&&!selectedSecond">
+      <div class="second-menu" v-if="selectedFirst">
         <div class="menu-content">
           <a
             href="javascript:;"
@@ -34,12 +34,25 @@
             v-for="item in secondList"
             :key="item.id"
             track-by="$index"
-            @click="selectSecondMenu(item,$index)"
-          >{{item.name}}</a>
+            @click="selectLinkMenu(item)"
+          >{{item.name | subStringName}}</a>
         </div>
       </div>
-      <!-- 选中二级栏目的状态 -->
-      <div class="third-menu" v-if="selectedSecond">
+    </template>
+    <!-- level：3 含有三级菜单 -->
+    <template v-if="level===3">
+      <div class="first-menu">
+        <a
+          href="javascript:;"
+          v-for="item in list"
+          :key="item.id"
+          track-by="$index"
+          @click="selectFirstMenu('click',item,$index)"
+          @mouseover="selectFirstMenu('hover',item,$index)"
+          :class="{'menu-item':true,'selected':item.selected}"
+        >{{item.name | subStringName}}</a>
+      </div>
+      <div class="third-menu" v-if="selectedFirst">
         <div class="menu-content">
           <div class="third-item" v-for="second in secondList" :key="second.id" track-by="$index">
             <div class="title">
@@ -52,8 +65,8 @@
                 v-for="item in second.children"
                 :key="item.id"
                 track-by="$index"
-                @click="selectThirdMenu(item,$index)"
-              >{{item.name}}</a>
+                @click="selectLinkMenu(item)"
+              >{{item.name | subStringName}}</a>
             </div>
           </div>
         </div>
@@ -75,6 +88,10 @@ export default {
       default() {
         return {};
       }
+    },
+    eventType: {
+      type: String,
+      default: "click"
     }
   },
   data() {
@@ -82,11 +99,15 @@ export default {
       level: 1,
       list: [],
       selectedFirst: false, // 是否选中一级栏目
-      selectedSecond: false, // 是否选中二级栏目
       secondList: []
     };
   },
-  watch: {},
+  filters: {
+    subStringName: value => {
+      console.log(value)
+      return value.length > 6 ? `${value.substring(0, 6)}...` : value;
+    }
+  },
   computed: {},
   ready() {
     this.init();
@@ -101,7 +122,9 @@ export default {
         that.list.$set(index, Object.assign({}, element, { selected: false }));
       });
     },
-    selectFirstMenu(item, index) {
+    selectFirstMenu(type, item, index) {
+      console.log(type,this.eventType)
+      if (type != this.eventType) return false;
       this.reset();
       this.selectedFirst = true;
       let menu = this.list[index];
@@ -109,14 +132,7 @@ export default {
       this.list.$set(index, menu);
       this.secondList = menu.children;
     },
-    selectSecondMenu(item, index) {
-      this.selectedSecond = true;
-    },
-    selectThirdMenu(item, index) {
-      this.$emit("select", item);
-      this.reset();
-    },
-    selectLinkMenu(item){
+    selectLinkMenu(item) {
       this.$emit("select", item);
       this.reset();
     },
@@ -128,7 +144,6 @@ export default {
         that.list.$set(index, element);
       });
       this.selectedFirst = false;
-      this.selectedSecond = false;
     }
   }
 };
@@ -162,6 +177,9 @@ export default {
         color: rgba(0, 142, 255, 1);
         background: rgba(0, 0, 0, 0.2);
       }
+    }
+    .first-box {
+      position: relative;
     }
   }
   .second-menu,
