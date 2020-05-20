@@ -1,8 +1,8 @@
 import navCate from './components/navcate/index.vue'
 import waterfall from './components/waterfall/index.vue'
-import pickerarea from './components/pickerarea/index.vue'
+import area from './components/area/index.vue'
 const Components = {
-  navCate, waterfall, pickerarea
+  navCate, waterfall, area
 };
 
 const install = function(Vue, opts = {}) {

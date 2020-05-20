@@ -25,9 +25,9 @@ router.map({
       require(['./routers/navcate.vue'], resolve);
     }
   },
-  '/pickerarea': {
+  '/area': {
     component: function(resolve) {
-      require(['./routers/pickerarea.vue'], resolve);
+      require(['./routers/area.vue'], resolve);
     }
   }
 });
