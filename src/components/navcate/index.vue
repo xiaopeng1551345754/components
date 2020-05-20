@@ -1,48 +1,64 @@
 <template>
   <div class="hex-cate">
-    <div class="first-menu">
-      <a
-        href="javascript:;"
-        v-for="item in menuList"
-        :key="item.id"
-        track-by="$index"
-        @click="selectFirstMenu(item,$index)"
-        :class="{'menu-item':true,'selected':item.selected}"
-      >{{item.name}}</a>
-    </div>
-    <!-- 未选中二级栏目的状态 -->
-    <div class="second-menu" v-if="selectedFirst&&!selectedSecond">
-      <div class="menu-content">
+    <!-- level=1 -->
+    <template v-if="level===1">
+      <div class="first-menu">
         <a
           href="javascript:;"
-          class="menu-item"
-          v-for="item in secondList"
+          v-for="item in list"
           :key="item.id"
           track-by="$index"
-          @click="selectSecondMenu(item,$index)"
+          @click="selectLinkMenu(item)"
+          class="menu-item"
         >{{item.name}}</a>
       </div>
-    </div>
-    <!-- 选中二级栏目的状态 -->
-    <div class="third-menu" v-if="selectedSecond">
-      <div class="menu-content">
-        <div class="third-item" v-for="second in secondList" :key="second.id" track-by="$index">
-          <div class="title">
-            <span class="content">{{second.name}}</span>：
-          </div>
-          <div class="list">
-            <a
-              href="javascript:;"
-              class="menu-item"
-              v-for="item in second.children"
-              :key="item.id"
-              track-by="$index"
-              @click="selectThirdMenu(item,$index)"
-            >{{item.name}}</a>
+    </template>
+    <!-- level=2 -->
+    <template v-if="level===2">
+      <div class="first-menu">
+        <a
+          href="javascript:;"
+          v-for="item in list"
+          :key="item.id"
+          track-by="$index"
+          @click="selectFirstMenu(item,$index)"
+          :class="{'menu-item':true,'selected':item.selected}"
+        >{{item.name}}</a>
+      </div>
+      <!-- 未选中二级栏目的状态 -->
+      <div class="second-menu" v-if="selectedFirst&&!selectedSecond">
+        <div class="menu-content">
+          <a
+            href="javascript:;"
+            class="menu-item"
+            v-for="item in secondList"
+            :key="item.id"
+            track-by="$index"
+            @click="selectSecondMenu(item,$index)"
+          >{{item.name}}</a>
+        </div>
+      </div>
+      <!-- 选中二级栏目的状态 -->
+      <div class="third-menu" v-if="selectedSecond">
+        <div class="menu-content">
+          <div class="third-item" v-for="second in secondList" :key="second.id" track-by="$index">
+            <div class="title">
+              <span class="content">{{second.name}}</span>：
+            </div>
+            <div class="list">
+              <a
+                href="javascript:;"
+                class="menu-item"
+                v-for="item in second.children"
+                :key="item.id"
+                track-by="$index"
+                @click="selectThirdMenu(item,$index)"
+              >{{item.name}}</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 <script>
@@ -55,14 +71,16 @@ export default {
   },
   props: {
     menuList: {
-      type: Array,
+      type: Object,
       default() {
-        return [];
+        return {};
       }
     }
   },
   data() {
     return {
+      level: 1,
+      list: [],
       selectedFirst: false, // 是否选中一级栏目
       selectedSecond: false, // 是否选中二级栏目
       secondList: []
@@ -70,19 +88,26 @@ export default {
   },
   watch: {},
   computed: {},
-  ready() {},
+  ready() {
+    this.init();
+  },
   methods: {
     // init waterfall instance
-    init() {},
+    init() {
+      let that = this;
+      this.level = this.menuList.level;
+      let list = this.menuList.list;
+      list.forEach((element, index) => {
+        that.list.$set(index, Object.assign({}, element, { selected: false }));
+      });
+    },
     selectFirstMenu(item, index) {
       this.reset();
-      this.$nextTick(() => {
-        this.selectedFirst = true;
-        let menu = this.menuList[index];
-        menu.selected = true;
-        this.menuList.$set(index, menu);
-        this.secondList = menu.children;
-      });
+      this.selectedFirst = true;
+      let menu = this.list[index];
+      menu.selected = true;
+      this.list.$set(index, menu);
+      this.secondList = menu.children;
     },
     selectSecondMenu(item, index) {
       this.selectedSecond = true;
@@ -91,14 +116,17 @@ export default {
       this.$emit("select", item);
       this.reset();
     },
+    selectLinkMenu(item){
+      this.$emit("select", item);
+      this.reset();
+    },
     reset() {
       let that = this;
-      let menuList = this.menuList
-      menuList.forEach((element, index) => {
+      let list = this.list;
+      list.forEach((element, index) => {
         element.selected = false;
-        that.menuList.$set(index, element);
+        that.list.$set(index, element);
       });
-      // this.$set(data, 'menuList', menuList)
       this.selectedFirst = false;
       this.selectedSecond = false;
     }

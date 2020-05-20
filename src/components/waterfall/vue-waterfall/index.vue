@@ -563,8 +563,11 @@ export default {
     &.doing-tag{
       background:rgba(46,76,244,1);
     }
-    &.done-tag,&.nostart-tag{
+    .nostart-tag{
       background:rgba(0,0,0,0.45);
+    }
+    .done-tag{
+      background:rgba(0,0,0,0);
     }
   }
 }
