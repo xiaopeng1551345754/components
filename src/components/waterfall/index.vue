@@ -3,9 +3,10 @@
     <vue-waterfall
       :imgs-arr="list"
       @scroll-bottom="scrollBottom"
-      @click="selectItem"
+      @select-item="selectItem"
       :gap="14"
       :max-cols="4"
+      :loading-img="loadingImg"
     >
     </vue-waterfall>
   </div>
@@ -39,11 +40,11 @@ export default {
   watch: {},
   computed: {},
   ready() {
+    this.init()
   },
   methods: {
     // init waterfall instance
     init() {
-
     },
     scrollBottom() {
       this.$emit("scroll-bottom");

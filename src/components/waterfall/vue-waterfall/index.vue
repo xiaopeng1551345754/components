@@ -25,10 +25,9 @@
           <div class="img-inner-box static-box" v-if="v.type==='static'" :data-index="$index">
             <div
               class="img-wraper"
-              v-if="v[srcKey]"
               :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}"
             >
-              <img :src="v[srcKey]" alt />
+              <img :src="v.realPath" alt />
             </div>
             <div class="img-info">
               <p class="title">{{v.title}}</p>
@@ -38,10 +37,9 @@
           <div class="img-inner-box live-box" v-if="v.type==='live'" :data-index="$index">
             <div
               class="img-wraper"
-              v-if="v[srcKey]"
               :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}"
             >
-              <img :src="v[srcKey]" alt />
+              <img :src="v.realPath" alt />
             </div>
             <div class="tag doing-tag" v-if="v.status==='doing'">进行中</div>
             <div class="tag done-tag" v-if="v.status==='done'">结束</div>
@@ -84,6 +82,10 @@ export default {
     },
     loadingDotStyle: {
       type: Object
+    },
+    loadingImg: {
+      type: String,
+      default: ""
     },
     gap: {
       // .img-box 间距
@@ -174,6 +176,7 @@ export default {
   ready() {
     this.bindClickEvent();
     this.loadingMiddle();
+    
 
     this.preload();
     this.cols = this.calcuCols();
@@ -223,6 +226,7 @@ export default {
     preload(src, imgIndex) {
       this.imgsArr.forEach((imgItem, imgIndex) => {
         if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
+        this.imgsArr[imgIndex].realPath = this.loadingImg
         // 无图时
         if (!imgItem[this.srcKey]) {
           this.imgsArr[imgIndex]._height = "0";
@@ -234,7 +238,6 @@ export default {
           }
           return;
         }
-
         var oImg = new Image();
         oImg.src = imgItem[this.srcKey];
         oImg.onload = oImg.onerror = e => {
@@ -250,10 +253,11 @@ export default {
             this.imgsArr[imgIndex]._error = true;
             this.$emit("imgError", this.imgsArr[imgIndex]);
           }
-
+          
           if (this.loadedCount == this.imgsArr.length) {
             this.$emit("preloaded");
           }
+          this.imgsArr[imgIndex].realPath = imgItem[this.srcKey]
         };
       });
     },
@@ -351,7 +355,7 @@ export default {
             targetEl = targetEl.parentNode;
           }
           var index = targetEl.getAttribute("data-index");
-          this.$emit("click", e, this.imgsArr_c[index]);
+          this.$emit("select-item", e, this.imgsArr_c[index]);
           // this.$emit("click", e, {
           //   index,
           //   value: this.imgsArr_c[index]

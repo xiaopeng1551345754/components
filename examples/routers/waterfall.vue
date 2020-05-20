@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       loadingImg:
-        "http://n.sinaimg.cn/translate/34/w534h300/20180506/EZhs-hacuuvu0675818.jpg", // 懒加载图片
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       list: [
         {
           type: "live",
