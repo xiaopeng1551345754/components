@@ -5,9 +5,9 @@
 export default {
   data() {
     return {
-      eventType:'hover',
+      eventType:'click',
       menuList: {
-        level: 2,
+        level: 3,
         list: [
           {
             name: "车分类",
@@ -21,6 +21,10 @@ export default {
                 id: "car_333",
                 name: "车二级分类",
                 children: [
+                  {
+                    id: "car_333",
+                    name: "三级分类"
+                  },
                   {
                     id: "car_333",
                     name: "三级分类"
@@ -42,6 +46,30 @@ export default {
                 name: "车二级分类"
               }
             ]
+          },
+          {
+            name: "车分类"
+          },
+          {
+            name: "车分类"
+          },
+          {
+            name: "车分类"
+          },
+          {
+            name: "车分类"
+          },
+          {
+            name: "车分类"
+          },
+          {
+            name: "车分类"
+          },
+          {
+            name: "车分类"
+          },
+          {
+            name: "车分类"
           },
           {
             name: "车分类"

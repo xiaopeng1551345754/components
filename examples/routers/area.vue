@@ -1,17 +1,14 @@
 <template>
-  <div>
-    <button @click="show=!show">{{show?'关闭':'打开'}}</button>
-    <!-- area内部方法：setContries(list)，setProvinces(id,list)，setCities(id,list) -->
-    <area v-ref:area :show="show" :input-width="inputWidth" @select-node="selectNode" />
-  </div>
+  <!-- area内部方法：setContries(list)，setProvinces(id,list)，setCities(id,list) -->
+  <area v-ref:area :show="show" :input-width="inputWidth" @select-node="selectNode" />
 </template>
 <script>
 export default {
   data() {
     return {
       areaComponent: null,
-      show: true,
-      inputWidth: "468px",
+      show: true, // 显示状态
+      inputWidth: "468px", // 组件宽度 ，不传 默认468
       list: [
         {
           name: "中国",
@@ -66,11 +63,27 @@ export default {
           name: "中国",
           id: "china",
           type: "country"
+        },
+        {
+          name: "美国",
+          id: "USA",
+          type: "country"
+        },
+        {
+          name: "英国",
+          id: "US",
+          type: "country"
+        },
+        {
+          name: "中国",
+          id: "china",
+          type: "country"
         }
       ]
     };
   },
   ready() {
+    // 设置国家列表
     this.areaComponent = this.$children[0];
     this.areaComponent.setContries(this.list);
   },
@@ -83,7 +96,7 @@ export default {
       } else if (from === "provice") {
         this.areaComponent.setCities(data.id, data.children);
       } else if (from === "city") {
-        this.show = false
+        this.show = false;
       }
     },
     getResult() {

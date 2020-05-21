@@ -1,8 +1,8 @@
 <template>
-  <div class="hex-cate" @mouseleave="reset">
+  <div class="hex-cate" @mouseleave="mouseLeave">
     <!-- level：1 只有一级菜单 -->
     <template v-if="level===1">
-      <div class="first-menu">
+      <div class="first-menu common-scrollbar">
         <a
           href="javascript:;"
           v-for="item in list"
@@ -15,7 +15,7 @@
     </template>
     <!-- level：2 只有二级菜单 -->
     <template v-if="level===2">
-      <div class="first-menu">
+      <div class="first-menu common-scrollbar">
         <a
           href="javascript:;"
           v-for="item in list"
@@ -26,7 +26,7 @@
           :class="{'menu-item':true,'selected':item.selected}"
         >{{item.name | subStringName}}</a>
       </div>
-      <div class="second-menu" v-if="selectedFirst">
+      <div class="second-menu common-scrollbar" v-if="selectedFirst">
         <div class="menu-content">
           <a
             href="javascript:;"
@@ -41,7 +41,7 @@
     </template>
     <!-- level：3 含有三级菜单 -->
     <template v-if="level===3">
-      <div class="first-menu">
+      <div class="first-menu common-scrollbar">
         <a
           href="javascript:;"
           v-for="item in list"
@@ -52,7 +52,7 @@
           :class="{'menu-item':true,'selected':item.selected}"
         >{{item.name | subStringName}}</a>
       </div>
-      <div class="third-menu" v-if="selectedFirst">
+      <div class="third-menu common-scrollbar" v-if="selectedFirst">
         <div class="menu-content">
           <div class="third-item" v-for="second in secondList" :key="second.id" track-by="$index">
             <div class="title">
@@ -104,7 +104,7 @@ export default {
   },
   filters: {
     subStringName: value => {
-      console.log(value)
+      console.log(value);
       return value.length > 6 ? `${value.substring(0, 6)}...` : value;
     }
   },
@@ -123,7 +123,7 @@ export default {
       });
     },
     selectFirstMenu(type, item, index) {
-      console.log(type,this.eventType)
+      console.log(type, this.eventType);
       if (type != this.eventType) return false;
       this.reset();
       this.selectedFirst = true;
@@ -144,6 +144,9 @@ export default {
         that.list.$set(index, element);
       });
       this.selectedFirst = false;
+    },
+    mouseLeave() {
+      if (this.eventType === "hover") this.reset();
     }
   }
 };
@@ -198,7 +201,7 @@ export default {
       float: left;
       font-size: 16px;
       color: rgba(0, 0, 0, 0.85);
-      margin-right: 20px;
+      margin-right: 25px;
       &:hover {
         color: rgba(0, 142, 255, 1);
       }
@@ -210,7 +213,7 @@ export default {
         display: flex;
         width: 100%;
         border-bottom: 1px solid #979797;
-        padding: 11px 0px;
+        padding: 17px 0px;
       }
       .title {
         padding: 0px 5px;
@@ -220,7 +223,7 @@ export default {
         overflow: hidden;
         .content {
           float: left;
-          width: 90px;
+          width: 80px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -229,6 +232,7 @@ export default {
       .list {
         flex: 1;
         .menu-item {
+          margin-right: 30px;
           height: auto;
           line-height: inherit;
         }

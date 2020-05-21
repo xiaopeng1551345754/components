@@ -1,8 +1,8 @@
 <template>
   <div :class="{'hex-area':true,'show':show}" :style="{width:inputWidth}">
-    <div class="section country">
+    <div class="section">
       <div class="title">国家列表</div>
-      <div class="content">
+      <div class="content common-scrollbar">
         <div
           v-for="item in contries"
           :key="item.id"
@@ -14,9 +14,9 @@
         </div>
       </div>
     </div>
-    <div class="section city">
+    <div class="section">
       <div class="title">省份列表</div>
-      <div class="content">
+      <div class="content common-scrollbar">
         <div
           v-for="item in provinces"
           :key="item.id"
@@ -28,9 +28,9 @@
         </div>
       </div>
     </div>
-    <div class="section xxx">
+    <div class="section">
       <div class="title">市级列表</div>
-      <div class="content">
+      <div class="content common-scrollbar">
         <div
           v-for="item in cities"
           :key="item.id"
@@ -88,16 +88,20 @@ export default {
   methods: {
     // init waterfall instance
     init() {},
+    // 设置国家列表
     setContries(list) {
       this.contries = list;
     },
+    // 设置省份列表
     setProvinces(id, list) {
       this.cities = [];
       this.provinces = list;
     },
+    // 设置市级列表
     setCities(id, list) {
       this.cities = list;
     },
+    // 选中列表节点
     selectNode(from, data, index) {
       if (from === "country") {
         this.clearContries();
@@ -109,14 +113,15 @@ export default {
       }
       this.$emit("select-node", from, data, index);
     },
+    // 清除国家列表选中状态
     clearContries() {
       let that = this;
       this.contries.forEach((element, index) => {
         element.selected = false;
         that.contries.$set(index, element);
       });
-      // this.clearProvinces();
     },
+    // 清除省份列表选中状态
     clearProvinces() {
       let that = this;
       this.provinces.forEach((element, index) => {
@@ -124,6 +129,7 @@ export default {
         that.provinces.$set(index, element);
       });
     },
+    // 清除市级列表选中状态
     clearCities() {
       let that = this;
       this.cities.forEach((element, index) => {
@@ -131,6 +137,7 @@ export default {
         that.cities.$set(index, element);
       });
     },
+    // 重置列表
     reset() {
       this.clearContries();
       this.clearProvinces();
@@ -146,6 +153,7 @@ export default {
   height: 0px;
   overflow: hidden;
   display: flex;
+  transition: 0.3s ease-in;
   * {
     box-sizing: border-box;
   }
