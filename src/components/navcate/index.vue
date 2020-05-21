@@ -221,7 +221,6 @@ export default {
         .content {
           float: left;
           width: 90px;
-          // display: inline-block;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
