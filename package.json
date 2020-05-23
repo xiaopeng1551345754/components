@@ -1,13 +1,13 @@
 {
-  "name": "outsystem-components", 
+  "name": "front", 
   "version": "0.0.1",
-  "title": "outsystem-components",
+  "title": "front",
   "description": "outsystem components",
   "homepage": "https://github.com/jiangtao/components",
   "keywords": [
     "components"
   ],
-  "main": "dist/outsystem-components.min.js",
+  "main": "dist/front.min.js",
   "files": [
     "dist",
     "src"
