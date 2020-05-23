@@ -47,6 +47,7 @@
             <div class="play-icon">
               <img src="../images/play.png" alt />
             </div>
+            <div class="img-info-bg"></div>
             <div class="img-info">
               <p class="title">{{v.title}}</p>
               <p class="desc">{{v.exhibition_name}}</p>
@@ -532,6 +533,15 @@ export default {
   }
 }
 .live-box {
+  .img-info-bg{
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width:100%;
+    height:65%;
+    background:linear-gradient(0deg,rgba(24,34,57,1) 0%,rgba(0,0,0,0) 100%);
+    opacity:0.73;
+  }
   .img-info {
     position: absolute;
     left: 20px;
