@@ -1,28 +1,41 @@
 <template>
-  <!-- area内部方法：setContries(list)，setProvinces(id,list)，setCities(id,list) -->
-  <area v-ref:area :show="show" :input-width="inputWidth" @select-node="selectNode" />
+  <area :list="list" :default-data="defaultData" @select-node="selectNode" />
 </template>
 <script>
 export default {
   data() {
     return {
-      areaComponent: null,
-      show: true, // 显示状态
-      inputWidth: "468px", // 组件宽度 ，不传 默认468
+      defaultData: [
+        {
+          name: "中国",
+          id: "china1",
+          type: "country"
+        },
+        {
+          name: "北京",
+          id: "BeiJing1",
+          type: "province"
+        },
+        {
+          name: "朝阳区",
+          id: "district1",
+          type: "district"
+        }
+      ],
       list: [
         {
           name: "中国",
-          id: "china",
+          id: "china1",
           type: "country",
           children: [
             {
               name: "北京",
-              id: "BeiJing",
+              id: "BeiJing1",
               type: "province",
               children: [
                 {
                   name: "朝阳区",
-                  id: "district",
+                  id: "district1",
                   type: "district"
                 },
                 {
@@ -82,22 +95,11 @@ export default {
       ]
     };
   },
-  ready() {
-    // 设置国家列表
-    this.areaComponent = this.$children[0];
-    this.areaComponent.setContries(this.list);
-  },
+  ready() {},
   methods: {
     //  暴露事件方法
-    selectNode(from, data, index) {
-      console.log(from, data);
-      if (from === "country") {
-        this.areaComponent.setProvinces(data.id, data.children);
-      } else if (from === "provice") {
-        this.areaComponent.setCities(data.id, data.children);
-      } else if (from === "city") {
-        this.show = false;
-      }
+    selectNode(country, province, city) {
+      console.log(country, province, city);
     },
     getResult() {
       // 返回的国省市

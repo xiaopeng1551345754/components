@@ -33,14 +33,15 @@ body {
   &::-webkit-scrollbar-thumb {
     width: 5px;
     height: 28px;
-    background: rgba(216, 216, 216, 1);
+    background:rgba(0,0,0,0.45);
     border-radius: 2px;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: rgba(216, 216, 216, 1);
+    background:rgba(0,0,0,0.45);
   }
   &::-webkit-scrollbar-corner {
-    background: rgba(216, 216, 216, 1);
+    background:rgba(0,0,0,0.45);
+    // background: rgba(216, 216, 216, 1);
   }
 }
 </style>

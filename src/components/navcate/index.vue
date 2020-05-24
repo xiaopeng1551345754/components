@@ -30,7 +30,7 @@
         <div class="menu-content">
           <a
             href="javascript:;"
-            class="menu-item"
+            :class="{'menu-item':true,'selected':item.selected}"
             v-for="item in secondList"
             :key="item.id"
             track-by="$index"
@@ -56,15 +56,15 @@
         <div class="menu-content">
           <div class="third-item" v-for="second in secondList" :key="second.id" track-by="$index">
             <div class="title">
-              <span class="content">{{second.name}}</span>：
+              <span class="content">{{second.name}}</span>:
             </div>
             <div class="list">
               <a
                 href="javascript:;"
-                class="menu-item"
                 v-for="item in second.children"
                 :key="item.id"
                 track-by="$index"
+                :class="{'menu-item':true,'selected':item.selected}"
                 @click="selectLinkMenu(item)"
               >{{item.name | subStringName}}</a>
             </div>
@@ -83,6 +83,12 @@ export default {
     clickOutSide
   },
   props: {
+    defaultData: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
     menuList: {
       type: Object,
       default() {
@@ -116,14 +122,50 @@ export default {
     // init waterfall instance
     init() {
       let that = this;
+      // 处理menulist格式
       this.level = this.menuList.level;
       let list = this.menuList.list;
       list.forEach((element, index) => {
         that.list.$set(index, Object.assign({}, element, { selected: false }));
       });
+      // 设置默认值
+      this.setDefaultData();
+    },
+    setDefaultData() {
+      if (this.defaultData.length <= 0) return false;
+      let that = this;
+      let data = this.defaultData;
+      let fid = data[0].id || -1;
+      let fIndex = this.setSelected(this.list, fid);
+      if (fIndex > -1) {
+        // 选中一级菜单
+        this.selectFirstMenu(this.eventType, this.list[fIndex], fIndex);
+        //二级菜单
+        let fItem = this.list[fIndex];
+        if (data[1] && fItem.children) {
+          let sid = data[1].id || -1;
+          let sIndex = this.setSelected(fItem.children, sid);
+          //三级菜单
+          let sItem = fItem.children[sIndex];
+          if (data[2] && sItem.children) {
+            let tid = data[2].id || -1;
+            this.setSelected(sItem.children, tid);
+          }
+        }
+      }
+    },
+    setSelected(list, id) {
+      // 循环设置menulist数据
+      let resultIndex = -1;
+      list.forEach((element, index) => {
+        if (element.id === id) {
+          list.$set(index, Object.assign({}, element, { selected: true }));
+          resultIndex = index;
+        }
+      });
+      return resultIndex;
     },
     selectFirstMenu(type, item, index) {
-      console.log(type, this.eventType);
       if (type != this.eventType) return false;
       this.reset();
       this.selectedFirst = true;
@@ -161,8 +203,6 @@ export default {
   }
   .menu-item {
     display: block;
-    height: 44px;
-    line-height: 44px;
     text-decoration: none;
   }
   .first-menu {
@@ -173,8 +213,11 @@ export default {
     border: 1px solid rgba(186, 186, 186, 1);
     overflow-y: auto;
     .menu-item {
+      height: 44px;
+      line-height: 44px;
       text-align: center;
       font-size: 18px;
+      font-weight: 400;
       color: rgba(0, 0, 0, 0.64);
       &.selected {
         color: rgba(0, 142, 255, 1);
@@ -195,35 +238,49 @@ export default {
     border-left: none;
     overflow-y: auto;
     .menu-content {
-      padding: 0px 10px;
-    }
-    .menu-item {
-      float: left;
-      font-size: 16px;
-      color: rgba(0, 0, 0, 0.85);
-      margin-right: 25px;
-      &:hover {
-        color: rgba(0, 142, 255, 1);
+      padding-top: 11px;
+      padding-left: 23px;
+      overflow: hidden;
+      .menu-item {
+        line-height: 22px;
+        float: left;
+        font-size: 16px;
+        font-weight: 300;
+        color: rgba(0, 0, 0, 0.85);
+        margin-right: 25px;
+        margin-bottom: 17px;
+        &:hover {
+          font-weight: 400;
+          color: rgba(0, 142, 255, 1);
+        }
+        &.selected {
+          font-weight: 400;
+          color: rgba(0, 142, 255, 1);
+        }
       }
     }
   }
   .third-menu {
     .menu-content {
+      padding-top: 0px;
+      padding-left: 12px;
+      padding-right: 18px;
       .third-item {
         display: flex;
         width: 100%;
         border-bottom: 1px solid #979797;
-        padding: 17px 0px;
+        padding: 17px 0px 11px;
       }
       .title {
-        padding: 0px 5px;
-        margin-right: 10px;
+        width: 90px;
+        margin-right: 11px;
+        font-weight: 400;
         color: rgba(0, 0, 0, 0.45);
         clear: both;
         overflow: hidden;
         .content {
           float: left;
-          width: 80px;
+          width: 84px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -231,11 +288,13 @@ export default {
       }
       .list {
         flex: 1;
-        .menu-item {
-          margin-right: 30px;
-          height: auto;
-          line-height: inherit;
-        }
+      }
+      .menu-item {
+        font-weight: 300;
+        margin-right: 32px;
+        margin-bottom: 6px;
+        height: auto;
+        line-height: inherit;
       }
     }
   }
