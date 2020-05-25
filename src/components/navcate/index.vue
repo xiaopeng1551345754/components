@@ -65,7 +65,7 @@
                 :key="item.id"
                 track-by="$index"
                 :class="{'menu-item':true,'selected':item.selected}"
-                @click="selectLinkMenu(item)"
+                @click="selectLinkMenu(item, second)"
               >{{item.name | subStringName}}</a>
             </div>
           </div>
@@ -105,7 +105,8 @@ export default {
       level: 1,
       list: [],
       selectedFirst: false, // 是否选中一级栏目
-      secondList: []
+      secondList: [],
+      firstMenu: {}
     };
   },
   filters: {
@@ -168,13 +169,14 @@ export default {
       if (type != this.eventType) return false;
       this.reset();
       this.selectedFirst = true;
+      this.firstMenu = item
       let menu = this.list[index];
       menu.selected = true;
       this.list.$set(index, menu);
       this.secondList = menu.children;
     },
-    selectLinkMenu(item) {
-      this.$emit("select", item);
+    selectLinkMenu(item, second) {
+      this.$emit("select", item, second, this.firstMenu);
       this.reset();
     },
     reset() {
@@ -190,6 +192,7 @@ export default {
       if (this.eventType === "hover") this.reset();
     },
     hiddenMenu () {
+      this.$emit("clickoutside")
       this.reset();
     }
   }

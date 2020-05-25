@@ -24,46 +24,46 @@ export default {
         level: 3,
         list: [
           {
-            name: "车分类",
+            name: "车分类1",
             id: "car_11",
             children: [
               {
                 id: "car_21",
-                name: "车二级分类字数超多"
+                name: "车二级分类字数超多11"
               },
               {
                 id: "car_22",
-                name: "车二级分类",
+                name: "车二级分类12",
                 children: [
                   {
                     id: "car_31",
-                    name: "三级分类"
+                    name: "三级分类121"
                   },
                   {
                     id: "car_32",
-                    name: "三级分类"
+                    name: "三级分类122"
                   },
                   {
                     id: "car_33",
-                    name: "三级分类"
+                    name: "三级分类123"
                   },
                   {
                     id: "car_34",
-                    name: "三级分类"
+                    name: "三级分类124"
                   }
                 ]
               },
               {
                 id: "car_23",
-                name: "车二级分类字数超多"
+                name: "车二级分类字数超多13"
               },{
                 id: "car_24",
-                name: "车二级分类字数超多"
+                name: "车二级分类字数超多14"
               },
             ]
           },
           {
-            name: "车分类",
+            name: "车分类2",
             id: "car_12",
             children: [
               {
@@ -73,13 +73,13 @@ export default {
             ]
           },
           {
-            name: "车分类"
+            name: "车分类3"
           },
           {
-            name: "车分类"
+            name: "车分类4"
           },
           {
-            name: "车分类"
+            name: "车分类5"
           },
           {
             name: "车分类"
@@ -105,8 +105,8 @@ export default {
   },
   methods: {
     //  暴露事件方法
-    selectNode(node) {
-      console.log(node);
+    selectNode(thr, sec, fir) {
+      console.log(thr, sec, fir);
     }
   }
 };
