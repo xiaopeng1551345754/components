@@ -89,11 +89,15 @@ export default {
         return [];
       }
     },
-    menuList: {
-      type: Object,
+    list: {
+      type: Array,
       default() {
-        return {};
+        return []
       }
+    },
+    level: {
+      type: Number,
+      default: 1
     },
     eventType: {
       type: String,
@@ -102,8 +106,6 @@ export default {
   },
   data() {
     return {
-      level: 1,
-      list: [],
       selectedFirst: false, // 是否选中一级栏目
       secondList: [],
       firstMenu: {}
@@ -123,9 +125,7 @@ export default {
     init() {
       let that = this;
       // 处理menulist格式
-      this.level = this.menuList.level;
-      let list = this.menuList.list;
-      list.forEach((element, index) => {
+      this.list.forEach((element, index) => {
         that.list.$set(index, Object.assign({}, element, { selected: false }));
       });
       // 设置默认值
