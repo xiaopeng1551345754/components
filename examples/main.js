@@ -29,6 +29,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/area.vue'], resolve);
     }
+  },
+  '/timeline': {
+    component: function(resolve) {
+      require(['./routers/timeline.vue'], resolve);
+    }
   }
 });
 
@@ -41,6 +46,6 @@ router.afterEach(function(transition) {
 });
 
 router.redirect({
-  '*': "/waterfall"
+  '*': "/timeline"
 });
 router.start(App, '#app');
