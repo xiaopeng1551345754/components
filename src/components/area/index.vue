@@ -11,12 +11,13 @@
         p-id="2845"
         width="52"
         height="52"
+        :class="{'trans':show}"
       >
         <path
           d="M529.808696 614.4c-11.130435 11.130435-26.713043 11.130435-35.617392 0L178.086957 291.617391c-22.26087-22.26087-55.652174-24.486957-75.686957-6.678261-17.808696 15.582609-17.808696 51.2 8.904348 75.686957L476.382609 734.608696c22.26087 22.26087 55.652174 22.26087 75.686956 0l365.078261-371.756522c22.26087-22.26087 24.486957-55.652174 6.678261-75.686957-17.808696-17.808696-55.652174-17.808696-75.686957 6.678261L529.808696 614.4"
           fill="#BFBFBF"
           p-id="2846"
-        />
+        />s
       </svg>
     </div>
     <div :class="{'area-select':true,'show':show}">
@@ -300,6 +301,13 @@ export default {
         height: 100%;
         padding-right: 5px;
         overflow: auto;
+        &::-webkit-scrollbar {
+          width: 5px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background:rgba(0,0,0,0.45);
+          border-radius: 2.5px;
+        }
       }
       .item {
         position: relative;
@@ -367,6 +375,9 @@ export default {
       height: 100%;
       width: 20px;
       color: rgba(0, 0, 0, 0.25);
+    }
+    .trans {
+      transform: rotate(180deg);
     }
   }
   .area-select {
