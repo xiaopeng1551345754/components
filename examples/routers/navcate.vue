@@ -5,7 +5,7 @@
 export default {
   data() {
     return {
-      eventType:'click',
+      eventType:'click',//hover
       defaultData:[
         {
           id: "car_11",
@@ -52,7 +52,14 @@ export default {
                     name: "三级分类"
                   }
                 ]
-              }
+              },
+              {
+                id: "car_23",
+                name: "车二级分类字数超多"
+              },{
+                id: "car_24",
+                name: "车二级分类字数超多"
+              },
             ]
           },
           {

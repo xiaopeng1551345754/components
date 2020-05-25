@@ -56,7 +56,7 @@
         <div class="menu-content">
           <div class="third-item" v-for="second in secondList" :key="second.id" track-by="$index">
             <div class="title">
-              <span class="content">{{second.name}}</span>:
+              <span class="name-content">{{second.name}}</span>:
             </div>
             <div class="list">
               <a
@@ -278,7 +278,7 @@ export default {
         color: rgba(0, 0, 0, 0.45);
         clear: both;
         overflow: hidden;
-        .content {
+        .name-content {
           float: left;
           width: 84px;
           overflow: hidden;
