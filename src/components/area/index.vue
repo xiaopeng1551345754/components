@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'hex-area':true}" :style="{width:inputWidth}">
+  <div :class="{'hex-area':true}" :style="{width:inputWidth}" v-click-out-side='hiddenMenu'>
     <div class="area-input" @click="show=!show">
       <input type="text" placeholder="请选择地区" disabled :value="selectText" />
       <svg
@@ -272,6 +272,10 @@ export default {
       this.clearCities();
       this.provinces = [];
       this.cities = [];
+    },
+    hiddenMenu () {
+      this.show = false;
+      this.reset();
     }
   }
 };
