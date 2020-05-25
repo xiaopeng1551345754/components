@@ -1,5 +1,5 @@
 <template>
-  <div class="hex-cate" @mouseleave="mouseLeave">
+  <div class="hex-cate" @mouseleave="mouseLeave" v-click-out-side='hiddenMenu'>
     <!-- level：1 只有一级菜单 -->
     <template v-if="level===1">
       <div class="first-menu common-scrollbar">
@@ -110,7 +110,6 @@ export default {
   },
   filters: {
     subStringName: value => {
-      console.log(value);
       return value.length > 6 ? `${value.substring(0, 6)}...` : value;
     }
   },
@@ -189,6 +188,9 @@ export default {
     },
     mouseLeave() {
       if (this.eventType === "hover") this.reset();
+    },
+    hiddenMenu () {
+      this.reset();
     }
   }
 };
