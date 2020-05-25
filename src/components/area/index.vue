@@ -120,7 +120,14 @@ export default {
       }
     };
   },
-  watch: {},
+  watch: {
+    list: {
+      deep: true,
+      handler () {
+        this.init()
+      }
+    }
+  },
   computed: {
     selectText() {
       return (
@@ -139,7 +146,6 @@ export default {
       // 设置国家列表
       this.setContries(this.list);
       this.setDefaultData();
-      console.log(this.provinces);
     },
     // 设置初始数据
     setDefaultData() {
