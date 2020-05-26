@@ -1,6 +1,10 @@
 <template>
   <div class="wrap">
-    <timeline :data="data" @select="select"> </timeline>
+    <timeline 
+    :data="data" 
+    @select="select"
+    :lang='"en"'
+    > </timeline>
   </div>
 </template>
 

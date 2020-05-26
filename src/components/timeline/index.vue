@@ -2,20 +2,20 @@
   <div class="ali_time_line">
     <div class="ali_time_line_head">
       <div class="items time">
-        {{head[0]}}
+        {{t('time')}}
       </div>
       <div class="items line_wrap"></div>
       <div class="items theme">
-        {{head[1]}}
+        {{t('theme')}}
       </div>
       <div class="items type">
-        {{head[2]}}
+        {{t('type')}}
       </div>
       <div class="items people">
-        {{head[3]}}
+        {{t('people')}}
       </div>
       <div class="items select">
-        {{head[4]}}
+        {{t('select')}}
       </div>
     </div>
     <div class="ali_time_line_item_wrap">
@@ -45,7 +45,7 @@
               {{item.people}}
             </div>
             <div class="items select" @click='select(item)'>
-              查看
+              {{t('watch')}}
             </div>
           </div>
         </div>
@@ -63,20 +63,52 @@ export default {
       default () {
         return []
       }
+    },
+    lang: {
+      type: String,
+      default: "zh",
+    },
+    langInfo: {
+      type: Object,
+      default () {
+        return {
+          zh: {
+            time: '时间',
+            theme: '主题',
+            type: '类型',
+            people: '主要人员',
+            selece: '操作',
+            watch: '查看'
+          },
+          en: {
+            time: 'time',
+            theme: 'theme',
+            type: 'type',
+            people: 'members',
+            selece: 'handle',
+            watch: 'see'
+          }
+        }
+      }
     }
   },
   data () {
-    return {
-      head: [
-        '时间',
-        '主题',
-        '类型',
-        '主要人员',
-        '操作'
-      ]
-    }
+    return {}
   },
   methods: {
+    t(keypath) {
+      const o = this.langInfo[this.lang] || {}
+      const keys = keypath.split('.')
+      let r = o
+      let key
+      for(let i = 0; i < keys.length; i++) {
+        key = keys[i]
+        if (key && typeof r === 'object') {
+          r = r[key]
+        }
+      }
+      return r || ''
+    },
     select (item) {
       this.$emit('select', item)
     }
