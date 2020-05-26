@@ -1,7 +1,7 @@
 <template>
   <div :class="{'hex-area':true}" :style="{width:inputWidth}" v-click-out-side='hiddenMenu'>
     <div class="area-input" @click="show=!show">
-      <input type="text" placeholder="请选择地区" disabled :value="selectText" />
+      <input type="text" :placeholder="t('none')" disabled :value="selectText" />
       <svg
         t="1590251416183"
         class="icon"
@@ -22,7 +22,7 @@
     </div>
     <div :class="{'area-select':true,'show':show}">
       <div class="section">
-        <div class="title">国家列表</div>
+        <div class="title">{{t('contries')}}</div>
         <div class="content common-scrollbar">
           <div class="content-scroll">
             <div
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="section">
-        <div class="title">省份列表</div>
+        <div class="title">{{t('provinces')}}</div>
         <div class="content common-scrollbar">
           <div class="content-scroll">
             <div
@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="section">
-        <div class="title">市级列表</div>
+        <div class="title">{{t('cities')}}</div>
         <div class="content common-scrollbar">
           <div class="content-scroll">
             <div
@@ -100,6 +100,29 @@ export default {
       default() {
         return [];
       }
+    },
+    lang: {
+      type: String,
+      default: "zh",
+    },
+    langInfo: {
+      type: Object,
+      default () {
+        return {
+          zh: {
+            none: '请选择地区',
+            contries: '国家列表',
+            provinces: '省份列表',
+            cities: '市级列表'
+          },
+          en: {
+            none: 'please select area',
+            contries: 'contries',
+            provinces: 'provinces',
+            cities: 'cities'
+          }
+        }
+      }
     }
   },
   data() {
@@ -141,6 +164,19 @@ export default {
     this.init();
   },
   methods: {
+    t(keypath) {
+      const o = this.langInfo[this.lang] || {}
+      const keys = keypath.split('.')
+      let r = o
+      let key
+      for(let i = 0; i < keys.length; i++) {
+        key = keys[i]
+        if (key && typeof r === 'object') {
+          r = r[key]
+        }
+      }
+      return r || ''
+    },
     // init waterfall instance
     init() {
       // 设置国家列表

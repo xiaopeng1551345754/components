@@ -1,26 +1,30 @@
 <template>
-  <area :list="list" :default-data="defaultData" @select-node="selectNode" />
+  <area 
+  :list="list" 
+  :default-data="defaultData" @select-node="selectNode" 
+  :lang='"en"'
+  />
 </template>
 <script>
 export default {
   data() {
     return {
       defaultData: [
-        {
-          name: "中国",
-          id: "china1",
-          type: "country"
-        },
-        {
-          name: "北京",
-          id: "BeiJing1",
-          type: "province"
-        },
-        {
-          name: "朝阳区",
-          id: "district1",
-          type: "district"
-        }
+        // {
+        //   name: "中国",
+        //   id: "china1",
+        //   type: "country"
+        // },
+        // {
+        //   name: "北京",
+        //   id: "BeiJing1",
+        //   type: "province"
+        // },
+        // {
+        //   name: "朝阳区",
+        //   id: "district1",
+        //   type: "district"
+        // }
       ],
       list: [
         {
