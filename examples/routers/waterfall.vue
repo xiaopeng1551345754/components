@@ -2,6 +2,7 @@
   <waterfall
     :loading-img="loadingImg"
     :list="list"
+    :lang='"en"'
     @scroll-bottom="scrollBottom"
     @select-item="selectItem"
   ></waterfall>

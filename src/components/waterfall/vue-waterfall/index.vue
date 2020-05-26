@@ -41,9 +41,9 @@
             >
               <img :src="v.realPath" alt />
             </div>
-            <div class="tag doing-tag" v-if="v.status==='doing'">进行中</div>
-            <div class="tag done-tag" v-if="v.status==='done'">结束</div>
-            <div class="tag nostart-tag" v-if="v.status==='nostart'">未开始</div>
+            <div class="tag doing-tag" v-if="v.status==='doing'">{{t('doing')}}</div>
+            <div class="tag done-tag" v-if="v.status==='done'">{{t('over')}}</div>
+            <div class="tag nostart-tag" v-if="v.status==='nostart'">{{t('nostart')}}</div>
             <div class="play-icon">
               <img src="../images/play.png" alt />
             </div>
@@ -138,6 +138,13 @@ export default {
     enablePullDownEvent: {
       type: Boolean,
       default: false
+    },
+    lang: {
+      type: String,
+      default: "zh",
+    },
+    langInfo: {
+      type: Object
     }
   },
   data() {
@@ -223,6 +230,19 @@ export default {
     }
   },
   methods: {
+    t(keypath) {
+      const o = this.langInfo[this.lang] || {}
+      const keys = keypath.split('.')
+      let r = o
+      let key
+      for(let i = 0; i < keys.length; i++) {
+        key = keys[i]
+        if (key && typeof r === 'object') {
+          r = r[key]
+        }
+      }
+      return r || ''
+    },
     // ==1== 预加载
     preload(src, imgIndex) {
       this.imgsArr.forEach((imgItem, imgIndex) => {

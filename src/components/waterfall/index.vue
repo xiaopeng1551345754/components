@@ -7,6 +7,8 @@
       :gap="14"
       :max-cols="4"
       :loading-img="loadingImg"
+      :lang='lang'
+      :lang-info='langInfo'
     >
     </vue-waterfall>
   </div>
@@ -32,6 +34,27 @@ export default {
     loadingImg: {
       type: String,
       default: ""
+    },
+    lang: {
+      type: String,
+      default: "zh",
+    },
+    langInfo: {
+      type: Object,
+      default () {
+        return {
+          zh: {
+            nostart: '未开始',
+            doing: '进行中',
+            over: '结束'
+          },
+          en: {
+            nostart: 'nostart',
+            doing: 'doing',
+            over: 'over'
+          }
+        }
+      }
     }
   },
   data() {
