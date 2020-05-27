@@ -210,6 +210,7 @@ export default {
     if (this.domId) {
       const self = this;
       this.$nextTick (()=>{
+        const dom = document.querySelector(this.domId);
         dom.onscroll = function () {
           if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 0) {
             self.$emit("scroll-bottom");
