@@ -166,7 +166,8 @@ export default {
       LoadingTimer: null,
       isFirstLoad: true, // 首次加载
       over: false, // 结束waterfall加载
-      scrollEl: null // 滚动的div
+      scrollEl: null, // 滚动的div
+      prev: 0
     };
   },
   computed: {
@@ -212,8 +213,12 @@ export default {
       this.$nextTick (()=>{
         const dom = document.querySelector(this.domId);
         dom.onscroll = function () {
-          if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 0) {
-            self.$emit("scroll-bottom");
+          const now = Date.now();
+          if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 20) {
+            if (now - self.prev > 200) {
+              self.prev = now
+              self.$emit("scroll-bottom");
+            }
           }
         }
       })
