@@ -1,5 +1,5 @@
 <template>
-  <div class="hex-cate" @mouseleave="mouseLeave" v-click-out-side='hiddenMenu'>
+  <div class="hex-cate" @mouseleave="mouseLeave" v-click-out-side='hiddenMenu' :class='{"oh":level!==1}'>
     <!-- level：1 只有一级菜单 -->
     <template v-if="level===1">
       <div class="first-menu common-scrollbar">
@@ -23,7 +23,7 @@
           track-by="$index"
           @click="selectFirstMenu('click',item,$index)"
           @mouseover="selectFirstMenu('hover',item,$index)"
-          :class="{'menu-item':true,'selected':item.selected}"
+          :class="{'menu-item':true,'selected':firstMenu.id === item.id}"
         >{{item.name | subStringName}}</a>
       </div>
       <div class="second-menu common-scrollbar" v-if="selectedFirst">
@@ -49,7 +49,7 @@
           track-by="$index"
           @click="selectFirstMenu('click',item,$index)"
           @mouseover="selectFirstMenu('hover',item,$index)"
-          :class="{'menu-item':true,'selected':item.selected}"
+          :class="{'menu-item':true,'selected':firstMenu.id === item.id}"
         >{{item.name | subStringName}}</a>
       </div>
       <div class="third-menu common-scrollbar" v-if="selectedFirst">
@@ -203,6 +203,11 @@ export default {
   width: 538px;
   height: 400px;
   display: flex;
+  &.oh {
+    overflow: hidden;
+    border-radius:0px 0px 8px 8px;
+
+  }
   * {
     box-sizing: border-box;
   }
@@ -214,19 +219,37 @@ export default {
     float: left;
     width: 118px;
     height: 100%;
-    background: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(186, 186, 186, 1);
     overflow-y: auto;
+    background: #F1F1F1;
+    &::-webkit-scrollbar {
+      background: rgba(0,0,0,0)
+    }
+    &::-webkit-scrollbar-thumb {
+      background:rgba(216,216,216,1);
+      border-radius:2px;
+      width: 4px;
+    }
     .menu-item {
-      height: 44px;
-      line-height: 44px;
+      padding: 14px 0 ;
+      line-height: 18px;
       text-align: center;
       font-size: 18px;
       font-weight: 400;
       color: rgba(0, 0, 0, 0.64);
       &.selected {
-        color: rgba(0, 142, 255, 1);
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 1);
+        color: #014BC9;
+        position: relative;
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 18px;
+          background:  #014BC9;
+        }
       }
     }
     .first-box {
@@ -238,10 +261,14 @@ export default {
     float: left;
     width: 420px;
     height: 100%;
-    background: rgba(235, 235, 235, 1);
-    border: 1px solid rgba(186, 186, 186, 1);
+    background: #fff;
     border-left: none;
     overflow-y: auto;
+    &::-webkit-scrollbar-thumb {
+      background:rgba(216,216,216,1);
+      border-radius:2px;
+      width: 4px;
+    }
     .menu-content {
       padding-top: 11px;
       padding-left: 23px;
@@ -252,15 +279,21 @@ export default {
         font-size: 16px;
         font-weight: 300;
         color: rgba(0, 0, 0, 0.85);
-        margin-right: 25px;
-        margin-bottom: 17px;
+        padding: 4px 14px;
+        width: 92px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 7px;
         &:hover {
           font-weight: 400;
-          color: rgba(0, 142, 255, 1);
+          color: #014BC9;
         }
         &.selected {
           font-weight: 400;
-          color: rgba(0, 142, 255, 1);
+          color: #014BC9;
+          background: rgba(127,219,255,0.2);
+          border-radius:4px;
         }
       }
     }
@@ -273,7 +306,7 @@ export default {
       .third-item {
         display: flex;
         width: 100%;
-        border-bottom: 1px solid #979797;
+        border-bottom: 1px solid #ebebeb;
         padding: 17px 0px 11px;
       }
       .title {
@@ -295,9 +328,11 @@ export default {
         flex: 1;
       }
       .menu-item {
+        width: 92px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-weight: 300;
-        margin-right: 32px;
-        margin-bottom: 6px;
         height: auto;
         line-height: inherit;
       }
