@@ -141,11 +141,3 @@ export default {
   }
 };
 </script>
-<style lang="less">
-body {
-  background: gray;
-}
-.wrap {
-  margin: auto;
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class='wrap'>
+  <div class='waterfall_wrap'>
     <div id="dom">
       <div>
 
@@ -120,7 +120,7 @@ export default {
 };
 </script>
 <style lang="less">
-.wrap {
+.waterfall_wrap {
   width: 500px;
   height: 300px;
   position: fixed;

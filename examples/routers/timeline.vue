@@ -33,9 +33,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.wrap {
-  height: 320px;
-}
-</style>

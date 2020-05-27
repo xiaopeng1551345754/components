@@ -1,5 +1,5 @@
 <template>
-  <div class="hex-cate" @mouseleave="mouseLeave" v-click-out-side='hiddenMenu' :class='{"oh":level!==1,"sd":selectedFirst}'>
+  <div class="hex-cate" @mouseleave="mouseLeave" v-click-out-side='hiddenMenu' :class='{"oh":level!==1,"sd":selectedFirst,"onlyOne":level===1}'>
     <!-- level：1 只有一级菜单 -->
     <template v-if="level===1">
       <div class="first-menu common-scrollbar">
@@ -8,8 +8,9 @@
           v-for="item in list"
           :key="item.id"
           track-by="$index"
-          @click="selectLinkMenu(item)"
+          @click="selectLinkMenu(item, 1)"
           class="menu-item"
+          :class="{'menu-item':true,'selected':firstMenu.id === item.id}"
         >{{item.name | subStringName}}</a>
       </div>
     </template>
@@ -30,7 +31,7 @@
         <div class="menu-content">
           <a
             href="javascript:;"
-            :class="{'menu-item':true,'selected':item.selected}"
+            :class="{'menu-item':true,'selected':secMenu.id === item.id}"
             v-for="item in secondList"
             :key="item.id"
             track-by="$index"
@@ -64,7 +65,7 @@
                 v-for="item in second.children"
                 :key="item.id"
                 track-by="$index"
-                :class="{'menu-item':true,'selected':item.selected}"
+                :class="{'menu-item':true,'selected':thiMenu.id ===item.id}"
                 @click="selectLinkMenu(item, second)"
               >{{item.name | subStringName}}</a>
             </div>
@@ -106,9 +107,11 @@ export default {
   },
   data() {
     return {
-      selectedFirst: false, // 是否选中一级栏目
+      selectedFirst: true, // 是否选中一级栏目
       secondList: [],
-      firstMenu: {}
+      firstMenu: {},
+      secMenu: {},
+      thiMenu: {}
     };
   },
   filters: {
@@ -145,11 +148,13 @@ export default {
         if (data[1] && fItem.children) {
           let sid = data[1].id || -1;
           let sIndex = this.setSelected(fItem.children, sid);
+          this.secMenu = data[1]
           //三级菜单
           let sItem = fItem.children[sIndex];
           if (data[2] && sItem.children) {
             let tid = data[2].id || -1;
             this.setSelected(sItem.children, tid);
+            this.thiMenu = data[2]
           }
         }
       }
@@ -176,6 +181,16 @@ export default {
       this.secondList = menu.children;
     },
     selectLinkMenu(item, second) {
+      if (second) {
+        this.secMenu = second
+        this.thiMenu = item
+      } else {
+        this.secMenu =item
+      }
+      if (second === 1) {
+        this.firstMenu = item
+      }
+      item.selected = true
       this.$emit("select", item, second, this.firstMenu);
       this.reset();
     },
@@ -186,7 +201,7 @@ export default {
         element.selected = false;
         that.list.$set(index, element);
       });
-      this.selectedFirst = false;
+      // this.selectedFirst = false;
     },
     mouseLeave() {
       if (this.eventType === "hover") this.reset();
@@ -210,6 +225,9 @@ export default {
   }
   &.sd {
     box-shadow:0px 3px 8px 0px rgba(0,0,0,0.31);
+  }
+  &.onlyOne {
+    width: 118px;
   }
   * {
     box-sizing: border-box;
