@@ -324,7 +324,7 @@ export default {
         color: rgba(0, 0, 0, 0.45);
         clear: both;
         overflow: hidden;
-        padding-top: 4px;
+        padding-top: 2px;
         .name-content {
           float: left;
           width: 84px;
