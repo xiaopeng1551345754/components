@@ -1,5 +1,5 @@
 <template>
-  <div class="hex-cate" @mouseleave="mouseLeave" v-click-out-side='hiddenMenu' :class='{"oh":level!==1}'>
+  <div class="hex-cate" @mouseleave="mouseLeave" v-click-out-side='hiddenMenu' :class='{"oh":level!==1,"sd":selectedFirst}'>
     <!-- level：1 只有一级菜单 -->
     <template v-if="level===1">
       <div class="first-menu common-scrollbar">
@@ -208,6 +208,9 @@ export default {
     border-radius:0px 0px 8px 8px;
 
   }
+  &.sd {
+    box-shadow:0px 3px 8px 0px rgba(0,0,0,0.31);
+  }
   * {
     box-sizing: border-box;
   }
@@ -222,7 +225,8 @@ export default {
     overflow-y: auto;
     background: #F1F1F1;
     &::-webkit-scrollbar {
-      background: rgba(0,0,0,0)
+      background: rgba(0,0,0,0);
+      width: 4px;
     }
     &::-webkit-scrollbar-thumb {
       background:rgba(216,216,216,1);
@@ -264,6 +268,10 @@ export default {
     background: #fff;
     border-left: none;
     overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 4px;
+      background: rgba(0,0,0,0);
+    }
     &::-webkit-scrollbar-thumb {
       background:rgba(216,216,216,1);
       border-radius:2px;
