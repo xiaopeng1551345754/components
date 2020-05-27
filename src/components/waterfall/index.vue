@@ -7,8 +7,9 @@
       :gap="14"
       :max-cols="4"
       :loading-img="loadingImg"
-      :lang="lang"
-      :lang-info="langInfo"
+      :lang='lang'
+      :lang-info='langInfo'
+      :dom-id = 'domId'
     >
     </vue-waterfall>
   </div>
@@ -55,6 +56,9 @@ export default {
           }
         }
       }
+    },
+    domId: {
+      type: String
     }
   },
   data() {

@@ -145,6 +145,9 @@ export default {
     },
     langInfo: {
       type: Object
+    },
+    domId: {
+      type: String
     }
   },
   data() {
@@ -203,6 +206,17 @@ export default {
       window.addEventListener("resize", this.response);
     if (this.isMobile && this.enablePullDownEvent) this.pullDown();
     this.scroll();
+
+    if (this.domId) {
+      const self = this;
+      this.$nextTick (()=>{
+        dom.onscroll = function () {
+          if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 0) {
+            self.$emit("scroll-bottom");
+          }
+        }
+      })
+    }
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.response);
@@ -334,19 +348,21 @@ export default {
       this.waterfall();
       if (this.over) this.setOverTipPos();
     },
-
     // ==5== 滚动触底事件
     scrollFn() {
-      var scrollEl = this.scrollEl;
-      if (this.isPreloading) return;
-      var minHeight = Math.min.apply(null, this.colsHeightArr);
-      if (
-        scrollEl.scrollTop + scrollEl.offsetHeight >
-        minHeight - this.reachBottomDistance
-      ) {
-        this.isPreloading = true;
-        // console.log('scroll-bottom')
-        this.$emit("scroll-bottom"); // 滚动触底
+      var self = this
+      if (!this.domId) {
+        var scrollEl = this.scrollEl;
+        if (this.isPreloading) return;
+        var minHeight = Math.min.apply(null, this.colsHeightArr);
+        if (
+          scrollEl.scrollTop + scrollEl.offsetHeight >
+          minHeight - this.reachBottomDistance
+        ) {
+          this.isPreloading = true;
+          // console.log('scroll-bottom')
+          this.$emit("scroll-bottom"); // 滚动触底
+        }
       }
     },
     scroll() {

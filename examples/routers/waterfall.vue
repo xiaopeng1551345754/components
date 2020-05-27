@@ -1,11 +1,19 @@
 <template>
-  <waterfall
-    :loading-img="loadingImg"
-    :list="list"
-    :lang='"en"'
-    @scroll-bottom="scrollBottom"
-    @select-item="selectItem"
-  ></waterfall>
+  <div class='wrap'>
+    <div id="dom">
+      <div>
+
+      </div>
+    </div>
+    <waterfall
+      :loading-img="loadingImg"
+      :list="list"
+      :lang='"en"'
+      :dom-id='"#dom"'
+      @scroll-bottom="scrollBottom"
+      @select-item="selectItem"
+    ></waterfall>
+  </div>
 </template>
 <script>
 export default {
@@ -111,3 +119,22 @@ export default {
   }
 };
 </script>
+<style lang="less">
+.wrap {
+  width: 500px;
+  height: 300px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+#dom {
+  height: 200px;
+  width: 200px;
+  background: green;
+  overflow: auto;
+  div {
+    height: 400px;
+  }
+}
+</style>
