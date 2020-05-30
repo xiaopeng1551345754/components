@@ -5,11 +5,12 @@
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
       :gap="14"
-      :max-cols="4"
+      :max-cols="maxCols"
       :loading-img="loadingImg"
       :lang='lang'
       :lang-info='langInfo'
       :dom-id = 'domId'
+      :img-width = 'imgWidth'
     >
     </vue-waterfall>
   </div>
@@ -59,6 +60,14 @@ export default {
     },
     domId: {
       type: String
+    },
+    imgWidth: {
+      type: Number,
+      default: 240
+    },
+    maxCols: {
+      type: Number,
+      default: 4
     }
   },
   data() {

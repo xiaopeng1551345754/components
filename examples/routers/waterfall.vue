@@ -1,10 +1,10 @@
 <template>
   <div class='waterfall_wrap'>
-    <div id="dom">
+    <!-- <div id="dom">
       <div>
 
       </div>
-    </div>
+    </div> -->
     <waterfall
       :loading-img="loadingImg"
       :list="list"
@@ -121,7 +121,7 @@ export default {
 </script>
 <style lang="less">
 .waterfall_wrap {
-  width: 500px;
+  width: 1000px;
   height: 300px;
   position: fixed;
   left: 50%;
