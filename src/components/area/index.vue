@@ -143,14 +143,6 @@ export default {
       }
     };
   },
-  watch: {
-    list: {
-      deep: true,
-      handler () {
-        this.init()
-      }
-    }
-  },
   computed: {
     selectText() {
       return (

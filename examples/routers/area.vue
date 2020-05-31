@@ -1,30 +1,34 @@
 <template>
-  <area 
-  :list="list" 
-  :default-data="defaultData" @select-node="selectNode" 
-  :lang='"en"'
-  />
+  <div>
+    <button @click='init'>init</button>
+    <area 
+    v-ref:area
+    :list="list" 
+    :default-data="defaultData" @select-node="selectNode" 
+    :lang='"en"'
+    />
+  </div>
 </template>
 <script>
 export default {
   data() {
     return {
       defaultData: [
-        // {
-        //   name: "中国",
-        //   id: "china1",
-        //   type: "country"
-        // },
-        // {
-        //   name: "北京",
-        //   id: "BeiJing1",
-        //   type: "province"
-        // },
-        // {
-        //   name: "朝阳区",
-        //   id: "district1",
-        //   type: "district"
-        // }
+        {
+          name: "中国",
+          id: "china1",
+          type: "country"
+        },
+        {
+          name: "北京",
+          id: "BeiJing1",
+          type: "province"
+        },
+        {
+          name: "朝阳区",
+          id: "district1",
+          type: "district"
+        }
       ],
       list: [
         {
@@ -107,6 +111,9 @@ export default {
     },
     getResult() {
       // 返回的国省市
+    },
+    init () {
+      this.$refs.area.init()
     }
   }
 };
