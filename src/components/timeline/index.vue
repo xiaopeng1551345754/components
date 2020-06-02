@@ -77,7 +77,7 @@ export default {
             theme: '主题',
             type: '类型',
             people: '主要人员',
-            selece: '操作',
+            select: '操作',
             watch: '查看'
           },
           en: {
@@ -85,7 +85,7 @@ export default {
             theme: 'theme',
             type: 'type',
             people: 'members',
-            selece: 'handle',
+            select: 'handle',
             watch: 'see'
           }
         }
@@ -212,7 +212,7 @@ export default {
         left: 50%;
         top: 0;
         transform: translateX(-50%);
-        background: #1890FF;
+        background: #2E4CF4;
       }
       .circle {
         width: 14px;
@@ -221,7 +221,7 @@ export default {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        border: 1px solid #1890FF;
+        border: 1px solid #2E4CF4;
         border-radius: 50%;
         .inner {
           width: 10px;
@@ -230,7 +230,7 @@ export default {
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-          background: #1890FF;
+          background: #2E4CF4;
           border-radius: 50%;
         }
       }
@@ -262,7 +262,7 @@ export default {
     }
     .select{
       width: 70px;
-      color: #1890FF;
+      color: #2E4CF4;
       text-shadow: 0;
       cursor: pointer;
     }
