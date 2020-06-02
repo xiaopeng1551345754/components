@@ -137,21 +137,29 @@ export default {
     &:hover .right{
       background:#fff !important;
       border:1px solid rgba(46,76,244,1) !important;
+      box-shadow:1px 1px 2px 0px rgba(0,0,0,0.25),-6px 8px 7px 2px rgba(69,86,89,0.15) !important;
+      transition: .3s;
       &::before {
-        border-right: 15px  solid rgba(46,76,244,1) !important;
+        border-bottom: 1px solid rgba(46,76,244,1) !important ;
+        border-left: 1px solid rgba(46,76,244,1) !important ;
+        transition: .3s;
+        z-index: 0;
+        background: #fff !important;
+        box-shadow:0px 0px 0px 0px rgba(0,0,0,0.25),-6px 8px 7px 2px rgba(69,86,89,0.15) !important;
       }
-      &::after {
-        position: absolute;
-        content: '';
-        right: 100%;
-        top: 50%;
-        transform: translate(2px,-50%);
-        border-top: 10px transparent dashed;
-        border-left: 10px transparent dashed;
-        border-bottom: 10px transparent dashed;
-        border-right: 15px #fff solid;
-        z-index: 1;
-      }
+      // &::after {
+      //   position: absolute;
+      //   content: '';
+      //   right: 100%;
+      //   top: 50%;
+      //   transform: translate(2px,-50%);
+      //   border-top: 10px transparent dashed;
+      //   border-left: 10px transparent dashed;
+      //   border-bottom: 10px transparent dashed;
+      //   border-right: 15px #fff solid;
+      //   z-index: 1;
+      //   transition: .3s;
+      // }
     }
     .items {
       flex-shrink: 0;
@@ -180,11 +188,10 @@ export default {
           content: '';
           right: 100%;
           top: 50%;
-          transform: translateY(-50%);
-          border-top: 10px transparent dashed;
-          border-left: 10px transparent dashed;
-          border-bottom: 10px transparent dashed;
-          border-right: 15px #f5f5f5 solid;
+          transform: translate(47.5%, -50%) rotate(45deg);
+          background: #f5f5f5;
+          width: 20px;
+          height: 20px;
         }
       }
     }
