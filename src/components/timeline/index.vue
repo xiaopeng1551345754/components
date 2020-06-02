@@ -135,9 +135,22 @@ export default {
     display: flex;
     cursor: pointer;
     &:hover .right{
-      background:rgba(225,241,255,1) !important;
+      background:#fff !important;
+      border:1px solid rgba(46,76,244,1) !important;
       &::before {
-        border-right: 15px #e1f1ff solid !important;
+        border-right: 15px  solid rgba(46,76,244,1) !important;
+      }
+      &::after {
+        position: absolute;
+        content: '';
+        right: 100%;
+        top: 50%;
+        transform: translate(2px,-50%);
+        border-top: 10px transparent dashed;
+        border-left: 10px transparent dashed;
+        border-bottom: 10px transparent dashed;
+        border-right: 15px #fff solid;
+        z-index: 1;
       }
     }
     .items {
@@ -161,6 +174,7 @@ export default {
         box-shadow:1px 1px 2px 0px rgba(0,0,0,0.25),0px 0px 2px 0px rgba(0,0,0,0.15);
         padding-left: 14px;
         position: relative;
+        border:1px solid rgba(0,0,0,0);
         &:before {
           position: absolute;
           content: '';
