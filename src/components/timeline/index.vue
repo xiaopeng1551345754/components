@@ -23,7 +23,7 @@
         <div class="items time">
           {{item.time}}
         </div>
-        <div class="items line_wrap" :class="{'first':idx===0,'end':idx === data.length-1}">
+        <div class="items line_wrap" :class="{'first':idx===0,'end':idx === data.length-1,'only':data.length === 1}">
           <div class="line">
 
           </div>
@@ -133,6 +133,13 @@ export default {
   .ali_time_line_head, .ali_time_line_item{
     flex-shrink: 0;
     display: flex;
+    cursor: pointer;
+    &:hover .right{
+      background:rgba(225,241,255,1) !important;
+      &::before {
+        border-right: 15px #e1f1ff solid !important;
+      }
+    }
     .items {
       flex-shrink: 0;
       overflow: hidden;
@@ -216,6 +223,11 @@ export default {
     .end {
       .line {
         height: 50%;
+      }
+    }
+    .only {
+      .line {
+        height: 0;
       }
     }
     .theme{
