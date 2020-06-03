@@ -1,8 +1,10 @@
 <template>
   <div class="date_wrap">
-    <datepicker>
-      
-    </datepicker>
+    <div class="wrap">
+      <datepicker>
+        
+      </datepicker>
+    </div>
   </div>
 </template>
 
@@ -13,5 +15,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.date_wrap {
+  background: green;
+  width: 100vw;
+  height: 100vh;
+  .wrap {
+    width: 470px;
+    position: fixed;
+    left: 40%;
+    top: 30%;
+  }
+  .pi {
+    margin: auto;
+  }
+}
 </style>

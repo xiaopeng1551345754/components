@@ -1,10 +1,15 @@
 <template>
-  <div class="ali_date_picker">
+  <div class="ali_date_picker" v-click-out-side="hide(0)">
     <div class="head">
       <div class="times">
-        <div class="start time" v-click-out-side='hide(0)'>
-          <div class="show-time" v-show="startStr" v-html="startStr" @click='show(0)'></div>
-          <div class="choose-time" v-show="!startStr" @click='show(0)'>
+        <div class="start time">
+          <div
+            class="show-time"
+            v-show="startStr"
+            v-html="startStr"
+            @click="show(0)"
+          ></div>
+          <div class="choose-time" v-show="!startStr" @click="show(0)">
             <div class="img">
               <img src="./image/time.png" />
             </div>
@@ -12,25 +17,16 @@
               {{ t("start") }}
             </div>
           </div>
-          <dataselect
-            class="select"
-            v-show="fromShow"
-            :max-start="maxStart"
-            :max-end="maxEnd"
-            :lang="lang"
-            :lang-info="langInfo"
-            :show-year="startYear"
-            :show-month="startMonth"
-            :show-day="startDay"
-            :show-hour="startHour"
-            :show-minute="startMinute"
-            @selected="selectedFrom"
-          ></dataselect>
         </div>
         <div class="bar1"></div>
-        <div class="end time" v-click-out-side='hide(1)'>
-          <div class="show-time" v-show="endStr" v-html="endStr" @click='show(1)'></div>
-          <div class="choose-time" v-show="!endStr" @click='show(1)'>
+        <div class="end time">
+          <div
+            class="show-time"
+            v-show="endStr"
+            v-html="endStr"
+            @click="show(1)"
+          ></div>
+          <div class="choose-time" v-show="!endStr" @click="show(1)">
             <div class="img">
               <img src="./image/time.png" />
             </div>
@@ -38,28 +34,42 @@
               {{ t("end") }}
             </div>
           </div>
-          <dataselect
-            class="select"
-            v-show="endShow"
-            :max-start="maxStart"
-            :max-end="maxEnd"
-            :lang="lang"
-            :lang-info="langInfo"
-            :show-year="endYear"
-            :show-month="endMonth"
-            :show-day="endDay"
-            :show-hour="endHour"
-            :show-minute="endMinute"
-            @selected="selectedEnd"
-          ></dataselect>
         </div>
       </div>
       <div class="btn">
-        <div @click='sure'>
+        <div @click="sure">
           {{ t("sure") }}
         </div>
       </div>
     </div>
+    <dataselect
+      class="select select1"
+      v-show="fromShow"
+      :max-start="maxStart"
+      :max-end="maxEnd"
+      :lang="lang"
+      :lang-info="langInfo"
+      :show-year="startYear"
+      :show-month="startMonth"
+      :show-day="startDay"
+      :show-hour="startHour"
+      :show-minute="startMinute"
+      @selected="selectedFrom"
+    ></dataselect>
+    <dataselect
+      class="select select2"
+      v-show="endShow"
+      :max-start="maxStart"
+      :max-end="maxEnd"
+      :lang="lang"
+      :lang-info="langInfo"
+      :show-year="endYear"
+      :show-month="endMonth"
+      :show-day="endDay"
+      :show-hour="endHour"
+      :show-minute="endMinute"
+      @selected="selectedEnd"
+    ></dataselect>
   </div>
 </template>
 
@@ -72,7 +82,7 @@ export default {
     dataselect,
   },
   directives: {
-    clickOutSide
+    clickOutSide,
   },
   props: {
     start: {
@@ -187,7 +197,7 @@ export default {
       startArray: [],
       endArray: [],
       fromShow: false,
-      endShow: false
+      endShow: false,
     };
   },
   methods: {
@@ -220,31 +230,30 @@ export default {
       return str * 1 < 10 ? "0" + str : str;
     },
     selectedFrom(date) {
-      this.startArray = date
-      this.fromShow = false
+      this.startArray = date;
+      this.fromShow = false;
     },
     selectedEnd(date) {
-      this.endArray = date
-      this.endShow = false
+      this.endArray = date;
+      this.endShow = false;
     },
-    show (type) {
+    show(type) {
       if (!type) {
-        this.fromShow = true
+        this.fromShow = true;
+        this.endShow = false;
       } else {
-        this.endShow = true
+        this.fromShow = false;
+        this.endShow = true;
       }
     },
-    hide (type) {
-      if (type*1) {
-        this.endShow = false
-        } else {
-        this.fromShow = false
-      }
+    hide(type) {
+      this.endShow = false;
+      this.fromShow = false;
     },
-    sure () {
-      console.log('sure',this.startArray,this.endArray)
-      this.$emit('sure',this.startArray,this.endArray)
-    }
+    sure() {
+      this.hide()
+      this.$emit("sure", this.startArray, this.endArray);
+    },
   },
   watch: {
     start: {
@@ -277,33 +286,39 @@ export default {
 </script>
 <style lang="less" scoped>
 .ali_date_picker {
+  position: relative;
+  user-select: none;
   .head {
     display: flex;
-    width: 470px;
+    width: 100%;
     height: 40px;
     align-items: center;
     justify-content: center;
-    background:rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 1);
     .times {
       display: flex;
+      flex-grow: 1;
+      margin-left: 14px;
       .bar1 {
         width: 15px;
         height: 1px;
         background: #d0d0d0;
-        margin: 11px 9px 0; 
+        margin: 11px 9px 0;
       }
       .time {
         position: relative;
+        flex-shrink: 0;
+        min-width: 132px;
+        flex-grow: 1;
         .show-time {
           cursor: pointer;
           border: 0.5px solid #d0d0d0;
           border-radius: 4px;
-          width: 161px;
           height: 22.46px;
           text-align: center;
           line-height: 22.46px;
           font-size: 14px;
-          color: #2E4CF4;
+          color: #2e4cf4;
         }
         .choose-time {
           cursor: pointer;
@@ -311,11 +326,10 @@ export default {
           border: 0.5px solid #d0d0d0;
           border-radius: 4px;
           align-items: center;
-          justify-content: center; 
-          width: 161px;
+          justify-content: center;
           height: 22.46px;
           font-size: 14px;
-          .img img{
+          .img img {
             width: 16px;
             height: 16px;
             position: relative;
@@ -323,11 +337,7 @@ export default {
           }
           .text {
             margin-left: 7px;
-          } 
-        }
-        .select {
-          position: absolute;
-          top: 40px;
+          }
         }
       }
     }
@@ -335,14 +345,27 @@ export default {
       cursor: pointer;
       width: 53px;
       height: 22.46px;
-      background:rgba(46,76,244,1);
-      border-radius:4px;
+      background: rgba(46, 76, 244, 1);
+      border-radius: 4px;
       text-align: center;
       line-height: 22.46px;
       font-size: 14px;
-      color: #FFF;
+      color: #fff;
       margin-left: 31px;
+      flex-shrink: 0;
+      margin-right: 14px;
+      flex-shrink: 0;
     }
+  }
+  .select {
+    position: absolute;
+    top: 100%;
+  }
+  .select1 {
+    left: 0;
+  }
+  .select2 {
+    right: 0;
   }
 }
 </style>
