@@ -54,7 +54,7 @@
     </div>
     <div class="foot">
       <div class="times">
-        <div class="hour btn" @click="changeShow(0)">
+        <div class="hour btn" @click="changeShow(0)" v-click-out-side='closeSelect(0)'>
           {{
             selectHour > -1
               ? selectHour < 10
@@ -62,7 +62,7 @@
                 : selectHour
               : t("hour")
           }}
-          <div class="select" v-show="hourShow">
+          <div class="select" v-show="hourShow" >
             <div
               class="item"
               v-for="item in 24"
@@ -75,7 +75,7 @@
           </div>
         </div>
         <div class="bar3">:</div>
-        <div class="minute btn" @click="changeShow(1)">
+        <div class="minute btn" @click="changeShow(1)" v-click-out-side='closeSelect(1)'>
           {{
             selectMinute > -1
               ? selectMinute < 10
@@ -101,9 +101,12 @@
 </template>
 
 <script>
-import vue from "Vue";
+import clickOutSide from "../../directives/clickoutside.js";
 export default {
   name: "dataselect",
+  directives: {
+    clickOutSide
+  },
   props: {
     maxStart: {
       type: Array,
@@ -254,6 +257,13 @@ export default {
         ]);
       }
     },
+    closeSelect (type) {
+      if (type*1) {
+        this.minuteShow = false;
+      } else {
+        this.hourShow = false;
+      }
+    }
   },
   filters: {
     lessTen(str) {
@@ -398,7 +408,7 @@ export default {
         top: 102%;
         width: 100%;
         left: 0;
-        height: 96px;
+        height: 116px;
         overflow: auto;
         box-shadow: 0px 12px 48px 16px rgba(0, 0, 0, 0.03);
         border: 1px solid rgba(208, 208, 208, 0.3);
