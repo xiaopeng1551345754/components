@@ -1,7 +1,9 @@
 <template>
   <div class="date_wrap">
     <div class="wrap">
-      <datepicker>
+      <datepicker
+        @sure='sure'
+      >
         
       </datepicker>
     </div>
@@ -10,7 +12,11 @@
 
 <script>
 export default {
-
+  methods: {
+    sure (str,end) {
+      console.log(JSON.stringify(str))
+    }
+  }
 }
 </script>
 

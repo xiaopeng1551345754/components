@@ -345,6 +345,7 @@ export default {
   .content {
     padding: 16px 12px 6px 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    min-height: auto;
     .weeks,
     .days {
       display: flex;
