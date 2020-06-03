@@ -34,6 +34,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/timeline.vue'], resolve);
     }
+  },
+  '/datepicker': {
+    component: function(resolve) {
+      require(['./routers/datepicker.vue'], resolve);
+    }
   }
 });
 
@@ -46,6 +51,6 @@ router.afterEach(function(transition) {
 });
 
 router.redirect({
-  '*': "/timeline"
+  '*': "/datepicker"
 });
 router.start(App, '#app');

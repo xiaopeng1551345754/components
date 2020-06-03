@@ -23,7 +23,7 @@
         <div class="items time">
           {{item.time}}
         </div>
-        <div class="items line_wrap" :class="{'first':idx===0,'end':idx === data.length-1}">
+        <div class="items line_wrap" :class="{'first':idx===0,'end':idx === data.length-1,'only':data.length === 1}">
           <div class="line">
 
           </div>
@@ -77,7 +77,7 @@ export default {
             theme: '主题',
             type: '类型',
             people: '主要人员',
-            selece: '操作',
+            select: '操作',
             watch: '查看'
           },
           en: {
@@ -85,7 +85,7 @@ export default {
             theme: 'theme',
             type: 'type',
             people: 'members',
-            selece: 'handle',
+            select: 'handle',
             watch: 'see'
           }
         }
@@ -133,6 +133,34 @@ export default {
   .ali_time_line_head, .ali_time_line_item{
     flex-shrink: 0;
     display: flex;
+    cursor: pointer;
+    &:hover .right{
+      background:#fff !important;
+      border:1px solid rgba(46,76,244,1) !important;
+      box-shadow:1px 1px 2px 0px rgba(0,0,0,0.25),-6px 8px 7px 2px rgba(69,86,89,0.15) !important;
+      transition: .3s;
+      &::before {
+        border-bottom: 1px solid rgba(46,76,244,1) !important ;
+        border-left: 1px solid rgba(46,76,244,1) !important ;
+        transition: .3s;
+        z-index: 0;
+        background: #fff !important;
+        box-shadow:0px 0px 0px 0px rgba(0,0,0,0.25),-6px 8px 7px 2px rgba(69,86,89,0.15) !important;
+      }
+      // &::after {
+      //   position: absolute;
+      //   content: '';
+      //   right: 100%;
+      //   top: 50%;
+      //   transform: translate(2px,-50%);
+      //   border-top: 10px transparent dashed;
+      //   border-left: 10px transparent dashed;
+      //   border-bottom: 10px transparent dashed;
+      //   border-right: 15px #fff solid;
+      //   z-index: 1;
+      //   transition: .3s;
+      // }
+    }
     .items {
       flex-shrink: 0;
       overflow: hidden;
@@ -154,16 +182,16 @@ export default {
         box-shadow:1px 1px 2px 0px rgba(0,0,0,0.25),0px 0px 2px 0px rgba(0,0,0,0.15);
         padding-left: 14px;
         position: relative;
+        border:1px solid rgba(0,0,0,0);
         &:before {
           position: absolute;
           content: '';
           right: 100%;
           top: 50%;
-          transform: translateY(-50%);
-          border-top: 10px transparent dashed;
-          border-left: 10px transparent dashed;
-          border-bottom: 10px transparent dashed;
-          border-right: 15px #f5f5f5 solid;
+          transform: translate(47.5%, -50%) rotate(45deg);
+          background: #f5f5f5;
+          width: 20px;
+          height: 20px;
         }
       }
     }
@@ -184,7 +212,7 @@ export default {
         left: 50%;
         top: 0;
         transform: translateX(-50%);
-        background: #1890FF;
+        background: #2E4CF4;
       }
       .circle {
         width: 14px;
@@ -193,7 +221,7 @@ export default {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        border: 1px solid #1890FF;
+        border: 1px solid #2E4CF4;
         border-radius: 50%;
         .inner {
           width: 10px;
@@ -202,7 +230,7 @@ export default {
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-          background: #1890FF;
+          background: #2E4CF4;
           border-radius: 50%;
         }
       }
@@ -218,6 +246,11 @@ export default {
         height: 50%;
       }
     }
+    .only {
+      .line {
+        height: 0;
+      }
+    }
     .theme{
       width: 282px;
     }
@@ -229,7 +262,7 @@ export default {
     }
     .select{
       width: 70px;
-      color: #1890FF;
+      color: #2E4CF4;
       text-shadow: 0;
       cursor: pointer;
     }

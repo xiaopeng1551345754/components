@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap timelinewrap">
     <timeline 
     :data="data" 
     @select="select"
@@ -21,7 +21,7 @@ export default {
     },
   },
   ready() {
-    for (let i = 11; i--; ) {
+    for (let i = 3; i--; ) {
       this.data.push({
         time: `${i}:${i}-${i}:${i}`,
         theme: '金夫人直播金夫人直播',
@@ -33,3 +33,8 @@ export default {
   },
 };
 </script>
+<style lang="less" scoped>
+.timelinewrap {
+  height: 500px;
+}
+</style>
