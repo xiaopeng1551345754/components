@@ -7,7 +7,13 @@ export default {
             }
             // 处理模拟的双击事件
             if (this.expression && (new Date().getTime())- last > 200) {
-                this.vm[this.expression]();
+              let tar = ''
+              let data = ''
+              if (this.expression.indexOf('(')) {
+                tar = this.expression.split(/[(,)]/)[0]
+                data = this.expression.split(/[(,)]/)[1]
+              }
+                this.vm[tar](data);
                 last = Date.now()
             }
         };

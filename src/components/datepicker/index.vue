@@ -2,9 +2,9 @@
   <div class="ali_date_picker">
     <div class="head">
       <div class="times">
-        <div class="start time">
-          <div v-show="startStr" v-html="startStr"></div>
-          <div v-show="!startStr">
+        <div class="start time" v-click-out-side='hide(0)'>
+          <div v-show="startStr" v-html="startStr" @click='show(0)'></div>
+          <div v-show="!startStr" @click='show(0)'>
             <div class="img">
               <img src="./image/time.png" />
             </div>
@@ -13,6 +13,7 @@
             </div>
           </div>
           <dataselect
+            v-show="fromShow"
             :max-start="maxStart"
             :max-end="maxEnd"
             :lang="lang"
@@ -26,9 +27,9 @@
           ></dataselect>
         </div>
         <div class="bar1"></div>
-        <div class="end time">
-          <div v-show="endStr" v-html="endStr"></div>
-          <div v-show="!endStr">
+        <div class="end time" v-click-out-side='hide(1)'>
+          <div v-show="endStr" v-html="endStr" @click='show(1)'></div>
+          <div v-show="!endStr" @click='show(1)'>
             <div class="img">
               <img src="./image/time.png" />
             </div>
@@ -37,6 +38,7 @@
             </div>
           </div>
           <dataselect
+            v-show="endShow"
             :max-start="maxStart"
             :max-end="maxEnd"
             :lang="lang"
@@ -51,7 +53,7 @@
         </div>
       </div>
       <div class="btn">
-        <div>
+        <div @click='sure'>
           {{ t("sure") }}
         </div>
       </div>
@@ -61,10 +63,14 @@
 
 <script>
 import dataselect from "./select.vue";
+import clickOutSide from "../../directives/clickoutside.js";
 export default {
   name: "datepicker",
   components: {
     dataselect,
+  },
+  directives: {
+    clickOutSide
   },
   props: {
     start: {
@@ -178,6 +184,8 @@ export default {
       endMinute: -1,
       startArray: [],
       endArray: [],
+      fromShow: false,
+      endShow: false
     };
   },
   methods: {
@@ -211,10 +219,30 @@ export default {
     },
     selectedFrom(date) {
       this.startArray = date
+      this.fromShow = false
     },
     selectedEnd(date) {
       this.endArray = date
+      this.endShow = false
     },
+    show (type) {
+      if (!type) {
+        this.fromShow = true
+      } else {
+        this.endShow = true
+      }
+    },
+    hide (type) {
+      if (type*1) {
+        this.endShow = false
+        } else {
+        this.fromShow = false
+      }
+    },
+    sure () {
+      console.log('sure',this.startArray,this.endArray)
+      this.$emit('sure',this.startArray,this.endArray)
+    }
   },
   watch: {
     start: {
