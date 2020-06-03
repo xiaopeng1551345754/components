@@ -3,8 +3,8 @@
     <div class="head">
       <div class="times">
         <div class="start time" v-click-out-side='hide(0)'>
-          <div v-show="startStr" v-html="startStr" @click='show(0)'></div>
-          <div v-show="!startStr" @click='show(0)'>
+          <div class="show-time" v-show="startStr" v-html="startStr" @click='show(0)'></div>
+          <div class="choose-time" v-show="!startStr" @click='show(0)'>
             <div class="img">
               <img src="./image/time.png" />
             </div>
@@ -13,6 +13,7 @@
             </div>
           </div>
           <dataselect
+            class="select"
             v-show="fromShow"
             :max-start="maxStart"
             :max-end="maxEnd"
@@ -28,8 +29,8 @@
         </div>
         <div class="bar1"></div>
         <div class="end time" v-click-out-side='hide(1)'>
-          <div v-show="endStr" v-html="endStr" @click='show(1)'></div>
-          <div v-show="!endStr" @click='show(1)'>
+          <div class="show-time" v-show="endStr" v-html="endStr" @click='show(1)'></div>
+          <div class="choose-time" v-show="!endStr" @click='show(1)'>
             <div class="img">
               <img src="./image/time.png" />
             </div>
@@ -38,6 +39,7 @@
             </div>
           </div>
           <dataselect
+            class="select"
             v-show="endShow"
             :max-start="maxStart"
             :max-end="maxEnd"
@@ -273,4 +275,74 @@ export default {
   ready() {},
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.ali_date_picker {
+  .head {
+    display: flex;
+    width: 470px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    background:rgba(255, 255, 255, 1);
+    .times {
+      display: flex;
+      .bar1 {
+        width: 15px;
+        height: 1px;
+        background: #d0d0d0;
+        margin: 11px 9px 0; 
+      }
+      .time {
+        position: relative;
+        .show-time {
+          cursor: pointer;
+          border: 0.5px solid #d0d0d0;
+          border-radius: 4px;
+          width: 161px;
+          height: 22.46px;
+          text-align: center;
+          line-height: 22.46px;
+          font-size: 14px;
+          color: #2E4CF4;
+        }
+        .choose-time {
+          cursor: pointer;
+          display: flex;
+          border: 0.5px solid #d0d0d0;
+          border-radius: 4px;
+          align-items: center;
+          justify-content: center; 
+          width: 161px;
+          height: 22.46px;
+          font-size: 14px;
+          .img img{
+            width: 16px;
+            height: 16px;
+            position: relative;
+            top: 2.5px;
+          }
+          .text {
+            margin-left: 7px;
+          } 
+        }
+        .select {
+          position: absolute;
+          top: 40px;
+        }
+      }
+    }
+    .btn {
+      cursor: pointer;
+      width: 53px;
+      height: 22.46px;
+      background:rgba(46,76,244,1);
+      border-radius:4px;
+      text-align: center;
+      line-height: 22.46px;
+      font-size: 14px;
+      color: #FFF;
+      margin-left: 31px;
+    }
+  }
+}
+</style>
