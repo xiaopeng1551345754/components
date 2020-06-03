@@ -43,6 +43,7 @@
       </div>
     </div>
     <dataselect
+      v-ref:from
       class="select select1"
       v-show="fromShow"
       :max-start="maxStart"
@@ -57,6 +58,7 @@
       @selected="selectedFrom"
     ></dataselect>
     <dataselect
+      v-ref:end
       class="select select2"
       v-show="endShow"
       :max-start="maxStart"
@@ -229,21 +231,44 @@ export default {
     lessTen(str) {
       return str * 1 < 10 ? "0" + str : str;
     },
+    toStamp (arr) {
+      let tar = JSON.parse(JSON.stringify(arr))
+      tar.push(0)
+      return new Date(tar[0],tar[1]-1,tar[2],tar[3],tar[4],tar[5]).getTime()
+    },
     selectedFrom(date) {
       this.startArray = date;
+      if (this.endStr) {
+        if (this.toStamp(this.startArray)>this.toStamp(this.endArray)) {
+          this.startArray = this.endArray
+          this.endArray = date
+          this.end = this.endArray
+        }
+      }
+      this.start = this.startArray
       this.fromShow = false;
     },
     selectedEnd(date) {
       this.endArray = date;
+      if (this.startStr) {
+        if (this.toStamp(this.startArray)>this.toStamp(this.endArray)) {
+          this.endArray = this.startArray
+          this.startArray = date
+          this.start = this.startArray
+        }
+      }
+      this.end = this.endArray
       this.endShow = false;
     },
     show(type) {
       if (!type) {
         this.fromShow = true;
         this.endShow = false;
+        this.$refs.from.init(this.startArray)
       } else {
         this.fromShow = false;
         this.endShow = true;
+        this.$refs.end.init(this.endArray)
       }
     },
     hide(type) {

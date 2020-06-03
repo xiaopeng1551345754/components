@@ -14,7 +14,7 @@
 export default {
   methods: {
     sure (str,end) {
-      console.log(JSON.stringify(str))
+      console.log(JSON.stringify(str),JSON.stringify(end))
     }
   }
 }

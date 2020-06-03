@@ -33,11 +33,11 @@
           :key="idx"
           :class="{
             today:
-              now[0] == showYear && now[1] == showMonth && now[2] == item + 1,
+              now[0]*1 == showYear*1 && now[1]*1 == showMonth*1 && now[2]*1 == item + 1,
             selected:
-              select[0] == showYear &&
-              select[1] == showMonth &&
-              select[2] == item + 1,
+              select[0]*1 == showYear*1 &&
+              select[1]*1 == showMonth*1 &&
+              select[2]*1 == item + 1,
           }"
           @click="selectThisDay(item + 1)"
         >
@@ -183,14 +183,24 @@ export default {
       now: new Date().toLocaleDateString().split("/"),
       langMap: [],
       weekMap: [],
-      select: [-1, -1, -1],
-      selectHour: -1,
-      selectMinute: -1,
+      select: [this.showYear, this.showMonth, this.showDay],
+      selectHour: this.showHour,
+      selectMinute: this.showMinute,
       minuteShow: false,
       hourShow: false,
     };
   },
   methods: {
+    init (arr) {
+      this.select = [arr[0], arr[1], arr[2]]
+      this.showYear = arr[0]
+      this.showMonth = arr[1]
+      this.showDay = arr[2]
+      this.selectHour = arr[3]
+      this.selectMinute = arr[4]
+      this.showHour = arr[3]
+      this.showMinute = arr[4]
+    },
     t(keypath) {
       const o = this.langInfo[this.lang] || {};
       let keys;
@@ -280,23 +290,6 @@ export default {
     this.select = [this.showYear, this.showMonth, this.showDay];
     this.selectHour = this.showHour;
     this.selectMinute = this.showMinute;
-  },
-  watch: {
-    showYear (n) {
-      this.select = [this.showYear, this.showMonth, this.showDay];
-    },
-    showMonth (n) {
-      this.select = [this.showYear, this.showMonth, this.showDay];
-    },
-    showDay (n) {
-      this.select = [this.showYear, this.showMonth, this.showDay];
-    },
-    showHour (n) {
-      this.selectHour = this.showHour;
-    },
-    showMinute (n) {
-      this.selectMinute = this.showMinute;
-    }
   }
 };
 </script>
