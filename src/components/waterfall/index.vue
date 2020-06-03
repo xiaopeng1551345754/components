@@ -9,8 +9,8 @@
       :loading-img="loadingImg"
       :lang='lang'
       :lang-info='langInfo'
-      :dom-id = 'domId'
-      :img-width = 'imgWidth'
+      :dom-id='domId'
+      :img-size='imgSize'
     >
     </vue-waterfall>
   </div>
@@ -61,9 +61,8 @@ export default {
     domId: {
       type: String
     },
-    imgWidth: {
-      type: Number,
-      default: 240
+    imgSize: {
+      type: Object
     },
     maxCols: {
       type: Number,

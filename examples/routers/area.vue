@@ -30,7 +30,11 @@ export default {
           type: "district"
         }
       ],
-      list: [
+      list: []
+    };
+  },
+  ready() {
+    this.list = [
         {
           name: "中国",
           id: "china1",
@@ -100,10 +104,9 @@ export default {
           id: "china",
           type: "country"
         }
-      ]
-    };
-  },
-  ready() {},
+      ] 
+ 
+ },
   methods: {
     //  暴露事件方法
     selectNode(country, province, city) {

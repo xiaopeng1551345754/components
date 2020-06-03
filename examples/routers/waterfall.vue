@@ -10,6 +10,7 @@
       :list="list"
       :lang='"en"'
       :dom-id='"#dom"'
+      :img-size="imgSize"
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
     ></waterfall>
@@ -19,6 +20,7 @@
 export default {
   data() {
     return {
+      imgSize: null,
       loadingImg:
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       list: [
@@ -116,13 +118,25 @@ export default {
     selectItem(item) {
       console.log("item",item);
     }
+  },
+  ready () {
+    setTimeout(() => this.imgSize = {
+        live: {
+          width: 240,
+          height: 400
+        },
+        static: {
+          width: 240,
+          height: 300
+        }
+      }, 0)
   }
 };
 </script>
 <style lang="less">
 .waterfall_wrap {
   width: 1000px;
-  height: 300px;
+  height: 700px;
   position: fixed;
   left: 50%;
   top: 50%;

@@ -12,6 +12,7 @@
       <div
         class="vue-waterfall-easy"
         :style="isMobile? '' :{width: colWidth*cols+'px',left:'50%', marginLeft: -1*colWidth*cols/2 +'px'}"
+        :class="{mobile: isMobile}"
       >
         <div
           class="img-box"
@@ -19,13 +20,15 @@
           track-by="$index"
           :key="$index"
           :class="[cardAnimationClass, {__err__: v._error}]"
-          :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : colWidth+'px'}"
+          :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : getColWidth(v)+'px'}"
           :data-index="$index"
         >
-          <div class="img-inner-box static-box" v-if="v.type==='static'" :data-index="$index">
+          <div class="img-inner-box static-box"
+           :class="{fixed: !inValidImgSize(v)}"
+           :style="getImgSize(v)"
+            v-if="v.type==='static'" :data-index="$index">
             <div
               class="img-wraper"
-              :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}"
             >
               <img :src="v.realPath" alt />
             </div>
@@ -34,11 +37,8 @@
               <p class="desc">{{v.exhibition_name}}</p>
             </div>
           </div>
-          <div class="img-inner-box live-box" v-if="v.type==='live'" :data-index="$index">
-            <div
-              class="img-wraper"
-              :style="{width:imgWidth_c + 'px',height:v._height ? v._height+'px':false}"
-            >
+          <div :style="getImgSize(v)" class="img-inner-box live-box" v-if="v.type==='live'" :data-index="$index">
+            <div class="img-wraper">
               <img :src="v.realPath" alt />
             </div>
             <div class="tag doing-tag" v-if="v.status==='doing'">{{t('doing')}}</div>
@@ -117,6 +117,9 @@ export default {
       type: Number,
       default: 240
     },
+    imgSize: {
+      type: Object
+    },
     isRouterLink: {
       type: Boolean,
       default: false
@@ -173,13 +176,14 @@ export default {
   computed: {
     colWidth() {
       // 每一列的宽度
-      return this.imgWidth + this.gap;
+      let width = this.getTargetWidth() || this.imgWidth
+      return width + this.gap;
     },
     imgWidth_c() {
       // 对于移动端重新计算图片宽度`
       return this.isMobile
         ? window.innerWidth / 2 - this.mobileGap
-        : this.imgWidth;
+        : (this.getTargetWidth() || this.imgWidth);
     },
     hasLoadingSlot() {
       return !!this.$scopedSlots.loading;
@@ -250,6 +254,45 @@ export default {
     }
   },
   methods: {
+    getTargetWidth() {
+      let width
+      if (this.inValidImgSize['live']) {
+        width = parseFloat(this.imgSize['live'].width)
+      } else if(this.inValidImgSize['static']) {
+        width = parseFloat(this.imgSize['static'].width)
+      }
+      return width
+    },
+    inValidImgSize (v) {
+      return (!this.imgSize || (typeof this.imgSize === 'object' && !this.imgSize[v.type]))
+    },
+    getColWidth (v) {
+      // imgSize is invalid
+      if (this.inValidImgSize(v)) {
+        return this.colWidth
+      } else {
+        return this.getTargetWidth()
+       }
+    },
+    getImgSize (v) {
+      const defaults = {
+        w: this.imgWidth_c + 'px',
+        h: v._height ? v._height + 'px' : false
+      }
+      if (this.inValidImgSize(v)) {
+        return defaults
+      } else {
+        const style = this.imgSize[v.type]
+        const target = {
+          width: style.width ? parseFloat(style.width) + 'px' : defaults.width,
+          height: style.height ? parseFloat(style.height) + 'px' : defaults.height
+        }
+        if (v.type == 'live') {
+          target.height = Math.min(v._height,style.height) + 'px'
+        }    
+        return target
+       }
+    },
     t(keypath) {
       const o = this.langInfo[this.lang] || {}
       const keys = keypath.split('.')
@@ -476,6 +519,8 @@ export default {
     & > .img-box {
       position: absolute;
       box-sizing: border-box;
+    }
+    &.mobile > .img-box {
       width: 50%; // 移动端生效
     }
     & > .img-box.default-card-animation {
@@ -487,6 +532,7 @@ export default {
       display: block;
     }
     .img-inner-box {
+      position: relative;
       // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
       // border-radius: 4px;
     }
@@ -504,6 +550,14 @@ export default {
         width: 100%;
         display: block;
         border: none;
+      }
+    }
+    .fixed .img-wraper{
+      height: calc(~"100% - 73px");
+      & > img {
+        width: auto;
+        max-width: 100%;
+        max-height: 100%;
       }
     }
     .over {
@@ -553,6 +607,15 @@ export default {
     }
   }
 }
+.fixed {
+  &.img-inner-box {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.2);
+  }
+}
 .img-inner-box {
   position: relative;
   .title {
@@ -564,8 +627,10 @@ export default {
 }
 .static-box {
   .img-info {
-    padding: 20px;
+    padding: 15px;
     background: #ffffff;
+    width: 100%;
+    box-sizing: border-box;
   }
   .title {
     color: rgba(0, 0, 0, 1);
