@@ -48,12 +48,12 @@ export default {
           zh: {
             nostart: '未开始',
             doing: '进行中',
-            over: '结束'
+            over: '已结束'
           },
           en: {
-            nostart: 'nostart',
-            doing: 'doing',
-            over: 'over'
+            nostart: 'No Start',
+            doing: 'Doing',
+            over: 'Done'
           }
         }
       }

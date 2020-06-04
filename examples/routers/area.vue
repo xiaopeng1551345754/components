@@ -27,7 +27,7 @@ export default {
         {
           name: "朝阳区",
           id: "district1",
-          type: "district"
+          type: "city"
         }
       ],
       list: []
@@ -48,17 +48,17 @@ export default {
                 {
                   name: "朝阳区",
                   id: "district1",
-                  type: "district"
+                  type: "city"
                 },
                 {
                   name: "昌平区",
-                  id: "district",
-                  type: "district"
+                  id: "city",
+                  type: "city"
                 },
                 {
                   name: "东城区",
-                  id: "district",
-                  type: "district"
+                  id: "city",
+                  type: "city"
                 }
               ]
             },
@@ -82,26 +82,6 @@ export default {
         {
           name: "英国",
           id: "US",
-          type: "country"
-        },
-        {
-          name: "中国",
-          id: "china",
-          type: "country"
-        },
-        {
-          name: "美国",
-          id: "USA",
-          type: "country"
-        },
-        {
-          name: "英国",
-          id: "US",
-          type: "country"
-        },
-        {
-          name: "中国",
-          id: "china",
           type: "country"
         }
       ] 

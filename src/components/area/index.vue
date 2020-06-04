@@ -74,6 +74,7 @@
 </template>
 <script>
 // import { throttle } from '../../utils/dom'
+// import Vue from 'Vue'
 import clickOutSide from "../../directives/clickoutside.js";
 export default {
   name: "area",
@@ -94,6 +95,10 @@ export default {
     inputWidth: {
       type: String,
       default: "468px"
+    },
+    key: {
+      type: String,
+      default: 'name'
     },
     list: {
       type: Array,
@@ -179,23 +184,23 @@ export default {
       let that = this;
       let data = this.defaultData;
       // 选中第一列
-      let fid = data[0].id || -1;
-      let fIndex = this.setSelected(this.list, fid);
+      let fid = data[0][this.key] || -1;
+      let fIndex = this.setSelected(this.list, this.key, fid);
       if (fIndex > -1) {
         this.selectNode("country", fIndex, "init");
         // 选中第二列
         let fItem = this.contries[fIndex];
         if (data[1] && fItem.children) {
-          let sid = data[1].id || -1;
-          let sIndex = this.setSelected(fItem.children, sid);
+          let sid = data[1][this.key] || -1;
+          let sIndex = this.setSelected(fItem.children, this.key, sid);
           if (sIndex > -1) {
             this.selectNode("province", sIndex, "init");
           }
           // 选中第三列
           let sItem = fItem.children[sIndex];
           if (data[2] && sItem.children) {
-            let tid = data[2].id || -1;
-            let tIndex = this.setSelected(sItem.children, tid);
+            let tid = data[2][this.key] || -1;
+            let tIndex = this.setSelected(sItem.children, this.key, tid);
             if (tIndex > -1) {
               this.selectNode("city", tIndex, "init");
             }
@@ -203,16 +208,17 @@ export default {
         }
       }
     },
-    setSelected(list, id) {
-      // 循环设置menulist数据
-      let resultIndex = -1;
-      list.forEach((element, index) => {
-        if (element.id === id) {
-          // list.$set(index, Object.assign({}, element, { selected: true }));
-          resultIndex = index;
-        }
-      });
-      return resultIndex;
+    setSelected(list, key, val) {
+      return list.findIndex(x => x[key] === val)
+      // // 循环设置menulist数据
+      // let resultIndex = -1;
+      // list.forEach((element, index) => {
+      //   if (element[key] === val) {
+      //     // list.$set(index, Object.assign({}, element, { selected: true }));
+      //     resultIndex = index;
+      //   }
+      // });
+      // return resultIndex;
     },
     // 设置国家列表
     setContries(list) {
@@ -239,7 +245,7 @@ export default {
         this.clearProvinces();
         this.clearCities();
         this.contries.$set(index, Object.assign({}, data, { selected: true }));
-        this.setProvinces(data.id, data.children);
+        this.setProvinces(data[this.key], data.children);
         this.current.province = {};
         this.current.city = {};
         if (type !== "init") {
@@ -249,7 +255,7 @@ export default {
         data = this.provinces[index];
         this.clearProvinces();
         this.provinces.$set(index, Object.assign({}, data, { selected: true }));
-        this.setCities(data.id, data.children);
+        this.setCities(data[this.key], data.children);
         this.current.city = {};
         if (type !== "init") {
           this.$emit("select-node", this.current.country, data);
@@ -275,6 +281,7 @@ export default {
       let that = this;
       this.contries &&
         this.contries.forEach((element, index) => {
+          // Vue.set(element, 'selected', false);
           element.selected = false;
           that.contries.$set(index, element);
         });
@@ -284,6 +291,7 @@ export default {
       let that = this;
       this.provinces &&
         this.provinces.forEach((element, index) => {
+          // Vue.set(element, 'selected', false);
           element.selected = false;
           that.provinces.$set(index, element);
         });
@@ -294,6 +302,7 @@ export default {
       this.cities &&
         this.cities.forEach((element, index) => {
           element.selected = false;
+          // Vue.set(element, 'selected', false);
           that.cities.$set(index, element);
         });
     },
