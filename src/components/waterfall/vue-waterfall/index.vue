@@ -118,7 +118,19 @@ export default {
       default: 240
     },
     imgSize: {
-      type: Object
+      type: Object,
+      default () {
+        return {
+          live: {
+            width: 240,
+            height: 400
+          },
+          static: {
+            width: 240,
+            height: 300
+          }
+        }
+      }
     },
     isRouterLink: {
       type: Boolean,
@@ -288,7 +300,7 @@ export default {
           height: style.height ? parseFloat(style.height) + 'px' : defaults.height
         }
         if (v.type == 'live') {
-          target.height = Math.min(v._height,style.height) + 'px'
+          target.height = style.height + 'px'
         }    
         return target
        }
@@ -547,17 +559,22 @@ export default {
     }
     .img-wraper {
       & > img {
-        width: 100%;
         display: block;
         border: none;
       }
     }
     .fixed .img-wraper{
       height: calc(~"100% - 73px");
+      position: relative;
+      width: 100%;
       & > img {
         width: auto;
         max-width: 100%;
         max-height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
       }
     }
     .over {
@@ -631,15 +648,31 @@ export default {
     background: #ffffff;
     width: 100%;
     box-sizing: border-box;
+    height: 75px;
   }
   .title {
     color: rgba(0, 0, 0, 1);
+    height: 25px;
   }
   .desc {
     color: rgba(0, 0, 0, 0.45);
   }
 }
 .live-box {
+  .img-wraper{
+    height: 100%;
+    text-align: center;
+    img {
+      width: auto;
+      max-height: 100%;
+      height: auto;
+      max-width: 100%;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
   .img-info-bg{
     position: absolute;
     left: 0px;
