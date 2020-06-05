@@ -11,6 +11,7 @@
       :lang='"en"'
       :dom-id='"#dom"'
       :img-size="imgSize"
+      :img-width='280'
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
     ></waterfall>

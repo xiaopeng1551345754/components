@@ -11,6 +11,7 @@
       :lang-info='langInfo'
       :dom-id='domId'
       :img-size='imgSize'
+      :img-width='imgWidth'
     >
     </vue-waterfall>
   </div>
@@ -67,6 +68,9 @@ export default {
     maxCols: {
       type: Number,
       default: 4
+    },
+    imgWidth: {
+      type: Number
     }
   },
   data() {
