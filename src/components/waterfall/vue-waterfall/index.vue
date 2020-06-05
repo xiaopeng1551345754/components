@@ -37,7 +37,9 @@
               <p class="desc">{{v.exhibition_name}}</p>
             </div>
           </div>
-          <div :style="getImgSize(v)" class="img-inner-box live-box" v-if="v.type==='live'" :data-index="$index">
+          <div :style="getImgSize(v)" class="img-inner-box live-box" v-if="v.type==='live'" 
+          :class="{fixed: !inValidImgSize(v)}"
+          :data-index="$index">
             <div class="img-wraper">
               <img :src="v.realPath" alt />
             </div>
@@ -299,9 +301,9 @@ export default {
           width: style.width ? parseFloat(style.width) + 'px' : defaults.width,
           height: style.height ? parseFloat(style.height) + 'px' : defaults.height
         }
-        if (v.type == 'live') {
-          target.height = style.height + 'px'
-        }    
+        // if (v.type == 'live') {
+        //   target.height = Math.min(v._height,style.height) + 'px'
+        // }    
         return target
        }
     },
@@ -558,23 +560,26 @@ export default {
       }
     }
     .img-wraper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       & > img {
         display: block;
         border: none;
+        max-width: 100%;
       }
     }
     .fixed .img-wraper{
-      height: calc(~"100% - 73px");
-      position: relative;
-      width: 100%;
+      height: calc(~"100% - 75px");
+
       & > img {
         width: auto;
         max-width: 100%;
         max-height: 100%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
+        /*position: absolute;*/
+        /*top: 50%;*/
+        /*left: 50%;*/
+        /*transform: translate(-50%,-50%);*/
       }
     }
     .over {
@@ -659,20 +664,6 @@ export default {
   }
 }
 .live-box {
-  .img-wraper{
-    height: 100%;
-    text-align: center;
-    img {
-      width: auto;
-      max-height: 100%;
-      height: auto;
-      max-width: 100%;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
   .img-info-bg{
     position: absolute;
     left: 0px;

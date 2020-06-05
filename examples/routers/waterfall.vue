@@ -33,6 +33,14 @@ export default {
           exhibition_name: "展商名字展商名字"
         },
         {
+          type: "live",
+          src:
+            "https://hexyun.oss-cn-beijing.aliyuncs.com/cloud_expo_5eb6152d14b7b129cf44ec71/1590337754868/30ca03330c48f8fa9d4d20dcb6640206.png",
+          status: "done", //  进行中
+          title: "xxxx",
+          exhibition_name: "aa"
+        },
+        {
           type: "static",
           src:
             "http://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1591875387&t=275055d9e4a80cdcfe90d2f7b8f3dd49",
@@ -74,7 +82,7 @@ export default {
         {
           type: "live",
           src:
-            "https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1590483334&t=a427c29284cb086a3ec0b0b7609e976f",
+            "https://t9.baidu.com/it/u=2268908537,2815455140&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1591948862&t=49a838e09edb363937de208a82a33670",
           status: "done", //  结束
           title: "八个字以内的 title",
           exhibition_name: "展商名字展商名字"
@@ -120,16 +128,16 @@ export default {
     }
   },
   ready () {
-    setTimeout(() => this.imgSize = {
-        live: {
-          width: 240,
-          height: 400
-        },
-        static: {
-          width: 240,
-          height: 300
-        }
-      }, 0)
+    // setTimeout(() => this.imgSize = {
+    //     live: {
+    //       width: 240,
+    //       height: 400
+    //     },
+    //     static: {
+    //       width: 240,
+    //       height: 300
+    //     }
+    //   }, 0)
   }
 };
 </script>
