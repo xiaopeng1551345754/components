@@ -7,36 +7,36 @@
       :gap="14"
       :max-cols="maxCols"
       :loading-img="loadingImg"
-      :lang='lang'
-      :lang-info='langInfo'
-      :dom-id='domId'
-      :img-size='imgSize'
-      :img-width='imgWidth'
+      :lang="lang"
+      :lang-info="langInfo"
+      :dom-id="domId"
+      :img-size="imgSize"
+      :img-width="imgWidth"
     >
     </vue-waterfall>
   </div>
 </template>
 <script>
 import clickOutSide from "../../directives/clickoutside.js";
-import vueWaterfall from './vue-waterfall'
+import vueWaterfall from "./vue-waterfall";
 export default {
   name: "waterfall",
   components: {
-    vueWaterfall
+    vueWaterfall,
   },
   directives: {
-    clickOutSide
+    clickOutSide,
   },
   props: {
     list: {
       type: Array,
-      default() {
+      default () {
         return [];
-      }
+      },
     },
     loadingImg: {
       type: String,
-      default: ""
+      default: "",
     },
     lang: {
       type: String,
@@ -47,56 +47,55 @@ export default {
       default () {
         return {
           zh: {
-            nostart: '未开始',
-            doing: '进行中',
-            over: '已结束'
+            nostart: "未开始",
+            doing: "进行中",
+            over: "已结束",
           },
           en: {
-            nostart: 'No Start',
-            doing: 'Doing',
-            over: 'Done'
-          }
-        }
-      }
+            nostart: "No Start",
+            doing: "Doing",
+            over: "Done",
+          },
+        };
+      },
     },
     domId: {
-      type: String
+      type: String,
     },
     imgSize: {
-      type: Object
+      type: Object,
     },
     maxCols: {
       type: Number,
-      default: 4
+      default: 4,
     },
     imgWidth: {
-      type: Number
-    }
+      type: Number,
+    },
   },
-  data() {
+  data () {
     return {};
   },
   watch: {},
   computed: {},
-  ready() {
-    this.init()
+  ready () {
+    this.init();
   },
   methods: {
     // init waterfall instance
-    init() {
-    },
-    scrollBottom() {
+    init () { },
+    scrollBottom () {
       this.$emit("scroll-bottom");
     },
-    selectItem(e,item) {
+    selectItem (e, item) {
       this.$emit("select-item", item);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less">
-.hex-waterfall{
+.hex-waterfall {
   height: 100%;
-  background:rgba(244,244,244,1);
+  background: rgba(244, 244, 244, 1);
 }
 </style>

@@ -3,6 +3,7 @@
     class="vue-waterfall-easy-container"
     :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height }"
   >
+  <!-- <button @click="recalculate">布局</button> -->
     <div class="loading ball-beat" v-show="isPreloading_c" :class="{first:isFirstLoad}">
       <div class="dot-box" :isFirstLoad="isFirstLoad">
         <div class="dot" v-for="n in loadingDotCount" :key="n" :style="loadingDotStyle"></div>
@@ -167,9 +168,9 @@ export default {
       type: String
     }
   },
-  data() {
+  data () {
     return {
-      msg: "this is from vue-waterfall-easy.vue",
+      msg: "this is from  .vue",
       isMobile: !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i), // 初始化移动端
       isPreloading: true, // 正在预加载中，显示加载动画
       isPreloading_c: true,
@@ -188,25 +189,24 @@ export default {
     };
   },
   computed: {
-    colWidth() {
+    colWidth () {
       // 每一列的宽度
       let width = this.getTargetWidth() || this.imgWidth
       return width + this.gap;
     },
-    imgWidth_c() {
+    imgWidth_c () {
       // 对于移动端重新计算图片宽度`
       return this.isMobile
         ? window.innerWidth / 2 - this.mobileGap
         : (this.getTargetWidth() || this.imgWidth);
     },
-    hasLoadingSlot() {
+    hasLoadingSlot () {
       return !!this.$scopedSlots.loading;
     }
   },
-  ready() {
+  ready () {
     this.bindClickEvent();
     this.loadingMiddle();
-    
 
     this.preload();
     this.cols = this.calcuCols();
@@ -228,25 +228,27 @@ export default {
 
     if (this.domId) {
       const self = this;
-      this.$nextTick (()=>{
+      this.$nextTick(() => {
         const dom = document.querySelector(this.domId);
-        dom.onscroll = function () {
-          const now = Date.now();
-          if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 20) {
-            if (now - self.prev > 200) {
-              self.prev = now
-              self.$emit("scroll-bottom");
+        if (dom) {
+          dom.onscroll = function () {
+            const now = Date.now();
+            if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 20) {
+              if (now - self.prev > 200) {
+                self.prev = now
+                self.$emit("scroll-bottom");
+              }
             }
           }
         }
       })
     }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     window.removeEventListener("resize", this.response);
   },
   watch: {
-    isPreloading(newV, oldV) {
+    isPreloading (newV, oldV) {
       if (newV) {
         setTimeout(() => {
           if (!this.isPreloading) return; // 500毫秒内预加载完图片则不显示加载动画
@@ -256,23 +258,29 @@ export default {
         this.isPreloading_c = false;
       }
     },
-    imgsArr(newV, oldV) {
+    imgsArr (newV, oldV) {
+      let self = this;
       if (
         this.imgsArr_c.length > newV.length ||
         (this.imgsArr_c.length > 0 && newV[0] && !newV[0]._height)
       ) {
-        // console.log('reset')
         this.reset();
       }
       this.preload();
+
+      // 暴力处理
+      setTimeout(() => {
+        this.beginIndex = 0;
+        this.waterfall();
+      }, 2000);
     }
   },
   methods: {
-    getTargetWidth() {
+    getTargetWidth () {
       let width
       if (this.inValidImgSize['live']) {
         width = parseFloat(this.imgSize['live'].width)
-      } else if(this.inValidImgSize['static']) {
+      } else if (this.inValidImgSize['static']) {
         width = parseFloat(this.imgSize['static'].width)
       }
       return width
@@ -286,7 +294,7 @@ export default {
         return this.colWidth
       } else {
         return this.getTargetWidth()
-       }
+      }
     },
     getImgSize (v) {
       const defaults = {
@@ -301,18 +309,15 @@ export default {
           width: style.width ? parseFloat(style.width) + 'px' : defaults.width,
           height: style.height ? parseFloat(style.height) + 'px' : defaults.height
         }
-        // if (v.type == 'live') {
-        //   target.height = Math.min(v._height,style.height) + 'px'
-        // }    
         return target
-       }
+      }
     },
-    t(keypath) {
+    t (keypath) {
       const o = this.langInfo[this.lang] || {}
       const keys = keypath.split('.')
       let r = o
       let key
-      for(let i = 0; i < keys.length; i++) {
+      for (let i = 0; i < keys.length; i++) {
         key = keys[i]
         if (key && typeof r === 'object') {
           r = r[key]
@@ -321,7 +326,7 @@ export default {
       return r || ''
     },
     // ==1== 预加载
-    preload(src, imgIndex) {
+    preload (src, imgIndex) {
       this.imgsArr.forEach((imgItem, imgIndex) => {
         if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
         this.imgsArr[imgIndex].realPath = this.loadingImg
@@ -338,29 +343,37 @@ export default {
         }
         var oImg = new Image();
         oImg.src = imgItem[this.srcKey];
-        oImg.onload = oImg.onerror = e => {
+
+        // 图片加载成功处理逻辑
+        const onload = e => {
           this.loadedCount++;
           // 预加载图片，计算图片容器的高
-          this.imgsArr[imgIndex]._height =
-            e.type == "load"
-              ? Math.round(this.imgWidth_c / (oImg.width / oImg.height))
-              : this.isMobile
-              ? this.imgWidth_c
-              : this.imgWidth;
+
+          if (e.type === 'load') {
+            const imageHeight = Math.round(this.imgWidth_c / (oImg.width / oImg.height));
+            // console.log(e.target, oImg.width, oImg.height, imageHeight);
+            this.imgsArr[imgIndex]._height = imageHeight;
+          } else {
+            this.imgsArr[imgIndex]._height = this.isMobile ? this.imgWidth_c : this.imgWidth;
+          }
+
           if (e.type == "error") {
             this.imgsArr[imgIndex]._error = true;
             this.$emit("imgError", this.imgsArr[imgIndex]);
           }
-          
+
           if (this.loadedCount == this.imgsArr.length) {
             this.$emit("preloaded");
           }
-          this.imgsArr[imgIndex].realPath = imgItem[this.srcKey]
+          this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
         };
+
+        oImg.onload = onload;
+        oImg.onerror = onload;
       });
     },
     // ==2== 计算cols
-    calcuCols() {
+    calcuCols () {
       // 列数初始化
       var waterfallWidth = this.width ? this.width : window.innerWidth;
       var cols = parseInt(waterfallWidth / this.colWidth);
@@ -368,16 +381,15 @@ export default {
       return this.isMobile ? 2 : cols > this.maxCols ? this.maxCols : cols;
     },
     // ==3== waterfall布局
-    waterfall() {
+    waterfall () {
       if (!this.imgBoxEls) return;
-      // console.log('waterfall')
-      var top,
-        left,
-        height,
-        colWidth = this.isMobile
-          ? this.imgBoxEls[0].offsetWidth
-          : this.colWidth;
+      var top;
+      var left;
+      var height;
+      var colWidth = this.isMobile ? this.imgBoxEls[0].offsetWidth : this.colWidth;
+
       if (this.beginIndex == 0) this.colsHeightArr = [];
+
       for (var i = this.beginIndex; i < this.imgsArr.length; i++) {
         if (!this.imgBoxEls[i]) return;
         height = this.imgBoxEls[i].offsetHeight;
@@ -403,7 +415,7 @@ export default {
     },
 
     // ==4== resize 响应式
-    response() {
+    response () {
       var old = this.cols;
       this.cols = this.calcuCols();
       if (old === this.cols) return; // 列数不变直接退出
@@ -412,7 +424,7 @@ export default {
       if (this.over) this.setOverTipPos();
     },
     // ==5== 滚动触底事件
-    scrollFn() {
+    scrollFn () {
       var self = this
       if (!this.domId) {
         var scrollEl = this.scrollEl;
@@ -428,23 +440,23 @@ export default {
         }
       }
     },
-    scroll() {
+    scroll () {
       this.scrollEl.addEventListener("scroll", this.scrollFn);
     },
-    waterfallOver() {
+    waterfallOver () {
       this.scrollEl.removeEventListener("scroll", this.scrollFn);
       this.isPreloading = false;
       this.over = true;
       this.setOverTipPos();
     },
-    setOverTipPos() {
+    setOverTipPos () {
       var maxHeight = Math.max.apply(null, this.colsHeightArr);
       this.$nextTick(() => {
         this.$refs.over.style.top = maxHeight + "px";
       });
     },
     // ==6== 点击事件绑定
-    bindClickEvent() {
+    bindClickEvent () {
       this.$el
         .querySelector(".vue-waterfall-easy")
         .addEventListener("click", e => {
@@ -456,14 +468,10 @@ export default {
           }
           var index = targetEl.getAttribute("data-index");
           this.$emit("select-item", e, this.imgsArr_c[index]);
-          // this.$emit("click", e, {
-          //   index,
-          //   value: this.imgsArr_c[index]
-          // });
         });
     },
     // ==7== 下拉事件
-    pullDown() {
+    pullDown () {
       var scrollEl = this.$el.querySelector(".vue-waterfall-easy-scroll");
       var startY;
       scrollEl.addEventListener("touchmove", e => {
@@ -485,7 +493,7 @@ export default {
       });
     },
     // other
-    loadingMiddle() {
+    loadingMiddle () {
       // 对滚动条宽度造成的不居中进行校正
       var scrollEl = (this.scrollEl = this.$el.querySelector(
         ".vue-waterfall-easy-scroll"
@@ -494,7 +502,7 @@ export default {
       this.$el.querySelector(".loading").style.marginLeft =
         -scrollbarWidth / 2 + "px";
     },
-    reset() {
+    reset () {
       this.imgsArr_c = [];
       this.beginIndex = 0;
       this.loadedCount = 0;
@@ -502,6 +510,10 @@ export default {
       this.isPreloading = true;
       this.scroll();
       this.over = false;
+    },
+    recalculate () {
+      this.beginIndex = 0;
+      this.waterfall();
     }
   }
 };
@@ -566,10 +578,11 @@ export default {
       & > img {
         display: block;
         border: none;
+        width: 100%;
         max-width: 100%;
       }
     }
-    .fixed .img-wraper{
+    .fixed .img-wraper {
       height: calc(~"100% - 75px");
 
       & > img {
@@ -635,7 +648,7 @@ export default {
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    background: rgba(0,0,0,.2);
+    background: rgba(0, 0, 0, 0.2);
   }
 }
 .img-inner-box {
@@ -664,14 +677,18 @@ export default {
   }
 }
 .live-box {
-  .img-info-bg{
+  .img-info-bg {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    width:100%;
-    height:65%;
-    background:linear-gradient(0deg,rgba(24,34,57,1) 0%,rgba(0,0,0,0) 100%);
-    opacity:0.73;
+    width: 100%;
+    height: 65%;
+    background: linear-gradient(
+      0deg,
+      rgba(24, 34, 57, 1) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    opacity: 0.73;
   }
   .img-info {
     position: absolute;
@@ -702,17 +719,17 @@ export default {
     padding: 5px 10px;
     border-radius: 5px;
     opacity: 0.8;
-    font-size:14px;
+    font-size: 14px;
     text-align: center;
     color: #ffffff;
-    &.doing-tag{
-      background:rgba(46,76,244,1);
+    &.doing-tag {
+      background: rgba(46, 76, 244, 1);
     }
-    &.nostart-tag{
-      background:rgba(0,0,0,0.45);
+    &.nostart-tag {
+      background: rgba(0, 0, 0, 0.45);
     }
-    &.done-tag{
-      background:rgba(0,0,0,1);
+    &.done-tag {
+      background: rgba(0, 0, 0, 1);
     }
   }
 }

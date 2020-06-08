@@ -23,14 +23,14 @@ module.exports = {
   // 加载器
   module: {
     loaders: [
-      {test: /\.vue$/, loader: 'vue'},
-      {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
-      {test: /\.js$/, loader: 'babel', include: /vue/},
-      {test: /\.css$/, loader: 'style!css!autoprefixer'},
-      {test: /\.less$/, loader: 'style!css!less'},
-      {test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
-      {test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/, loader: 'url-loader?limit=8192'},
-      {test: /\.(html|tpl)$/, loader: 'html-loader'}
+      { test: /\.vue$/, loader: 'vue' },
+      { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+      { test: /\.js$/, loader: 'babel', include: /vue/ },
+      { test: /\.css$/, loader: 'style!css!autoprefixer' },
+      { test: /\.less$/, loader: 'style!css!less' },
+      { test: /\.scss$/, loader: 'style!css!sass?sourceMap' },
+      { test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/, loader: 'url-loader?limit=8192' },
+      { test: /\.(html|tpl)$/, loader: 'html-loader' }
     ]
   },
   vue: {
@@ -60,8 +60,10 @@ module.exports = {
     }
   },
   plugins: [
-    new ExtractTextPlugin('[name].css', {allChunks: true, resolve: ['modules']}),             // 提取CSS
+    new ExtractTextPlugin('[name].css', { allChunks: true, resolve: ['modules'] }),             // 提取CSS
     new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
   ],
-  devServer: {}
+  devServer: {
+    disableHostCheck: true
+  }
 };

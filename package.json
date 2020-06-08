@@ -1,5 +1,5 @@
 {
-  "name": "front", 
+  "name": "front",
   "version": "0.0.1",
   "title": "front",
   "description": "outsystem components",
@@ -13,7 +13,7 @@
     "src"
   ],
   "scripts": {
-    "dev": "webpack-dev-server --content-base examples/ --open --inline --hot --compress --history-api-fallback  --port 10000 --config build/webpack.dev.config.js --host 127.0.0.1",
+    "dev": "webpack-dev-server --content-base examples/ --open --inline --hot --compress --history-api-fallback  --port 10000 --config build/webpack.dev.config.js",
     "watch": "webpack --watch --config build/webpack.dev.config.js",
     "build:style": "gulp --gulpfile build/build-style.js",
     "docs": "webpack --config build/webpack.docs.config.js ",
