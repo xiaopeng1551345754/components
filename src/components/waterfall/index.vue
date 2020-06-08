@@ -4,7 +4,7 @@
       :imgs-arr="list"
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
-      :gap="14"
+      :gap="gap"
       :max-cols="maxCols"
       :loading-img="loadingImg"
       :lang="lang"
@@ -76,6 +76,10 @@ export default {
     noneData: {
       type: Boolean,
       default: false
+    },
+    gap: {
+      type: Number,
+      default: 14
     }
   },
   data () {

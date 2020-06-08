@@ -12,8 +12,9 @@
       :list="list"
       :lang="'en'"
       :img-size="imgSize"
-      :img-width="280"
+      :img-width="294"
       :none-data='noneData'
+      :gap='8'
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
     ></waterfall>

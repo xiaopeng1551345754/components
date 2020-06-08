@@ -96,11 +96,11 @@ export default {
     gap: {
       // .img-box 间距
       type: Number,
-      default: 20
+      default: 0
     },
     mobileGap: {
       type: Number,
-      default: 8
+      default: 0
     },
     maxCols: {
       type: Number,
