@@ -121,7 +121,7 @@ export default {
       console.log(node);
     },
     scrollBottom () {
-      // this.list = this.list.concat(this.list);
+      this.list = this.list.concat(this.list);
       console.log("scroll bottom");
     },
     selectItem (item) {
@@ -346,12 +346,12 @@ export default {
     let self = this;
     let count = 0;
     this.__timer = setInterval(function () {
-      // self.list = self.list.concat(list);
+      self.list = self.list.concat(list);
       count += 1;
       if (count >= 15) {
         clearInterval(self.__timer);
       }
-      // console.log('count', count);
+      console.log('count', count);
     }, 1000);
   },
 };

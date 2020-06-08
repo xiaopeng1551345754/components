@@ -272,13 +272,10 @@ export default {
       ) {
         this.reset();
       }
-      this.preload();
-
-      // 暴力处理
-      setTimeout(() => {
+      this.preload().then(res=>{
         this.beginIndex = 0;
         this.waterfall();
-      }, 2000);
+      }).catch();
     }
   },
   methods: {
@@ -333,50 +330,53 @@ export default {
     },
     // ==1== 预加载
     preload (src, imgIndex) {
-      this.imgsArr.forEach((imgItem, imgIndex) => {
-        if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
-        this.imgsArr[imgIndex].realPath = this.loadingImg
-        // 无图时
-        if (!imgItem[this.srcKey]) {
-          this.imgsArr[imgIndex]._height = "0";
-          this.loadedCount++;
-
-          // 支持无图模式
-          if (this.loadedCount == this.imgsArr.length) {
-            this.$emit("preloaded");
+      return new Promise((resolve, reject)=>{
+        this.imgsArr.forEach((imgItem, imgIndex) => {
+          if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
+          this.imgsArr[imgIndex].realPath = this.loadingImg
+          // 无图时
+          if (!imgItem[this.srcKey]) {
+            this.imgsArr[imgIndex]._height = "0";
+            this.loadedCount++;
+  
+            // 支持无图模式
+            if (this.loadedCount == this.imgsArr.length) {
+              this.$emit("preloaded");
+            }
+            return;
           }
-          return;
-        }
-        var oImg = new Image();
-        oImg.src = imgItem[this.srcKey];
-
-        // 图片加载成功处理逻辑
-        const onload = e => {
-          this.loadedCount++;
-          // 预加载图片，计算图片容器的高
-
-          if (e.type === 'load') {
-            const imageHeight = Math.round(this.imgWidth_c / (oImg.width / oImg.height));
-            // console.log(e.target, oImg.width, oImg.height, imageHeight);
-            this.imgsArr[imgIndex]._height = imageHeight;
-          } else {
-            this.imgsArr[imgIndex]._height = this.isMobile ? this.imgWidth_c : this.imgWidth;
-          }
-
-          if (e.type == "error") {
-            this.imgsArr[imgIndex]._error = true;
-            this.$emit("imgError", this.imgsArr[imgIndex]);
-          }
-
-          if (this.loadedCount == this.imgsArr.length) {
-            this.$emit("preloaded");
-          }
-          this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
-        };
-
-        oImg.onload = onload;
-        oImg.onerror = onload;
-      });
+          var oImg = new Image();
+          oImg.src = imgItem[this.srcKey];
+  
+          // 图片加载成功处理逻辑
+          const onload = e => {
+            this.loadedCount++;
+            // 预加载图片，计算图片容器的高
+  
+            if (e.type === 'load') {
+              const imageHeight = Math.round(this.imgWidth_c / (oImg.width / oImg.height));
+              // console.log(e.target, oImg.width, oImg.height, imageHeight);
+              this.imgsArr[imgIndex]._height = imageHeight;
+            } else {
+              this.imgsArr[imgIndex]._height = this.isMobile ? this.imgWidth_c : this.imgWidth;
+            }
+  
+            if (e.type == "error") {
+              this.imgsArr[imgIndex]._error = true;
+              this.$emit("imgError", this.imgsArr[imgIndex]);
+            }
+  
+            if (this.loadedCount == this.imgsArr.length) {
+              this.$emit("preloaded");
+              resolve()
+            }
+            this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
+          };
+  
+          oImg.onload = onload;
+          oImg.onerror = onload;
+        });
+      })
     },
     // ==2== 计算cols
     calcuCols () {
