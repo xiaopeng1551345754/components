@@ -12,6 +12,7 @@
       :dom-id="domId"
       :img-size="imgSize"
       :img-width="imgWidth"
+      :none-data='noneData'
     >
     </vue-waterfall>
   </div>
@@ -72,6 +73,10 @@ export default {
     imgWidth: {
       type: Number,
     },
+    noneData: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {};

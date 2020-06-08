@@ -6,13 +6,14 @@
       </div>
     </div> -->
     <button @click="change">修改</button>
+    <button @click="changeNoneData">修改空数据</button>
     <waterfall
       :loading-img="loadingImg"
       :list="list"
       :lang="'en'"
-      :dom-id="'#dom'"
       :img-size="imgSize"
       :img-width="280"
+      :none-data='noneData'
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
     ></waterfall>
@@ -24,6 +25,7 @@ export default {
     return {
       imgSize: null,
       loadingImg: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
+      noneData: false,
       list: [{
         type: "live",
         src:
@@ -119,7 +121,7 @@ export default {
       console.log(node);
     },
     scrollBottom () {
-      this.list = this.list.concat(this.list);
+      // this.list = this.list.concat(this.list);
       console.log("scroll bottom");
     },
     selectItem (item) {
@@ -133,6 +135,9 @@ export default {
       setTimeout(function () {
         self.list = back;
       }, 1000)
+    },
+    changeNoneData () {
+      this.noneData = !this.noneData;
     }
   },
   ready () {
@@ -341,12 +346,12 @@ export default {
     let self = this;
     let count = 0;
     this.__timer = setInterval(function () {
-      self.list = self.list.concat(list);
+      // self.list = self.list.concat(list);
       count += 1;
       if (count >= 15) {
         clearInterval(self.__timer);
       }
-      console.log('count', count);
+      // console.log('count', count);
     }, 1000);
   },
 };

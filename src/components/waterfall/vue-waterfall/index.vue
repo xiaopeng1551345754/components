@@ -1,7 +1,8 @@
 <template>
   <div
     class="vue-waterfall-easy-container"
-    :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height }"
+    :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height}"
+    :class='{none: noneText && noneData}'
   >
   <!-- <button @click="recalculate">布局</button> -->
     <div class="loading ball-beat" v-show="isPreloading_c" :class="{first:isFirstLoad}">
@@ -59,6 +60,7 @@
         </div>
       </div>
     </div>
+    <div class="text" v-show='noneText && noneData'>没有更多了…</div>
   </div>
 </template>
 
@@ -166,6 +168,9 @@ export default {
     },
     domId: {
       type: String
+    },
+    noneData: {
+      type: Boolean
     }
   },
   data () {
@@ -185,7 +190,8 @@ export default {
       isFirstLoad: true, // 首次加载
       over: false, // 结束waterfall加载
       scrollEl: null, // 滚动的div
-      prev: 0
+      prev: 0,
+      noneText: false
     };
   },
   computed: {
@@ -428,8 +434,14 @@ export default {
       var self = this
       if (!this.domId) {
         var scrollEl = this.scrollEl;
-        if (this.isPreloading) return;
         var minHeight = Math.min.apply(null, this.colsHeightArr);
+        if (scrollEl.scrollTop + scrollEl.offsetHeight >=
+          scrollEl.scrollHeight-20) {
+          this.noneText = true
+        } else {
+          this.noneText = false
+        }
+        if (this.isPreloading) return;
         if (
           scrollEl.scrollTop + scrollEl.offsetHeight >
           minHeight - this.reachBottomDistance
@@ -523,6 +535,11 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
+  background: #f4f4f4;
+  transition: .3s;
+  &.none {
+    padding-bottom: 42px;
+  }
   .vue-waterfall-easy-scroll {
     position: relative;
     width: 100%;
@@ -530,6 +547,9 @@ export default {
     overflow-x: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   .vue-waterfall-easy {
     position: absolute;
@@ -640,6 +660,16 @@ export default {
     &.ball-beat > .dot:nth-child(2n-1) {
       animation-delay: 0.35s;
     }
+  }
+  .text {
+    position: absolute;
+    bottom: 10px;
+    font-size:14px;
+    font-weight:400;
+    color:rgba(0,0,0,0.65);
+    line-height:22px;
+    text-align: center;
+    width: 100%;
   }
 }
 .fixed {
