@@ -3,12 +3,14 @@ import waterfall from "./components/waterfall/index.vue";
 import area from "./components/area/index.vue";
 import timeline from "./components/timeline/index.vue";
 import datepicker from "./components/datepicker/index.vue";
+import hxkdate from './components/hxk_date/index.vue'
 const Components = {
   navCate,
   waterfall,
   area,
   timeline,
-  datepicker
+  datepicker,
+  hxkdate
 };
 
 const install = function (Vue, opts = {}) {

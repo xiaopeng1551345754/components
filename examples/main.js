@@ -39,6 +39,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/datepicker.vue'], resolve);
     }
+  },
+  '/hxkdate': {
+    component: function(resolve) {
+      require(['./routers/hxk_date.vue'], resolve);
+    }
   }
 });
 
@@ -51,6 +56,6 @@ router.afterEach(function(transition) {
 });
 
 router.redirect({
-  '*': "/datepicker"
+  '*': "/hxkdate"
 });
 router.start(App, '#app');
