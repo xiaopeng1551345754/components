@@ -27,7 +27,7 @@
         class="item day"
         v-for="(idx, day) in days.days"
         :key="idx"
-        :class="{ normal: day.type === 'normal', selected: day.selected }"
+        :class="{ normal: day.type === 'normal', selected: selectedTimes[day.time]}"
         :style="{
           background: selectedTimes[day.time] ? selectedColor : '',
           color: selectedTimes[day.time] ? '#fff' : '',
@@ -41,6 +41,7 @@
           {{ day.text || noneText }}
         </div>
       </div>
+      <div class="item none" v-for="none in 6 - days.endWeek" :key="none"></div>
     </div>
     <div class="chooseYearModal" v-show="chooseYear">
       <div class="years">
@@ -131,6 +132,11 @@ export default {
     days() {
       const startWeek = new Date(this.year, this.month - 1, 1).getDay();
       const allDay = new Date(this.year, this.month, 0).getDate();
+      const endWeek = new Date(
+        this.year,
+        this.month - 1,
+        allDay
+      ).getDay();
       let days = [];
       for (let i = 1; i < allDay + 1; i++) {
         const time = this.year + "-" + this.month + "-" + i;
@@ -147,6 +153,7 @@ export default {
       const obj = {
         startWeek,
         days,
+        endWeek
       };
       return obj;
     },
@@ -340,6 +347,7 @@ export default {
   background: #fff;
   display: flex;
   flex-direction: column;
+  user-select: none;
   .head {
     display: flex;
     justify-content: space-between;
@@ -348,6 +356,7 @@ export default {
     .date {
       display: flex;
       align-items: center;
+      cursor: pointer;
       .text {
         font-size: 17px;
         font-weight: 500;
@@ -376,6 +385,7 @@ export default {
         width: 11px;
         height: 8px;
         position: relative;
+        cursor: pointer;
         img {
           position: absolute;
           left: 0;
@@ -396,13 +406,13 @@ export default {
       box-shadow: 0px 4px 2px 0px rgba(125, 126, 128, 0.1);
       .date {
         .control {
-          transform: rotate(180deg);
+          transition: .3s;
+          transform: rotateX(-180deg);
         }
       }
     }
   }
   .item {
-    margin: 0 2px;
     width: 13.2%;
     text-align: center;
     font-size: 13px;
@@ -411,6 +421,7 @@ export default {
   .days {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
   }
   .weeks {
     box-shadow: 0px 4px 2px 0px rgba(125, 126, 128, 0.1);
@@ -426,6 +437,11 @@ export default {
     .day {
       border-radius: 6px;
       padding: 10px 0;
+      cursor: default;
+      transition: .1s;
+      &.normal {
+        cursor: pointer;
+      }
       .num {
         font-size: 16px;
         font-family: PingFangSC-Medium, PingFang SC;
@@ -450,7 +466,7 @@ export default {
     flex-grow: 1;
     height: 1px;
     .years {
-      width: 90px;
+      width: 24%;
       flex-shrink: 0;
       border-right: 1px solid rgba(6, 26, 55, 0.06);
       height: 100%;
@@ -464,6 +480,8 @@ export default {
         color: rgba(6, 26, 55, 0.85);
         line-height: 21px;
         padding: 12px 0;
+        cursor: pointer;
+        transition: .1s;
       }
     }
     .months {
@@ -471,16 +489,20 @@ export default {
       flex-wrap: wrap;
       height: max-content;
       justify-content: space-around;
+      width: 76%;
       padding: 20px 8px 0;
       align-self: center;
       .month {
         flex-grow: 0;
-        width: 76px;
+        width: 26.6%;
         line-height: 34px;
         border-radius: 6px;
         border: 1px solid rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
+        cursor: pointer;
+        transition: .1s;
         &.disabled {
+          cursor: default;
           color: rgba(0, 0, 0, 0.1);
         }
       }

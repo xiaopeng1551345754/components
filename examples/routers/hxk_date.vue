@@ -20,7 +20,7 @@
 export default {
   data() {
     return {
-      start: "2020-3",
+      start: "2020-6",
       end: "2021-2",
       multiple: true,
       selectedColor: "red",
@@ -40,16 +40,16 @@ export default {
   ready () {
     setTimeout(()=>{
       this.showList = [
-        { time: "2020-3-9", text: "剩余0", color: "pink", type: "normal"},
-        { time: "2020-3-11", text: "以开放2", color: "green", type: "normal"},
-        { time: "2020-3-13", text: "以开放3", color: "black", type: "normal"},
+        { time: "2020-6-9", text: "剩余0", color: "pink", type: "normal"},
+        { time: "2020-6-11", text: "以开放2", color: "green", type: "normal"},
+        { time: "2020-6-13", text: "以开放3", color: "black", type: "normal"},
       ]
     })
     setTimeout(()=>{
       this.defaults = [
-        { time: "2020-3-6", text: "以开放", color: "pink", type: "normal" },
-        { time: "2020-3-13", text: "以开放3", color: "black", type: "normal"},
-        { time: "2020-3-11", text: "以开放3", color: "black", type: "normal"},
+        { time: "2020-6-6", text: "以开放", color: "pink", type: "normal" },
+        { time: "2020-6-13", text: "以开放3", color: "black", type: "normal"},
+        { time: "2020-6-11", text: "以开放3", color: "black", type: "normal"},
       ]
     },2000)
   }
@@ -67,7 +67,7 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 375px;
+    width: 100%;
     height: 400px;
   }
 }
