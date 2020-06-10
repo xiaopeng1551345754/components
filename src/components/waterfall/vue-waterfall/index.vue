@@ -79,7 +79,7 @@ export default {
     reachBottomDistance: {
       // 滚动触底距离，触发加载新图片
       type: Number, // selector
-      default: 20 // 默认在最低那一列到底时触发
+      default: 100 // 默认在最低那一列到底时触发
     },
     loadingDotCount: {
       // loading 点数
@@ -214,18 +214,19 @@ export default {
     this.bindClickEvent();
     this.loadingMiddle();
 
-    this.preload();
+    this.preload()
     this.cols = this.calcuCols();
     this.$on("preloaded", () => {
       this.isFirstLoad = false;
-
       this.imgsArr_c = this.imgsArr.concat([]); // 预加载完成，这时才开始渲染
       this.$nextTick(() => {
         this.isPreloading = false;
         this.imgBoxEls = this.$el.getElementsByClassName("img-box");
         // console.log('图片总数', this.imgBoxEls.length)
+        this.beginIndex = 0;
         this.waterfall();
       });
+      
     });
     if (!this.isMobile && !this.width)
       window.addEventListener("resize", this.response);
@@ -239,8 +240,8 @@ export default {
         if (dom) {
           dom.onscroll = function () {
             const now = Date.now();
-            if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 20) {
-              if (now - self.prev > 200) {
+            if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 100) {
+              if (now - self.prev > 500) {
                 self.prev = now
                 self.$emit("scroll-bottom");
               }
@@ -342,6 +343,7 @@ export default {
             // 支持无图模式
             if (this.loadedCount == this.imgsArr.length) {
               this.$emit("preloaded");
+              resolve()
             }
             return;
           }
@@ -357,6 +359,7 @@ export default {
               const imageHeight = Math.round(this.imgWidth_c / (oImg.width / oImg.height));
               // console.log(e.target, oImg.width, oImg.height, imageHeight);
               this.imgsArr[imgIndex]._height = imageHeight;
+              this.imgsArr[imgIndex]._load = true;
             } else {
               this.imgsArr[imgIndex]._height = this.isMobile ? this.imgWidth_c : this.imgWidth;
             }
@@ -364,6 +367,7 @@ export default {
             if (e.type == "error") {
               this.imgsArr[imgIndex]._error = true;
               this.$emit("imgError", this.imgsArr[imgIndex]);
+              reject(this.imgsArr[imgIndex])
             }
   
             if (this.loadedCount == this.imgsArr.length) {
@@ -395,7 +399,6 @@ export default {
       var colWidth = this.isMobile ? this.imgBoxEls[0].offsetWidth : this.colWidth;
 
       if (this.beginIndex == 0) this.colsHeightArr = [];
-
       for (var i = this.beginIndex; i < this.imgsArr.length; i++) {
         if (!this.imgBoxEls[i]) return;
         height = this.imgBoxEls[i].offsetHeight;
@@ -412,12 +415,11 @@ export default {
           // 更新colsHeightArr
           this.colsHeightArr[minIndex] = minHeight + height;
         }
-
+        
         this.imgBoxEls[i].style.left = left + "px";
         this.imgBoxEls[i].style.top = top + "px";
+        this.beginIndex = this.imgsArr.length; // 排列完之后，新增图片从这个索引开始预加载图片和排列
       }
-
-      this.beginIndex = this.imgsArr.length; // 排列完之后，新增图片从这个索引开始预加载图片和排列
     },
 
     // ==4== resize 响应式
@@ -431,12 +433,13 @@ export default {
     },
     // ==5== 滚动触底事件
     scrollFn () {
+      console.log('scroll')
       var self = this
       if (!this.domId) {
         var scrollEl = this.scrollEl;
         var minHeight = Math.min.apply(null, this.colsHeightArr);
         if (scrollEl.scrollTop + scrollEl.offsetHeight >=
-          scrollEl.scrollHeight-20) {
+          scrollEl.scrollHeight- this.reachBottomDistance) {
           this.noneText = true
         } else {
           this.noneText = false
@@ -452,11 +455,36 @@ export default {
         }
       }
     },
+    // from: https://github.com/vue-tools/vt-image/blob/master/src/utils.js#L72
+    throttle (fn,delay = 500)  {
+      let last
+      let now
+      let timer
+      let context = this
+      let args
+      return function () {
+        now = new Date().getTime()
+        args = arguments
+        if (last && now - last < delay) {
+          clearTimeout(timer)
+          timer = setTimeout(function () {
+            last = now
+            fn.apply(context,args)
+          },delay)
+        } else {
+          last = now
+          fn.apply(context,args)
+        }
+      }
+    },
+    _delayScroll () {
+      return this.throttle(this.scrollFn, 200)()
+    },
     scroll () {
-      this.scrollEl.addEventListener("scroll", this.scrollFn);
+      this.scrollEl.addEventListener("scroll", this._delayScroll);
     },
     waterfallOver () {
-      this.scrollEl.removeEventListener("scroll", this.scrollFn);
+      this.scrollEl.removeEventListener("scroll", this._delayScroll);
       this.isPreloading = false;
       this.over = true;
       this.setOverTipPos();
