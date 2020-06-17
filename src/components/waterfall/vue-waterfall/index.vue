@@ -32,7 +32,7 @@
             <div
               class="img-wraper"
             >
-              <img :src="v.realPath" alt />
+            <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
             <div class="img-info">
               <p class="title">{{v.title}}</p>
@@ -43,7 +43,7 @@
           :class="{fixed: !inValidImgSize(v)}"
           :data-index="$index">
             <div class="img-wraper">
-              <img :src="v.realPath" alt />
+              <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
             <div class="tag doing-tag" v-if="v.status==='doing'">{{t('doing')}}</div>
             <div class="tag done-tag" v-if="v.status==='done'">{{t('over')}}</div>
@@ -214,7 +214,7 @@ export default {
     this.bindClickEvent();
     this.loadingMiddle();
 
-    this.preload()
+    this.preload();
     this.cols = this.calcuCols();
     this.$on("preloaded", () => {
       this.isFirstLoad = false;
@@ -226,7 +226,7 @@ export default {
         this.beginIndex = 0;
         this.waterfall();
       });
-      
+
     });
     if (!this.isMobile && !this.width)
       window.addEventListener("resize", this.response);
@@ -273,9 +273,9 @@ export default {
       ) {
         this.reset();
       }
-      this.preload().then(res=>{
-        this.beginIndex = 0;
-        this.waterfall();
+      this.preload().then(res => {
+        // this.beginIndex = 0;
+        // this.waterfall();
       }).catch();
     }
   },
@@ -329,17 +329,30 @@ export default {
       }
       return r || ''
     },
+    // 获取真实高度
+    getImageHeight (item) {
+      const { ImageHeight = 0, ImageWidth = 0 } = item;
+      if (ImageHeight && ImageWidth) {
+        const define = this.imgSize[item.type] || { width: 240 };
+        const width = define.width;
+        const imageHeight = Math.round(width / (ImageWidth / ImageHeight));
+        return imageHeight + 'px';
+      }
+      return '';
+    },
     // ==1== 预加载
     preload (src, imgIndex) {
-      return new Promise((resolve, reject)=>{
+      return new Promise((resolve, reject) => {
+
         this.imgsArr.forEach((imgItem, imgIndex) => {
           if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
           this.imgsArr[imgIndex].realPath = this.loadingImg
+
           // 无图时
           if (!imgItem[this.srcKey]) {
             this.imgsArr[imgIndex]._height = "0";
             this.loadedCount++;
-  
+
             // 支持无图模式
             if (this.loadedCount == this.imgsArr.length) {
               this.$emit("preloaded");
@@ -347,14 +360,15 @@ export default {
             }
             return;
           }
+
           var oImg = new Image();
           oImg.src = imgItem[this.srcKey];
-  
+
           // 图片加载成功处理逻辑
           const onload = e => {
             this.loadedCount++;
             // 预加载图片，计算图片容器的高
-  
+
             if (e.type === 'load') {
               const imageHeight = Math.round(this.imgWidth_c / (oImg.width / oImg.height));
               // console.log(e.target, oImg.width, oImg.height, imageHeight);
@@ -363,20 +377,20 @@ export default {
             } else {
               this.imgsArr[imgIndex]._height = this.isMobile ? this.imgWidth_c : this.imgWidth;
             }
-  
+
             if (e.type == "error") {
               this.imgsArr[imgIndex]._error = true;
               this.$emit("imgError", this.imgsArr[imgIndex]);
               reject(this.imgsArr[imgIndex])
             }
-  
+
             if (this.loadedCount == this.imgsArr.length) {
               this.$emit("preloaded");
               resolve()
             }
             this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
           };
-  
+
           oImg.onload = onload;
           oImg.onerror = onload;
         });
@@ -390,8 +404,9 @@ export default {
       cols = cols === 0 ? 1 : cols;
       return this.isMobile ? 2 : cols > this.maxCols ? this.maxCols : cols;
     },
-    // ==3== waterfall布局
+    // ==3== waterfall 布局
     waterfall () {
+      // console.log('瀑布流布局计算', this.imgsArr.length, this.beginIndex);
       if (!this.imgBoxEls) return;
       var top;
       var left;
@@ -399,9 +414,14 @@ export default {
       var colWidth = this.isMobile ? this.imgBoxEls[0].offsetWidth : this.colWidth;
 
       if (this.beginIndex == 0) this.colsHeightArr = [];
+
+      // 瀑布流计算
       for (var i = this.beginIndex; i < this.imgsArr.length; i++) {
         if (!this.imgBoxEls[i]) return;
+        const img = this.imgBoxEls[i];
+        // console.log('img', img);
         height = this.imgBoxEls[i].offsetHeight;
+        // console.log('height', height);
         if (i < this.cols) {
           this.colsHeightArr.push(height);
           top = 0;
@@ -412,14 +432,15 @@ export default {
           top = minHeight;
           left = minIndex * colWidth;
           // 设置元素定位的位置
-          // 更新colsHeightArr
+          // 更新 colsHeightArr
           this.colsHeightArr[minIndex] = minHeight + height;
         }
-        
+
         this.imgBoxEls[i].style.left = left + "px";
         this.imgBoxEls[i].style.top = top + "px";
         this.beginIndex = this.imgsArr.length; // 排列完之后，新增图片从这个索引开始预加载图片和排列
       }
+
     },
 
     // ==4== resize 响应式
@@ -433,13 +454,13 @@ export default {
     },
     // ==5== 滚动触底事件
     scrollFn () {
-      console.log('scroll')
+      // console.log('scroll')
       var self = this
       if (!this.domId) {
         var scrollEl = this.scrollEl;
         var minHeight = Math.min.apply(null, this.colsHeightArr);
         if (scrollEl.scrollTop + scrollEl.offsetHeight >=
-          scrollEl.scrollHeight- this.reachBottomDistance) {
+          scrollEl.scrollHeight - this.reachBottomDistance) {
           this.noneText = true
         } else {
           this.noneText = false
@@ -456,7 +477,7 @@ export default {
       }
     },
     // from: https://github.com/vue-tools/vt-image/blob/master/src/utils.js#L72
-    throttle (fn,delay = 500)  {
+    throttle (fn, delay = 500) {
       let last
       let now
       let timer
@@ -469,11 +490,11 @@ export default {
           clearTimeout(timer)
           timer = setTimeout(function () {
             last = now
-            fn.apply(context,args)
-          },delay)
+            fn.apply(context, args)
+          }, delay)
         } else {
           last = now
-          fn.apply(context,args)
+          fn.apply(context, args)
         }
       }
     },
@@ -564,7 +585,7 @@ export default {
   height: 100%;
   position: relative;
   background: #f4f4f4;
-  transition: .3s;
+  transition: 0.3s;
   &.none {
     padding-bottom: 42px;
   }
@@ -634,13 +655,9 @@ export default {
       height: calc(~"100% - 75px");
 
       & > img {
-        width: auto;
+        width: 100%;
         max-width: 100%;
         max-height: 100%;
-        /*position: absolute;*/
-        /*top: 50%;*/
-        /*left: 50%;*/
-        /*transform: translate(-50%,-50%);*/
       }
     }
     .over {
@@ -692,10 +709,10 @@ export default {
   .text {
     position: absolute;
     bottom: 10px;
-    font-size:14px;
-    font-weight:400;
-    color:rgba(0,0,0,0.65);
-    line-height:22px;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.65);
+    line-height: 22px;
     text-align: center;
     width: 100%;
   }

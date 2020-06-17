@@ -24,98 +24,23 @@
 export default {
   data () {
     return {
-      imgSize: null,
+      imgSize: {
+        live: {
+          width: 280,
+          // height: 400
+        },
+        static: {
+          width: 280,
+          // height: 300
+        }
+      },
       loadingImg: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       noneData: false,
-      list: [],
-      other: [{
-        type: "live",
-        src:
-          "https://hexyun.oss-cn-beijing.aliyuncs.com/cloud_expo_5eb6152d14b7b129cf44ec71/1590583689685/0e291d568ba94c3867bab6fa81be583f.jpg",
-        status: "doing", //  进行中
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-      {
-        type: "live",
-        src:
-          "https://digital-expo-oss-jc.oss-cn-hangzhou.aliyuncs.com/expo/3/exhibits/pic20200607045956336_30vvrsxf.jpeg",
-        status: "done", //  进行中
-        title: "xxxx",
-        exhibition_name: "aa",
-      },
-      {
-        type: "static",
-        src:
-          "http://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1591875387&t=275055d9e4a80cdcfe90d2f7b8f3dd49",
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-
-      {
-        type: "static",
-        src:
-          "https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1590483334&t=a427c29284cb086a3ec0b0b7609e976f",
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-
-      {
-        type: "static",
-        src:
-          "https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1590483334&t=a427c29284cb086a3ec0b0b7609e976f",
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-
-      {
-        type: "static",
-        src:
-          "https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1590483334&t=a427c29284cb086a3ec0b0b7609e976f",
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-
-      {
-        type: "static",
-        src:
-          "https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1590483334&t=a427c29284cb086a3ec0b0b7609e976f",
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-      {
-        type: "live",
-        src:
-          "https://t9.baidu.com/it/u=2268908537,2815455140&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1591948862&t=49a838e09edb363937de208a82a33670",
-        status: "done", //  结束
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-      {
-        type: "live",
-        src:
-          "https://hexyun.oss-cn-beijing.aliyuncs.com/cloud_expo_5eb6152d14b7b129cf44ec71/1590337754868/30ca03330c48f8fa9d4d20dcb6640206.png",
-        status: "nostart", //  未开始
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-      {
-        type: "live",
-        src:
-          "https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1590483334&t=a427c29284cb086a3ec0b0b7609e976f",
-        status: "doing", //  进行中
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      },
-      {
-        type: "live",
-        src:
-          "https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1590483334&t=a427c29284cb086a3ec0b0b7609e976f",
-        status: "doing", //  进行中
-        title: "八个字以内的 title",
-        exhibition_name: "展商名字展商名字",
-      }],
+      list: []
     };
+  },
+  created () {
+    console.log('created');
   },
   methods: {
     //  暴露事件方法
@@ -123,27 +48,61 @@ export default {
       console.log(node);
     },
     scrollBottom () {
-      this.list = this.list.concat(this.other);
       console.log("scroll bottom");
+      this.getWaterfall();
     },
     selectItem (item) {
       console.log("item", item);
     },
     change () {
       var self = this;
-      const back = JSON.parse(JSON.stringify(this.list));
       this.list = [];
-      console.log("this.list", this.list);
       setTimeout(function () {
-        self.list = back;
       }, 1000)
     },
     changeNoneData () {
       this.noneData = !this.noneData;
+    },
+    // 抓取数据
+    getWaterfall () {
+      const self = this;
+      $.post({
+        url: 'https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95',
+        data: {},
+        dataType: 'json',
+        success: function (res) {
+          if (res.data && res.data.list) {
+            let list = res.data.list;
+            list = list.map(item => {
+              item.src = item.coverUrl;
+              item.title = item.goodsName;
+              item.exhibition_name = item.ownerName;
+              item.status = 'doing';
+
+              const liveTypes = new Set(['LIVE', 'MEETING']);
+              item.type = liveTypes.has(item.goodsType) ? 'live' : 'static';
+              // delete item.ImageHeight;
+              // delete item.ImageWidth;
+              return item;
+            });
+            self.list = self.list.concat(list);
+          }
+        }
+      });
     }
   },
   ready () {
-    this.list = this.list.concat(this.other)
+    this.getWaterfall();
+
+    let time = 0;
+
+    this.__timer = setInterval(() => {
+      this.getWaterfall();
+      time += 1;
+      if (time >= 5) {
+        clearInterval(this.__timer);
+      }
+    }, 1000);
   },
 };
 </script>
