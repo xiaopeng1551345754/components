@@ -41,6 +41,8 @@ export default {
   },
   created () {
     console.log('created');
+    this.request()
+
   },
   methods: {
     //  暴露事件方法
@@ -63,6 +65,14 @@ export default {
     changeNoneData () {
       this.noneData = !this.noneData;
     },
+    request () {
+      $.post({
+        url: 'https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95',
+        data: {},
+        dataType: 'json',
+        success: function (res) { }
+      });
+    },
     // 抓取数据
     getWaterfall () {
       const self = this;
@@ -78,6 +88,7 @@ export default {
               item.title = item.goodsName;
               item.exhibition_name = item.ownerName;
               item.status = 'doing';
+              item.realPath = '';
 
               const liveTypes = new Set(['LIVE', 'MEETING']);
               item.type = liveTypes.has(item.goodsType) ? 'live' : 'static';
@@ -96,13 +107,13 @@ export default {
 
     let time = 0;
 
-    this.__timer = setInterval(() => {
-      this.getWaterfall();
-      time += 1;
-      if (time >= 5) {
-        clearInterval(this.__timer);
-      }
-    }, 1000);
+    // this.__timer = setInterval(() => {
+    //   this.getWaterfall();
+    //   time += 1;
+    //   if (time >= 5) {
+    //     clearInterval(this.__timer);
+    //   }
+    // }, 1000);
   },
 };
 </script>

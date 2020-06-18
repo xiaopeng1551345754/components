@@ -18,7 +18,7 @@
       >
         <div
           class="img-box"
-          v-for="v in imgsArr_c"
+          v-for="(index, v) in imgsArr_c"
           track-by="$index"
           :key="$index"
           :class="[cardAnimationClass, {__err__: v._error}]"
@@ -29,10 +29,8 @@
            :class="{fixed: !inValidImgSize(v)}"
            :style="getImgSize(v)"
             v-if="v.type==='static'" :data-index="$index">
-            <div
-              class="img-wraper"
-            >
-            <img :src="v.realPath" :height="getImageHeight(v)" alt />
+            <div class="img-wraper" >
+              <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
             <div class="img-info">
               <p class="title">{{v.title}}</p>
@@ -222,7 +220,6 @@ export default {
       this.$nextTick(() => {
         this.isPreloading = false;
         this.imgBoxEls = this.$el.getElementsByClassName("img-box");
-        // console.log('图片总数', this.imgBoxEls.length)
         this.beginIndex = 0;
         this.waterfall();
       });
@@ -332,8 +329,10 @@ export default {
     // 获取真实高度
     getImageHeight (item) {
       const { ImageHeight = 0, ImageWidth = 0 } = item;
+      // console.log(item.title, ImageWidth, ImageHeight);
+      this.imgSize = this.imgSize || {};
       if (ImageHeight && ImageWidth) {
-        const define = this.imgSize[item.type] || { width: 240 };
+        const define = this.imgSize[item.type] || { width: this.imgWidth };
         const width = define.width;
         const imageHeight = Math.round(width / (ImageWidth / ImageHeight));
         return imageHeight + 'px';
@@ -366,6 +365,7 @@ export default {
 
           // 图片加载成功处理逻辑
           const onload = e => {
+            // console.log("onload", imgIndex);
             this.loadedCount++;
             // 预加载图片，计算图片容器的高
 
@@ -418,10 +418,18 @@ export default {
       // 瀑布流计算
       for (var i = this.beginIndex; i < this.imgsArr.length; i++) {
         if (!this.imgBoxEls[i]) return;
-        const img = this.imgBoxEls[i];
-        // console.log('img', img);
-        height = this.imgBoxEls[i].offsetHeight;
-        // console.log('height', height);
+
+        const box = this.imgBoxEls[i];
+        height = parseFloat(window.getComputedStyle(box).height);
+
+        // 暴力计算
+        const item = this.imgsArr[i];
+        const imageHeight = parseFloat(this.getImageHeight(item));
+        if (height < imageHeight) {
+          height = item.type === 'live' ? imageHeight + 10 : imageHeight + 85;
+        }
+        // console.log('height', height, 'imageHeight', imageHeight);
+
         if (i < this.cols) {
           this.colsHeightArr.push(height);
           top = 0;
@@ -431,11 +439,11 @@ export default {
           var minIndex = this.colsHeightArr.indexOf(minHeight); // 最低高度的索引
           top = minHeight;
           left = minIndex * colWidth;
-          // 设置元素定位的位置
-          // 更新 colsHeightArr
+
+          // 更新列的最低高度
           this.colsHeightArr[minIndex] = minHeight + height;
         }
-
+        // console.log('height', height, top, box);
         this.imgBoxEls[i].style.left = left + "px";
         this.imgBoxEls[i].style.top = top + "px";
         this.beginIndex = this.imgsArr.length; // 排列完之后，新增图片从这个索引开始预加载图片和排列
