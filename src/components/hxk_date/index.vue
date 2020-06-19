@@ -27,7 +27,7 @@
         class="item day"
         v-for="(idx, day) in days.days"
         :key="idx"
-        :class="{ normal: day.type === 'normal', selected: selectedTimes[day.time]}"
+        :class="{ normal: day.type === 'normal', selected: selectedTimes[day.time] && selectShape === 'square', selectedCircle: selectedTimes[day.time] && selectShape === 'circle'}"
         :style="{
           background: selectedTimes[day.time] ? selectedColor : '',
           color: selectedTimes[day.time] ? '#fff' : '',
@@ -37,8 +37,12 @@
         <div class="num">
           {{ idx + 1 }}
         </div>
-        <div class="text" :style="{ color: day.color }">
+        <div class="text" v-if='bottomText' :style="{ color: day.color }">
           {{ day.text || noneText }}
+        </div>
+        <div class='dot' v-if='!bottomText && day.text' :style="{ background: selectedTimes[day.time] && selectShape === 'circle' && day.color ? '#fff':day.color}"></div>
+        <div class="dot" v-if='!bottomText && !day.text'>
+
         </div>
       </div>
       <div class="item none" v-for="none in 6 - days.endWeek" :key="none"></div>
@@ -119,6 +123,18 @@ export default {
         return [];
       },
     },
+    bestDisabled: {
+      type: Boolean,
+      default: true
+    },
+    bottomText: {
+      type: Boolean,
+      defaule: true
+    },
+    selectShape: {
+      type: String,
+      default: "square"
+    }
   },
   computed: {
     startArr() {
@@ -144,10 +160,18 @@ export default {
         if (data) {
           days.push(data);
         } else {
-          days.push({
-            time,
-            selected: false,
-          });
+          if (this.bestDisabled) {
+            days.push({
+              time,
+              selected: false,
+            });
+          } else {
+            days.push({
+              time,
+              selected: false,
+              type: 'normal'
+            });
+          }
         }
       }
       const obj = {
@@ -448,6 +472,12 @@ export default {
         font-weight: 500;
         line-height: 16px;
       }
+      .dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        margin: 8px auto 0;
+      }
       .text {
         font-size: 12px;
         font-family: PingFangSC-Regular, PingFang SC;
@@ -458,6 +488,9 @@ export default {
     }
     .normal {
       color: rgba(6, 26, 55, 0.85);
+    }
+    .selectedCircle {
+      border-radius: 50%;
     }
   }
   .chooseYearModal {

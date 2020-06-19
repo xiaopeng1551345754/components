@@ -9,6 +9,9 @@
         :none-text="noneText"
         :show-list="showList"
         :default="defaults"
+        :best-disabled='false'
+        :bottom-text='false'
+        :select-shape='"circle"'
         @selected='selected'
       >
       </hxkdate>
@@ -22,9 +25,9 @@ export default {
     return {
       start: "2020-6",
       end: "2021-2",
-      multiple: true,
+      multiple: false,
       selectedColor: "red",
-      noneText: "123",
+      noneText: "",
       showList: [],
       defaults: [],
     };
