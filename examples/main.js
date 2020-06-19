@@ -44,6 +44,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/hxk_date.vue'], resolve);
     }
+  },
+  '/timelinesingle': {
+    component: function(resolve) {
+      require(['./routers/timelinesingle.vue'], resolve);
+    }
   }
 });
 
@@ -56,6 +61,6 @@ router.afterEach(function(transition) {
 });
 
 router.redirect({
-  '*': "/hxkdate"
+  '*': "/timelinesingle"
 });
 router.start(App, '#app');
