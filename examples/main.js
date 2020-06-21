@@ -49,6 +49,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/timelinesingle.vue'], resolve);
     }
+  },
+  '/board': {
+    component: function(resolve) {
+      require(['./routers/board.vue'], resolve);
+    }
   }
 });
 
@@ -61,6 +66,6 @@ router.afterEach(function(transition) {
 });
 
 router.redirect({
-  '*': "/timelinesingle"
+  '*': "/board"
 });
 router.start(App, '#app');
