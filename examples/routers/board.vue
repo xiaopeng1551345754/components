@@ -56,6 +56,7 @@ export default {
   .wrap {
     width: 100%;
     height: 100%;
+    margin-top: 200px;
     background: lightgreen;
   }
 }

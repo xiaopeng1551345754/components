@@ -56,7 +56,7 @@ export default {
     touchStart(e) {
       e = e || event;
       e.preventDefault();
-      this.startDraw(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+      this.startDraw(e.targetTouches[0].clientX - this.dom.getBoundingClientRect().left, e.targetTouches[0].clientY - this.dom.getBoundingClientRect().top);
     },
     startDraw(x, y) {
       this.start = { x, y };
@@ -71,7 +71,10 @@ export default {
     touchMove(e) {
       e = e || event;
       e.preventDefault();
-      this.moveDraw(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+      this.moveDraw(
+        e.targetTouches[0].clientX - this.dom.getBoundingClientRect().left,
+        e.targetTouches[0].clientY - this.dom.getBoundingClientRect().top
+      );
     },
     moveDraw(x, y) {
       if (this.down) {
@@ -117,7 +120,7 @@ export default {
     },
     exportImg() {
       const base = this.dom.toDataURL("image/png");
-      this.$emit('exportimg', base);
+      this.$emit("exportimg", base);
     },
   },
   watch: {
@@ -125,23 +128,25 @@ export default {
       immediate: true,
       handler(n) {
         if (n) {
-          this.defaultDraw(n)
+          this.defaultDraw(n);
         }
       },
     },
   },
   ready() {
-    const wrap = this.$els.boardWrap;
-    this.width = wrap.offsetWidth;
-    this.height = wrap.offsetHeight;
+    this.$nextTick(() => {
+      const wrap = this.$els.boardWrap;
+      this.width = wrap.offsetWidth;
+      this.height = wrap.offsetHeight;
 
-    this.dom = this.$els.boardDom;
-    this.dom.width = this.width;
-    this.dom.height = this.height;
+      this.dom = this.$els.boardDom;
+      this.dom.width = this.width;
+      this.dom.height = this.height;
 
-    this.ctx = this.dom.getContext("2d");
-    this.ctx.strokeStyle = this.color;
-    this.ctx.lineWidth = this.linewidth * 1;
+      this.ctx = this.dom.getContext("2d");
+      this.ctx.strokeStyle = this.color;
+      this.ctx.lineWidth = this.linewidth * 1;
+    });
   },
 };
 </script>
