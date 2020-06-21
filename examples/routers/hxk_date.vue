@@ -12,6 +12,7 @@
         :best-disabled='false'
         :bottom-text='false'
         :select-shape='"circle"'
+        :filter-default='false'
         @selected='selected'
       >
       </hxkdate>

@@ -134,6 +134,10 @@ export default {
     selectShape: {
       type: String,
       default: "square"
+    },
+    filterDefault: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -341,9 +345,13 @@ export default {
       handler(n) {
         // 当初始化值变动的时候,重置当前年月
         if (n) {
-          this.selected = n.filter((item) =>
-            this.showList.find((items) => items.time === item.time)
-          );
+          if (this.filterDefault) {
+            this.selected = n.filter((item) =>
+              this.showList.find((items) => items.time === item.time)
+            );
+          } else {
+            this.selected = n
+          }
         }
       },
     },
