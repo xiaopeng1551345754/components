@@ -6,6 +6,8 @@ import datepicker from "./components/datepicker/index.vue";
 import hxkdate from './components/hxk_date/index.vue'
 import timelinesingle from './components/timelinesingle/index.vue'
 import board from './components/board/index.vue'
+import accordion from './components/accordion/index.vue'
+
 const Components = {
   navCate,
   waterfall,
@@ -14,7 +16,8 @@ const Components = {
   datepicker,
   hxkdate,
   timelinesingle,
-  board
+  board,
+  accordion
 };
 
 const install = function (Vue, opts = {}) {

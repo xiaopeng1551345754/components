@@ -54,6 +54,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/board.vue'], resolve);
     }
+  },
+  'accordion': {
+    component: function(resolve) {
+      require(['./routers/accordion.vue'], resolve);
+    }
   }
 });
 
@@ -66,6 +71,6 @@ router.afterEach(function(transition) {
 });
 
 router.redirect({
-  '*': "/board"
+  '*': "/accordion"
 });
 router.start(App, '#app');
