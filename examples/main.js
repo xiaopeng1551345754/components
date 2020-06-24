@@ -59,6 +59,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/accordion.vue'], resolve);
     }
+  },
+  'cardmenu': {
+    component: function(resolve) {
+      require(['./routers/cardmenu.vue'], resolve);
+    }
   }
 });
 
@@ -71,6 +76,6 @@ router.afterEach(function(transition) {
 });
 
 router.redirect({
-  '*': "/accordion"
+  '*': "/cardmenu"
 });
 router.start(App, '#app');
