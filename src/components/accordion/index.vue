@@ -5,7 +5,10 @@
       v-for="(idx, item) in data"
       :key="idx"
       :style="{
-        height: item.id === active ? maxHeight + 'px' : minHeight + 'px',
+        height:
+          item.id === active || idx === data.length - 1
+            ? maxHeight + 'px'
+            : minHeight + 'px',
       }"
       :class="{ active: item.id == active }"
       @click="select(item)"
