@@ -8,6 +8,7 @@ import timelinesingle from './components/timelinesingle/index.vue'
 import board from './components/board/index.vue'
 import accordion from './components/accordion/index.vue'
 import cardmenu from './components/cardmenu/index.vue'
+import lanhemenu from './components/lanhemenu/index.vue'
 
 const Components = {
   navCate,
@@ -19,7 +20,8 @@ const Components = {
   timelinesingle,
   board,
   accordion,
-  cardmenu
+  cardmenu,
+  lanhemenu
 };
 
 const install = function (Vue, opts = {}) {

@@ -64,6 +64,11 @@ router.map({
     component: function(resolve) {
       require(['./routers/cardmenu.vue'], resolve);
     }
+  },
+  'lanhemenu': {
+    component: function(resolve) {
+      require(['./routers/lanhemenu.vue'], resolve);
+    }
   }
 });
 
@@ -76,6 +81,6 @@ router.afterEach(function(transition) {
 });
 
 router.redirect({
-  '*': "/cardmenu"
+  '*': "/lanhemenu"
 });
 router.start(App, '#app');
