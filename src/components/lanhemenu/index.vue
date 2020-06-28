@@ -1,5 +1,5 @@
 <template>
-  <div class="lanhe_menu" v-el:wrap>
+  <div class="lanhe_menu" v-el:wrap :style="{ overflow: disabled ? 'hidden' : 'auto' }">
     <template v-for="(idx, card) in list">
       <div class="card_name" :key="idx">
         {{ card.name }}

@@ -19,7 +19,7 @@ export default {
     return {
       list: [],
       defaultActive: 0,
-      disabled: false,
+      disabled: true,
     };
   },
   methods: {
