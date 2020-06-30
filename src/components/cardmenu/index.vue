@@ -24,9 +24,7 @@
           @click="select(item, card)"
         >
           <div class="item_icon">
-            <img
-              :src="item.image"
-            />
+            <img :src="item.image" />
           </div>
           <div class="item_text">
             <div class="item_name">
@@ -139,6 +137,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@t: 55px;
 .card_menu {
   width: 100%;
   height: 100%;
@@ -159,7 +158,13 @@ export default {
     display: flex;
     flex-direction: column;
     &.active {
-      top: 0;
+      .loop(@i) when (@i<10) {
+        &:nth-child(@{i}) {
+          top: @i * @t - @t;
+        }
+        .loop(@i+1);
+      }
+      .loop(1);
     }
     .card_name {
       font-size: 18px;

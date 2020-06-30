@@ -39,7 +39,7 @@ export default {
           name: `一级${i}`,
           children: [],
         };
-        for (let j = 10; j--; ) {
+        for (let j = 5; j--; ) {
           let chi = {
             _id: i,
             name: `一级${i}二级${j}`,
