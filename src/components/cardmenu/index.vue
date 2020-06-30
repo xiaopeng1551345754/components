@@ -84,7 +84,7 @@ export default {
         const ch = tar.clientHeight;
         const sh = tar.scrollHeight;
         const t = st === 0;
-        const b = sh - ch === st;
+        const b = sh - ch -st <= 10;
         if (t || b) {
           const move =
             e.targetTouches[0].clientY - this.dom.getBoundingClientRect().top;
@@ -137,7 +137,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@t: 55px;
+@t: 80px;
 .card_menu {
   width: 100%;
   height: 100%;
@@ -172,6 +172,7 @@ export default {
       color: rgba(47, 45, 41, 1);
       line-height: 25px;
       margin-top: 30px;
+      margin-bottom: 25px;
       flex-shrink: 0;
     }
     .items {
