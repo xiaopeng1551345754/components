@@ -146,11 +146,11 @@ export default {
   user-select: none;
   .card {
     width: 100%;
-    height: 100%;
     border-radius: 30px 30px 0px 0px;
     position: absolute;
     left: 0;
     top: 100%;
+    bottom: 0;
     transition: 0.3s;
     background: #fff;
     padding: 0 36px;
