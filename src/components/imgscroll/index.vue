@@ -1,65 +1,130 @@
 <template>
-  <div id="luxy" class="luxy">
-    <div class="luxy-el" :data-speed-y="img.speed" :data-offset="idx===0?0:img.offset" v-for='(idx, img) in imglist' :key='idx' @click='selectThis(img)'>
-      <img :src="img.src"/>
-    </div>
-    <!-- <div class="luxy-el" data-speed-y="30" data-offset="50">
-      <img src="./images/img.jpg" alt="" />
-    </div>
-    <div class="luxy-el" data-speed-y="20" data-offset="40">
-      <img src="./images/img.jpg" alt="" />
-    </div>
-    <div class="luxy-el" data-speed-y="15" data-offset="30">
-      <img src="./images/img.jpg" alt="" />
-    </div>
-    <div class="luxy-el" data-speed-y="10" data-offset="20">
-      <img src="./images/img.jpg" alt="" />
-    </div>
-    <div class="luxy-el" data-speed-y="5" data-offset="10">
-      <img src="./images/img.jpg" alt="" />
-    </div>
-    <div class="luxy-el" data-speed-y="1" data-offset="5">
-      <img src="./images/img.jpg" alt="" />
-    </div> -->
+  <div class="imgscroll-wrap" v-el:wrap>
+    <div 
+      @click='selectThis(item)'
+      v-for="(idx, item) in list"
+      :key="idx"
+      :style="{backgroundImage: 'url('+item.img+')',height: height+ 'px'}"></div>
   </div>
 </template>
 <script>
 export default {
   name: "imgscroll",
-  props:{
-    imglist:{
-      type:Array
+  props: {
+    list: {
+      type: Array
     },
-    speed: {
+    defaultRem: {
       type: Number,
-      default: 40
+      default: 0
     },
-    offset: {
+    changeRem: {
       type: Number,
-      default: 40
+      default: 2
+    },
+    startChange: {
+      type: Number,
+      default: 0.5
+    },
+    height: {
+      type: Number,
+      default: 400
     }
   },
-  data() {
-    return {};
+  data () {
+    return {
+      boxArr: [],
+      dom: ''
+    };
   },
-  ready() {
-
+  ready () {
+    this.$nextTick(()=>{
+      this.dom = this.$els.wrap
+    })
   },
   methods: {
     selectThis (img) {
-      this.$emit('select',img)
+      this.$emit('select', img)
+    },
+    init () {
+      this.$nextTick(()=>{
+        var uiWidth = 750
+        var docEl = this.dom
+        var recalc = function () {
+          // 乘以一个比例，作为rem的值，实现rem的值随着设别宽度的不同而不同
+          var clientWidth = docEl.clientWidth || 0
+          docEl.style.fontSize = 100 * (clientWidth / uiWidth) + 'px'
+        }
+        recalc() // 先自动触发一下
+        window.addEventListener('resize', recalc, false) // 添加页面监听事件
+  
+        this.getBoxArr() // 获取各个盒子的位置高度信息
+        if (this.boxArr && this.boxArr.length) {
+          this.initPosition() // 初始化功能
+        }
+        console.log("s数据" + this.data);
+      })
+    },
+    getBoxArr () {
+      var doms = document.querySelectorAll('.imgscroll-wrap > div')
+      this.boxArr = []
+      if (doms && doms.length) {
+        for (var i = 0; i < doms.length; i++) {
+          var boxDom = doms[i]
+          this.boxArr.push({
+            boxDom: boxDom, // 盒子的dom
+            startSpace: boxDom.offsetTop + (1 + this.startChange), // 开始修改背景的位置（盒子的顶部，距离页面文档顶部的距离）
+            boxHeight: boxDom.offsetHeight, // 盒子高度
+            endSpace:
+              boxDom.offsetTop +
+              (1 + this.startChange) +
+              boxDom.offsetHeight // 结束修改背景的位置（盒子的底部，距离页面文档顶部的距离）
+          })
+        }
+      }
+    },
+    initPosition () {
+      this.setPosition()
+      this.dom.addEventListener('scroll', this.windowScroll)
+    },
+    windowScroll () {
+      this.setPosition()
+    },
+    setPosition () {
+      const boxArr = this.boxArr
+      if (!boxArr || !boxArr.length) return
+      var scrollTop = this.dom.scrollTop
+      console.log(boxArr)
+      for (var i = 0; i < boxArr.length; i++) {
+        var boxDom = boxArr[i].boxDom,
+          startSpace = boxArr[i].startSpace,
+          endSpace = boxArr[i].endSpace,
+          boxHeight = boxArr[i].boxHeight
+        if (scrollTop < startSpace) {
+          // 还没到的dom
+          boxDom.style.backgroundPosition =
+            ' center ' + this.defaultRem + 'rem'
+        } else if (scrollTop > endSpace) {
+          // 已经过去了的dom
+          boxDom.style.backgroundPosition =
+            ' center ' + this.defaultRem + this.changeRem + 'rem'
+        } else {
+          // 正好处于，开始设置
+          var remNum =
+            this.defaultRem +
+            ((scrollTop - startSpace) / boxHeight) * this.changeRem // 按比例计算
+          let string = ' center ' + remNum + 'rem'
+          boxDom.style['backgroundPosition'] = string
+        }
+      }
     }
   },
   watch: {
-    imglist: {
+    list: {
       immediate: true,
-      handler(n) {
-        this.$nextTick(()=>{
-          luxy.init({
-            wrapper: "#luxy",
-            targets: ".luxy-el",
-            wrapperSpeed: 0.08,
-          });
+      handler (n) {
+        this.$nextTick(() => {
+          this.init()
         })
       }
     }
@@ -67,29 +132,12 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-html,
-body,
-* {
-  margin: 0;
-  padding: 0;
-  outline: none;
-  border: none;
-  background: transparent;
-  background-color: transparent;
-}
-img {
-  width: 100%;
+.imgscroll-wrap {
   height: 100%;
+  overflow: auto;
 }
-div > h5 {
-  text-align: center;
-  line-height: 50px;
-  font-size: 32px;
-}
-
-div {
-  background-position: center 2rem;
+.imgscroll-wrap div {
   background-repeat: no-repeat;
-  background-size: 90% auto;
+  background-size: 100% 100%;
 }
 </style>
