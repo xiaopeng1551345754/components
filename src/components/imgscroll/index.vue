@@ -62,7 +62,6 @@ export default {
         if (this.boxArr && this.boxArr.length) {
           this.initPosition() // 初始化功能
         }
-        console.log("s数据" + this.data);
       })
     },
     getBoxArr () {
@@ -94,7 +93,6 @@ export default {
       const boxArr = this.boxArr
       if (!boxArr || !boxArr.length) return
       var scrollTop = this.dom.scrollTop
-      console.log(boxArr)
       for (var i = 0; i < boxArr.length; i++) {
         var boxDom = boxArr[i].boxDom,
           startSpace = boxArr[i].startSpace,
