@@ -4,6 +4,7 @@
       :imgs-arr="list"
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
+      @scroll="scroll"
       :gap="gap"
       :max-cols="maxCols"
       :loading-img="loadingImg"
@@ -13,6 +14,8 @@
       :img-size="imgSize"
       :img-width="imgWidth"
       :none-data='noneData'
+      :vertical-gap="verticalGap"
+      :type="type"
     >
     </vue-waterfall>
   </div>
@@ -80,6 +83,14 @@ export default {
     gap: {
       type: Number,
       default: 14
+    },
+    verticalGap: {
+      type: Number,
+      default: 0
+    },
+    type: {
+      type: String,
+      default: 'pc'
     }
   },
   data () {
@@ -87,6 +98,9 @@ export default {
   },
   watch: {},
   computed: {},
+  created () {
+    console.log('this.type', this.type);
+  },
   ready () {
     this.init();
   },
@@ -99,6 +113,9 @@ export default {
     selectItem (e, item) {
       this.$emit("select-item", item);
     },
+    scroll (top) {
+      this.$emit('scroll', top);
+    }
   },
 };
 </script>

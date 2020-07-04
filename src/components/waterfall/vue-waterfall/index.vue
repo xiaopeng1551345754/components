@@ -25,35 +25,42 @@
           :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : getColWidth(v)+'px'}"
           :data-index="$index"
         >
-          <div class="img-inner-box static-box"
+          <div class="img-inner-box static-box" v-if="v.type==='static'"
            :class="{fixed: !inValidImgSize(v)}"
-           :style="getImgSize(v)"
-            v-if="v.type==='static'" :data-index="$index">
+           :style="getImgSize(v)" :data-index="$index">
             <div class="img-wraper" >
               <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
-            <div class="img-info">
+            <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
               <p class="title">{{v.title}}</p>
               <p class="desc">{{v.exhibition_name}}</p>
             </div>
           </div>
+
           <div :style="getImgSize(v)" class="img-inner-box live-box" v-if="v.type==='live'" 
           :class="{fixed: !inValidImgSize(v)}"
           :data-index="$index">
             <div class="img-wraper">
               <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
-            <div class="tag doing-tag" v-if="v.status==='doing'">{{t('doing')}}</div>
-            <div class="tag done-tag" v-if="v.status==='done'">{{t('over')}}</div>
-            <div class="tag nostart-tag" v-if="v.status==='nostart'">{{t('nostart')}}</div>
-            <div class="play-icon">
-              <img src="../images/play.png" alt />
-            </div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="doing-tag"  v-if="v.status==='doing'">{{t('doing', v.liveType)}}</div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="done-tag"  v-if="v.status==='done'">{{t('over', v.liveType)}}</div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="nostart-tag"  v-if="v.status==='nostart'">{{t('nostart', v.liveType)}}</div>
+            <template v-if="type === 'pc'">
+            <div class="play-icon"><img src="../images/play.png" alt /></div>
             <div class="img-info-bg"></div>
             <div class="img-info">
               <p class="title">{{v.title}}</p>
               <p class="desc">{{v.exhibition_name}}</p>
             </div>
+            </template>
+            <template v-else>
+              <div class="play-icon-mobile"><img src="../images/play-mobile.png" alt /></div>
+              <div class="live-info">
+                <p class="title">{{v.title}}</p>
+                <p class="desc">{{v.exhibition_name}}</p>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -134,6 +141,14 @@ export default {
           }
         }
       }
+    },
+    verticalGap: {
+      type: Number,
+      default: 0,
+    },
+    type: {
+      type: String,
+      default: 'pc',
     },
     isRouterLink: {
       type: Boolean,
@@ -313,7 +328,7 @@ export default {
         return target
       }
     },
-    t (keypath) {
+    t (keypath, liveType) {
       const o = this.langInfo[this.lang] || {}
       const keys = keypath.split('.')
       let r = o
@@ -323,6 +338,10 @@ export default {
         if (key && typeof r === 'object') {
           r = r[key]
         }
+      }
+      // Trick
+      if (liveType === 'MEETING') {
+        r = r.replace('直播', '会议')
       }
       return r || ''
     },
@@ -425,10 +444,16 @@ export default {
         // 暴力计算
         const item = this.imgsArr[i];
         const imageHeight = parseFloat(this.getImageHeight(item));
+        const liveHeight = this.type === 'mobile' ? 26 : 10;
+        const staticHeight = this.type === 'mobile' ? 48 : 85;
+
         if (height < imageHeight) {
-          height = item.type === 'live' ? imageHeight + 10 : imageHeight + 85;
+          height = item.type === 'live' ? imageHeight + liveHeight : imageHeight + staticHeight;
         }
-        // console.log('height', height, 'imageHeight', imageHeight);
+
+        if (this.verticalGap) {
+          height += this.verticalGap;
+        }
 
         if (i < this.cols) {
           this.colsHeightArr.push(height);
@@ -463,9 +488,10 @@ export default {
     // ==5== 滚动触底事件
     scrollFn () {
       // console.log('scroll')
-      var self = this
+      var self = this;
       if (!this.domId) {
         var scrollEl = this.scrollEl;
+        this.$emit('scroll', scrollEl.scrollTop);
         var minHeight = Math.min.apply(null, this.colsHeightArr);
         if (scrollEl.scrollTop + scrollEl.offsetHeight >=
           scrollEl.scrollHeight - this.reachBottomDistance) {
@@ -750,13 +776,35 @@ export default {
     width: 100%;
     box-sizing: border-box;
     height: 75px;
+    .title {
+      color: rgba(0, 0, 0, 1);
+      height: 25px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .desc {
+      color: rgba(0, 0, 0, 0.45);
+    }
   }
-  .title {
-    color: rgba(0, 0, 0, 1);
-    height: 25px;
-  }
-  .desc {
-    color: rgba(0, 0, 0, 0.45);
+  .live-info {
+    box-sizing: border-box;
+    padding: 5px;
+    width: 100%;
+    height: auto;
+    .title {
+      font-size: 14px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .desc {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
   }
 }
 .live-box {
@@ -789,6 +837,29 @@ export default {
       width: 100%;
     }
   }
+  .play-icon-mobile {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 20px;
+    height: 20px;
+    img {
+      width: 100%;
+    }
+  }
+  .live-info {
+    padding: 5px;
+    background: #ffffff;
+    width: 100%;
+    box-sizing: border-box;
+    .title {
+      color: rgba(0, 0, 0, 1);
+      font-size: 14px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
   .title {
     color: rgba(255, 255, 255, 1);
   }
@@ -805,14 +876,33 @@ export default {
     font-size: 14px;
     text-align: center;
     color: #ffffff;
-    &.doing-tag {
-      background: rgba(46, 76, 244, 1);
-    }
     &.nostart-tag {
       background: rgba(0, 0, 0, 0.45);
     }
+    &.doing-tag {
+      background: rgba(46, 76, 244, 1);
+    }
     &.done-tag {
       background: rgba(0, 0, 0, 1);
+    }
+  }
+  .mobile-tag {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-size: 9px;
+    text-align: center;
+    color: #ffffff;
+    &.nostart-tag {
+      background: rgba(24, 144, 255, 1);
+    }
+    &.doing-tag {
+      background: rgba(250, 84, 28, 1);
+    }
+    &.done-tag {
+      background: rgba(138, 138, 138, 1);
     }
   }
 }

@@ -1,24 +1,25 @@
 <template>
-  <div class="waterfall_wrap">
-    <!-- <div id="dom">
-      <div>
-
-      </div>
-    </div> -->
-    <button @click="change">修改</button>
-    <button @click="changeNoneData">修改空数据</button>
-    <waterfall
-      :loading-img="loadingImg"
-      :list="list"
-      :lang="'en'"
-      :img-size="imgSize"
-      :img-width="294"
-      :none-data='noneData'
-      :gap='8'
-      :type="type"
-      @scroll-bottom="scrollBottom"
-      @select-item="selectItem"
-    ></waterfall>
+  <div class="container" id="container">
+    <div class="iframe-box" style="width:100%;height:200px;">
+      <iframe src="//daily.digitalexpo.com/silkroadcg3d/panorama/index.html" frameborder="0" width="100%" height="200"></iframe>
+    </div>
+    <div class="waterfall_wrap">
+      <waterfall
+        :loading-img="loadingImg"
+        :list="list"
+        :lang="'zh'"
+        :img-size="imgSize"
+        :img-width="294"
+        :none-data='noneData'
+        :gap='8'
+        :vertical-gap='10',
+        :type="type"
+        :lang-info="langInfo"
+        @scroll-bottom="scrollBottom"
+        @select-item="selectItem"
+        @scroll="scroll"
+      ></waterfall>
+    </div>
   </div>
 </template>
 <script>
@@ -27,22 +28,39 @@ export default {
     return {
       imgSize: {
         live: {
-          width: 280,
-          // height: 400
+          width: 171,
         },
         static: {
           width: 280,
-          // height: 300
         }
       },
       loadingImg: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       noneData: false,
       list: [],
-      type: 'pc'
-    };
+      langInfo: {
+        zh: {
+          nostart: "直播未开始",
+          doing: "直播进行中",
+          over: "直播已结束",
+        },
+        en: {
+          nostart: "Coming Soon",
+          doing: "Live broadcast in progress",
+          over: "Done",
+        },
+      },
+      type: 'mobile'
+    }
   },
   created () {
     console.log('created');
+    var width = screen.width;
+    var columnWidth = (width - 30) / 2;
+    this.imgSize = {
+      live: { width: columnWidth },
+      static: { width: columnWidth }
+    }
+    console.log(JSON.stringify(this.imgSize, null, 2));
     this.request()
 
   },
@@ -57,6 +75,10 @@ export default {
     },
     selectItem (item) {
       console.log("item", item);
+    },
+    scroll (top) {
+      const dom = document.getElementsByTagName('html')[0]
+      dom.scrollTop = top;
     },
     change () {
       var self = this;
@@ -89,11 +111,15 @@ export default {
               item.src = item.coverUrl;
               item.title = item.goodsName;
               item.exhibition_name = item.ownerName;
-              item.status = 'doing';
+
+              const statusMap = { '预开始': 'nostart', '进行中': 'doing', '已结束': 'done' };
+              item.status = statusMap[item.bussState];
               item.realPath = '';
 
               const liveTypes = new Set(['LIVE', 'MEETING']);
+              // const liveTypes = new Set();
               item.type = liveTypes.has(item.goodsType) ? 'live' : 'static';
+              item.liveType = item.goodsType;
               // delete item.ImageHeight;
               // delete item.ImageWidth;
               return item;
@@ -120,21 +146,18 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.waterfall_wrap {
-  width: 1200px;
-  height: 700px;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.container {
+  height: 667px;
 }
-#dom {
-  height: 200px;
-  width: 200px;
-  background: green;
-  overflow: auto;
-  div {
-    height: 400px;
-  }
+iframe {
+  display: block;
+}
+.waterfall_wrap {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  padding: 0 6px;
+  margin-top: 25px;
+  box-sizing: border-box;
 }
 </style>
