@@ -18,7 +18,7 @@
       >
         <div
           class="img-box"
-          v-for="(index, v) in imgsArr_c"
+          v-for="(index, v) in imagesList"
           track-by="$index"
           :key="$index"
           :class="[cardAnimationClass, {__err__: v._error}]"
@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <div class="text" v-show='noneText && noneData'>没有更多了…</div>
+    <div class="text" v-show='noneText && noneData'>已经全部加载完毕</div>
   </div>
 </template>
 
@@ -190,9 +190,10 @@ export default {
     return {
       msg: "this is from  .vue",
       isMobile: !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i), // 初始化移动端
+      // isMobile: false,
       isPreloading: true, // 正在预加载中，显示加载动画
       isPreloading_c: true,
-      imgsArr_c: [], // 待图片预加载imgsArr完成，插入新的字段height之后,才会生成imgsArr_c，这时才开始渲染
+      imagesList: [], // 待图片预加载imgsArr完成，插入新的字段height之后,才会生成imagesList，这时才开始渲染
       loadedCount: 0,
       cols: NaN, // 需要根据窗口宽度初始化
       imgBoxEls: null, // 所有的.img-box元素
@@ -204,20 +205,23 @@ export default {
       over: false, // 结束waterfall加载
       scrollEl: null, // 滚动的div
       prev: 0,
-      noneText: false
+      noneText: true
     };
   },
   computed: {
     colWidth () {
       // 每一列的宽度
-      let width = this.getTargetWidth() || this.imgWidth
+      let width = 0;
+      try {
+        width = Math.max(this.imgSize['live'].width, this.imgSize['static'].width);
+        return width + this.gap;
+      } catch (error) { }
+      width = this.getTargetWidth() || this.imgWidth
       return width + this.gap;
     },
     imgWidth_c () {
       // 对于移动端重新计算图片宽度`
-      return this.isMobile
-        ? window.innerWidth / 2 - this.mobileGap
-        : (this.getTargetWidth() || this.imgWidth);
+      return this.isMobile ? window.innerWidth / 2 - this.mobileGap : (this.getTargetWidth() || this.imgWidth);
     },
     hasLoadingSlot () {
       return !!this.$scopedSlots.loading;
@@ -227,22 +231,28 @@ export default {
     this.bindClickEvent();
     this.loadingMiddle();
 
-    this.preload();
+    // this.preload();
     this.cols = this.calcuCols();
-    this.$on("preloaded", () => {
-      this.isFirstLoad = false;
-      this.imgsArr_c = this.imgsArr.concat([]); // 预加载完成，这时才开始渲染
+
+    this.$on('preloaded', () => {
+      console.log('preloaded')
+      this.imagesList = this.imgsArr.concat([]);
       this.$nextTick(() => {
         this.isPreloading = false;
         this.imgBoxEls = this.$el.getElementsByClassName("img-box");
         this.beginIndex = 0;
         this.waterfall();
       });
-
     });
-    if (!this.isMobile && !this.width)
+
+    if (!this.isMobile && !this.width) {
       window.addEventListener("resize", this.response);
-    if (this.isMobile && this.enablePullDownEvent) this.pullDown();
+    }
+
+    if (this.isMobile && this.enablePullDownEvent) {
+      this.pullDown();
+    }
+
     this.scroll();
 
     if (this.domId) {
@@ -279,10 +289,7 @@ export default {
     },
     imgsArr (newV, oldV) {
       let self = this;
-      if (
-        this.imgsArr_c.length > newV.length ||
-        (this.imgsArr_c.length > 0 && newV[0] && !newV[0]._height)
-      ) {
+      if (this.imagesList.length > newV.length || (this.imagesList.length > 0 && newV[0] && !newV[0]._height)) {
         this.reset();
       }
       this.preload().then(res => {
@@ -341,7 +348,7 @@ export default {
       }
       // Trick
       if (liveType === 'MEETING') {
-        r = r.replace('直播', '会议')
+        r = r.replace('直播', '')
       }
       return r || ''
     },
@@ -358,6 +365,17 @@ export default {
       }
       return '';
     },
+    // 优化加载地址
+    getOptimizedSrc (imageURL, type) {
+      this.imgSize = this.imgSize || {};
+      const define = this.imgSize[type] || { width: this.imgWidth };
+      const width = Math.ceil(define.width || 400);
+      if (width && imageURL && imageURL.indexOf('aliyuncs.com') !== -1 && imageURL.indexOf('oss') !== -1) {
+        imageURL += `?x-oss-process=image/resize,w_${width}`
+        return imageURL;
+      }
+      return imageURL;
+    },
     // ==1== 预加载
     preload (src, imgIndex) {
       return new Promise((resolve, reject) => {
@@ -365,6 +383,7 @@ export default {
         this.imgsArr.forEach((imgItem, imgIndex) => {
           if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
           this.imgsArr[imgIndex].realPath = this.loadingImg
+          // this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
 
           // 无图时
           if (!imgItem[this.srcKey]) {
@@ -373,46 +392,57 @@ export default {
 
             // 支持无图模式
             if (this.loadedCount == this.imgsArr.length) {
-              this.$emit("preloaded");
-              resolve()
+              // this.$emit("preloaded");
             }
             return;
           }
 
+          const optimizedImage = this.getOptimizedSrc(imgItem[this.srcKey], imgItem.type);
+
           var oImg = new Image();
-          oImg.src = imgItem[this.srcKey];
+          oImg.src = optimizedImage;
 
           // 图片加载成功处理逻辑
           const onload = e => {
             // console.log("onload", imgIndex);
-            this.loadedCount++;
-            // 预加载图片，计算图片容器的高
+            // 预加载图片, 计算图片容器的高
 
             if (e.type === 'load') {
               const imageHeight = Math.round(this.imgWidth_c / (oImg.width / oImg.height));
-              // console.log(e.target, oImg.width, oImg.height, imageHeight);
               this.imgsArr[imgIndex]._height = imageHeight;
               this.imgsArr[imgIndex]._load = true;
             } else {
               this.imgsArr[imgIndex]._height = this.isMobile ? this.imgWidth_c : this.imgWidth;
             }
 
-            if (e.type == "error") {
-              this.imgsArr[imgIndex]._error = true;
-              this.$emit("imgError", this.imgsArr[imgIndex]);
-              reject(this.imgsArr[imgIndex])
-            }
-
+            this.loadedCount++;
             if (this.loadedCount == this.imgsArr.length) {
-              this.$emit("preloaded");
-              resolve()
+              // this.$emit("preloaded");
             }
-            this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
+            // console.log('load img', imgIndex, optimizedImage);
+            this.imgsArr[imgIndex].realPath = optimizedImage;
+            this.imagesList[imgIndex].realPath = optimizedImage;
           };
 
+          const onerror = e => {
+            console.log('img load error', e);
+            this.loadedCount++;
+            if (this.loadedCount == this.imgsArr.length) {
+              // this.$emit("preloaded");
+            }
+            // if (e.type == "error") {
+            //   this.imgsArr[imgIndex]._error = true;
+            //   this.$emit("imgError", this.imgsArr[imgIndex]);
+            //   reject(this.imgsArr[imgIndex])
+            // }
+          }
+
           oImg.onload = onload;
-          oImg.onerror = onload;
+          oImg.onerror = onerror;
         });
+        // 循环预处理结束
+        this.$emit("preloaded");
+        resolve();
       })
     },
     // ==2== 计算cols
@@ -426,7 +456,9 @@ export default {
     // ==3== waterfall 布局
     waterfall () {
       // console.log('瀑布流布局计算', this.imgsArr.length, this.beginIndex);
-      if (!this.imgBoxEls) return;
+      if (!this.imgBoxEls || !this.imgBoxEls.length) {
+        return false;
+      }
       var top;
       var left;
       var height;
@@ -505,7 +537,6 @@ export default {
           minHeight - this.reachBottomDistance
         ) {
           this.isPreloading = true;
-          // console.log('scroll-bottom')
           this.$emit("scroll-bottom"); // 滚动触底
         }
       }
@@ -562,7 +593,7 @@ export default {
             targetEl = targetEl.parentNode;
           }
           var index = targetEl.getAttribute("data-index");
-          this.$emit("select-item", e, this.imgsArr_c[index]);
+          this.$emit("select-item", e, this.imagesList[index]);
         });
     },
     // ==7== 下拉事件
@@ -598,7 +629,7 @@ export default {
         -scrollbarWidth / 2 + "px";
     },
     reset () {
-      this.imgsArr_c = [];
+      this.imagesList = [];
       this.beginIndex = 0;
       this.loadedCount = 0;
       this.isFirstLoad = true;
@@ -675,6 +706,7 @@ export default {
       }
     }
     .img-wraper {
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;

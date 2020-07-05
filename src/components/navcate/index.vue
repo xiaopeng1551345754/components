@@ -86,13 +86,13 @@ export default {
   props: {
     defaultData: {
       type: Array,
-      default() {
+      default () {
         return [];
       }
     },
     list: {
       type: Array,
-      default() {
+      default () {
         return []
       }
     },
@@ -105,7 +105,7 @@ export default {
       default: "click"
     }
   },
-  data() {
+  data () {
     return {
       selectedFirst: true, // 是否选中一级栏目
       secondList: [],
@@ -120,12 +120,12 @@ export default {
     }
   },
   computed: {},
-  ready() {
+  ready () {
     this.init();
   },
   methods: {
     // init waterfall instance
-    init() {
+    init () {
       let that = this;
       // 处理menulist格式
       this.list.forEach((element, index) => {
@@ -134,7 +134,7 @@ export default {
       // 设置默认值
       this.setDefaultData();
     },
-    setDefaultData() {
+    setDefaultData () {
       if (this.defaultData.length <= 0) return false;
       let that = this;
       let data = this.defaultData;
@@ -159,7 +159,7 @@ export default {
         }
       }
     },
-    setSelected(list, id) {
+    setSelected (list, id) {
       // 循环设置menulist数据
       let resultIndex = -1;
       list.forEach((element, index) => {
@@ -170,7 +170,7 @@ export default {
       });
       return resultIndex;
     },
-    selectFirstMenu(type, item, index) {
+    selectFirstMenu (type, item, index) {
       if (type != this.eventType) return false;
       this.reset();
       this.selectedFirst = true;
@@ -180,12 +180,12 @@ export default {
       this.list.$set(index, menu);
       this.secondList = menu.children;
     },
-    selectLinkMenu(item, second) {
+    selectLinkMenu (item, second) {
       if (second) {
         this.secMenu = second
         this.thiMenu = item
       } else {
-        this.secMenu =item
+        this.secMenu = item
       }
       if (second === 1) {
         this.firstMenu = item
@@ -194,7 +194,7 @@ export default {
       this.$emit("select", item, second, this.firstMenu);
       this.reset();
     },
-    reset() {
+    reset () {
       let that = this;
       let list = this.list;
       list.forEach((element, index) => {
@@ -203,7 +203,7 @@ export default {
       });
       // this.selectedFirst = false;
     },
-    mouseLeave() {
+    mouseLeave () {
       if (this.eventType === "hover") this.reset();
     },
     hiddenMenu () {
@@ -220,11 +220,10 @@ export default {
   display: flex;
   &.oh {
     overflow: hidden;
-    border-radius:0px 0px 8px 8px;
-
+    border-radius: 0px 0px 8px 8px;
   }
   &.sd {
-    box-shadow:0px 3px 8px 0px rgba(0,0,0,0.31);
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.31);
   }
   &.onlyOne {
     width: 118px;
@@ -241,18 +240,18 @@ export default {
     width: 118px;
     height: 100%;
     overflow-y: auto;
-    background: #F1F1F1;
+    background: #f1f1f1;
     &::-webkit-scrollbar {
-      background: rgba(0,0,0,0);
+      background: rgba(0, 0, 0, 0);
       width: 4px;
     }
     &::-webkit-scrollbar-thumb {
-      background:rgba(216,216,216,1);
-      border-radius:2px;
+      background: rgba(216, 216, 216, 1);
+      border-radius: 2px;
       width: 4px;
     }
     .menu-item {
-      padding: 14px 0 ;
+      padding: 14px 0;
       line-height: 18px;
       text-align: center;
       font-size: 18px;
@@ -260,17 +259,17 @@ export default {
       color: rgba(0, 0, 0, 0.64);
       &.selected {
         background: rgba(255, 255, 255, 1);
-        color: #014BC9;
+        color: #014bc9;
         position: relative;
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           left: 0;
           top: 50%;
           transform: translateY(-50%);
           width: 4px;
           height: 18px;
-          background:  #014BC9;
+          background: #014bc9;
         }
       }
     }
@@ -288,11 +287,11 @@ export default {
     overflow-y: auto;
     &::-webkit-scrollbar {
       width: 4px;
-      background: rgba(0,0,0,0);
+      background: rgba(0, 0, 0, 0);
     }
     &::-webkit-scrollbar-thumb {
-      background:rgba(216,216,216,1);
-      border-radius:2px;
+      background: rgba(216, 216, 216, 1);
+      border-radius: 2px;
       width: 4px;
     }
     .menu-content {
@@ -313,13 +312,13 @@ export default {
         margin-bottom: 7px;
         &:hover {
           font-weight: 400;
-          color: #014BC9;
+          color: #014bc9;
         }
         &.selected {
           font-weight: 400;
-          color: #014BC9;
-          background: rgba(127,219,255,0.2);
-          border-radius:4px;
+          color: #014bc9;
+          background: rgba(127, 219, 255, 0.2);
+          border-radius: 4px;
         }
       }
     }

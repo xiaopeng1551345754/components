@@ -1,7 +1,7 @@
 <template>
   <div class="container" id="container">
-    <div class="iframe-box" style="width:100%;height:200px;">
-      <iframe src="//daily.digitalexpo.com/silkroadcg3d/panorama/index.html" frameborder="0" width="100%" height="200"></iframe>
+    <div class="iframe-box" style="width:100%;height:300px;">
+      <iframe src="//daily.digitalexpo.com/silkroadcg3d/panorama/index.html" frameborder="0" width="100%" height="300"></iframe>
     </div>
     <div class="waterfall_wrap">
       <waterfall
@@ -11,7 +11,7 @@
         :img-size="imgSize"
         :img-width="294"
         :none-data='noneData'
-        :gap='8'
+        :gap='12'
         :vertical-gap='10',
         :type="type"
         :lang-info="langInfo"
@@ -54,13 +54,17 @@ export default {
   },
   created () {
     console.log('created');
+    this.__time = 0;
     var width = screen.width;
-    var columnWidth = (width - 30) / 2;
+    var columnWidth = (width - 30) / 2 + 0.5;
     this.imgSize = {
       live: { width: columnWidth },
       static: { width: columnWidth }
     }
     console.log(JSON.stringify(this.imgSize, null, 2));
+    this.$nextTick(() => {
+      document.getElementById('container').style.height = window.innerHeight - 200 + 'px';
+    });
     this.request()
 
   },
@@ -99,10 +103,13 @@ export default {
     },
     // 抓取数据
     getWaterfall () {
+      this.__time += 1;
       const self = this;
       $.post({
         url: 'https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95',
-        data: {},
+        data: {
+          time: this.__time
+        },
         dataType: 'json',
         success: function (res) {
           if (res.data && res.data.list) {
@@ -124,6 +131,9 @@ export default {
               // delete item.ImageWidth;
               return item;
             });
+            if (list && list.length === 0) {
+              self.noneData = true;
+            }
             self.list = self.list.concat(list);
           }
         }
