@@ -367,6 +367,7 @@ export default {
     },
     // 优化加载地址
     getOptimizedSrc (imageURL, type) {
+      return imageURL;
       this.imgSize = this.imgSize || {};
       const define = this.imgSize[type] || { width: this.imgWidth };
       const width = Math.ceil(define.width || 400);
