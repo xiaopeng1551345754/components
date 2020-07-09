@@ -79,6 +79,11 @@ router.map({
     component: function (resolve) {
       require(['./routers/imgscroll.vue'], resolve);
     }
+  },
+  '/menulist': {
+    component: function (resolve) {
+      require(['./routers/menulist.vue'], resolve);
+    }
   }
 });
 
