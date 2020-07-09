@@ -326,6 +326,7 @@ export default {
       if (type === 'children') {
         this.clickIndex = parentIndex + '|' + index;
       }
+      this.$emit('clickitem', item)
     }
   }
 }
