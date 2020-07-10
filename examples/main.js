@@ -1,10 +1,10 @@
 /**
  * Created by aresn on 16/6/20.
  */
-import Vue from 'vue'
-import VueRouter from 'vue-router';
-import App from './app.vue';
-import stage from '../src/index';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import App from "./app.vue";
+import stage from "../src/index";
 
 Vue.use(VueRouter);
 Vue.use(stage);
@@ -15,87 +15,90 @@ Vue.config.debug = true;
 var router = new VueRouter();
 
 router.map({
-  '/waterfall': {
+  "/waterfall": {
     component: function (resolve) {
-      require(['./routers/waterfall.vue'], resolve);
-    }
+      require(["./routers/waterfall.vue"], resolve);
+    },
   },
-  '/mobile': {
+  "/mobile": {
     component: function (resolve) {
-      require(['./routers/mobile.vue'], resolve);
-    }
+      require(["./routers/mobile.vue"], resolve);
+    },
   },
-  '/navcate': {
+  "/navcate": {
     component: function (resolve) {
-      require(['./routers/navcate.vue'], resolve);
-    }
+      require(["./routers/navcate.vue"], resolve);
+    },
   },
-  '/area': {
+  "/area": {
     component: function (resolve) {
-      require(['./routers/area.vue'], resolve);
-    }
+      require(["./routers/area.vue"], resolve);
+    },
   },
-  '/timeline': {
+  "/timeline": {
     component: function (resolve) {
-      require(['./routers/timeline.vue'], resolve);
-    }
+      require(["./routers/timeline.vue"], resolve);
+    },
   },
-  '/datepicker': {
+  "/datepicker": {
     component: function (resolve) {
-      require(['./routers/datepicker.vue'], resolve);
-    }
+      require(["./routers/datepicker.vue"], resolve);
+    },
   },
-  '/hxkdate': {
+  "/hxkdate": {
     component: function (resolve) {
-      require(['./routers/hxk_date.vue'], resolve);
-    }
+      require(["./routers/hxk_date.vue"], resolve);
+    },
   },
-  '/timelinesingle': {
+  "/timelinesingle": {
     component: function (resolve) {
-      require(['./routers/timelinesingle.vue'], resolve);
-    }
+      require(["./routers/timelinesingle.vue"], resolve);
+    },
   },
-  '/board': {
+  "/board": {
     component: function (resolve) {
-      require(['./routers/board.vue'], resolve);
-    }
+      require(["./routers/board.vue"], resolve);
+    },
   },
-  'accordion': {
+  accordion: {
     component: function (resolve) {
-      require(['./routers/accordion.vue'], resolve);
-    }
+      require(["./routers/accordion.vue"], resolve);
+    },
   },
-  'cardmenu': {
+  cardmenu: {
     component: function (resolve) {
-      require(['./routers/cardmenu.vue'], resolve);
-    }
+      require(["./routers/cardmenu.vue"], resolve);
+    },
   },
-  'lanhemenu': {
+  lanhemenu: {
     component: function (resolve) {
-      require(['./routers/lanhemenu.vue'], resolve);
-    }
+      require(["./routers/lanhemenu.vue"], resolve);
+    },
   },
-  '/imgscroll': {
+  "/imgscroll": {
     component: function (resolve) {
-      require(['./routers/imgscroll.vue'], resolve);
-    }
+      require(["./routers/imgscroll.vue"], resolve);
+    },
   },
-  '/menulist': {
+  "/menulist": {
     component: function (resolve) {
-      require(['./routers/menulist.vue'], resolve);
-    }
-  }
+      require(["./routers/menulist.vue"], resolve);
+    },
+  },
+  "/customselect": {
+    component: function (resolve) {
+      require(["./routers/customselect.vue"], resolve);
+    },
+  },
 });
 
 router.beforeEach(function () {
   window.scrollTo(0, 0);
 });
 
-router.afterEach(function (transition) {
-
-});
+router.afterEach(function (transition) {});
 
 router.redirect({
-  '*': "/lanhemenu"
+  "*": "/customselect",
 });
-router.start(App, '#app');
+router.start(App, "#app");

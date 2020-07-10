@@ -3,14 +3,15 @@ import waterfall from "./components/waterfall/index.vue";
 import area from "./components/area/index.vue";
 import timeline from "./components/timeline/index.vue";
 import datepicker from "./components/datepicker/index.vue";
-import hxkdate from './components/hxk_date/index.vue'
-import timelinesingle from './components/timelinesingle/index.vue'
-import board from './components/board/index.vue'
-import accordion from './components/accordion/index.vue'
-import cardmenu from './components/cardmenu/index.vue'
-import lanhemenu from './components/lanhemenu/index.vue'
-import imgscroll from './components/imgscroll/index.vue'
-import menulist from './components/menulist/index.vue'
+import hxkdate from "./components/hxk_date/index.vue";
+import timelinesingle from "./components/timelinesingle/index.vue";
+import board from "./components/board/index.vue";
+import accordion from "./components/accordion/index.vue";
+import cardmenu from "./components/cardmenu/index.vue";
+import lanhemenu from "./components/lanhemenu/index.vue";
+import imgscroll from "./components/imgscroll/index.vue";
+import menulist from "./components/menulist/index.vue";
+import customselect from "./components/custom_select/index.vue";
 
 const Components = {
   navCate,
@@ -25,7 +26,8 @@ const Components = {
   cardmenu,
   lanhemenu,
   imgscroll,
-  menulist
+  menulist,
+  customselect,
 };
 
 const install = function (Vue, opts = {}) {
