@@ -10,7 +10,7 @@
       @touchmove="touchMove"
       @touchend="touchEnd"
     >
-      <div class="card_name">
+      <div class="card_name" @click="changeCard(idx)">
         {{ card.name }}
       </div>
       <div
@@ -84,7 +84,7 @@ export default {
         const ch = tar.clientHeight;
         const sh = tar.scrollHeight;
         const t = st === 0;
-        const b = sh - ch -st <= 10;
+        const b = sh - ch - st <= 10;
         if (t || b) {
           const move =
             e.targetTouches[0].clientY - this.dom.getBoundingClientRect().top;
@@ -112,6 +112,13 @@ export default {
     },
     select(item, card) {
       this.$emit("select", item, card);
+    },
+    changeCard(idx) {
+      const tar = document.querySelectorAll(".card")[this.active].children[1];
+      if (tar && tar.scrollTo) {
+        tar.scrollTo(0, 0);
+      }
+      this.active = idx;
     },
   },
   watch: {
@@ -157,6 +164,9 @@ export default {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    & + .card {
+      box-shadow: 0 3px 6px 1px rgba(0, 0, 0, 0.5);
+    }
     &.active {
       .loop(@i) when (@i<10) {
         &:nth-child(@{i}) {
@@ -171,8 +181,8 @@ export default {
       font-weight: 600;
       color: rgba(47, 45, 41, 1);
       line-height: 25px;
-      margin-top: 30px;
-      margin-bottom: 25px;
+      padding-top: 30px;
+      padding-bottom: 25px;
       flex-shrink: 0;
     }
     .items {
