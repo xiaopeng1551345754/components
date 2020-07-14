@@ -12,6 +12,7 @@ import lanhemenu from "./components/lanhemenu/index.vue";
 import imgscroll from "./components/imgscroll/index.vue";
 import menulist from "./components/menulist/index.vue";
 import customselect from "./components/custom_select/index.vue";
+import tablelist from './components/tablelist/index.vue'
 
 const Components = {
   navCate,
@@ -28,6 +29,7 @@ const Components = {
   imgscroll,
   menulist,
   customselect,
+  tablelist
 };
 
 const install = function (Vue, opts = {}) {

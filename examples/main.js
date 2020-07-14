@@ -90,13 +90,18 @@ router.map({
       require(["./routers/customselect.vue"], resolve);
     },
   },
+  '/tablelist': {
+    component: function (resolve) {
+      require(['./routers/tablelist.vue'], resolve);
+    }
+  }
 });
 
 router.beforeEach(function () {
   window.scrollTo(0, 0);
 });
 
-router.afterEach(function (transition) {});
+router.afterEach(function (transition) { });
 
 router.redirect({
   "*": "/customselect",
