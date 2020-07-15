@@ -44,7 +44,7 @@
                     type="button"
                     v-for="(i,btn) in body.handle"
                     :key="i"
-                    @click="clickbtn(body,key, btn)">
+                    @click="clickbtn(body, btn)">
               {{ btn.name }}
             </button>
           </div>
@@ -72,20 +72,19 @@ export default {
       data.isPublic = !data.isPublic;
       this.$emit('changestatus', data);
     },
-    clickbtn (data, index, btn) {
-      // if (btn.name === '查看') {
-      //   this.$emit('viewdetail', data, index, btn);
-      // }
-      // if (btn.name === '处理') {
-      //   this.$emit('handle', data, index, btn);
-      // }
-      // if (btn.name === '删除') {
-      //   this.$emit('delete', data, index, btn);
-      // }
-      // if (btn.name === '通知专家') {
-      //   this.$emit('notice', data, index, btn);
-      // }
-      this.$emit('clickbtn', data, index, btn);
+    clickbtn (data, btn) {
+      if (btn.name === '查看') {
+        this.$emit('viewdetail', data);
+      }
+      if (btn.name === '处理') {
+        this.$emit('handle', data);
+      }
+      if (btn.name === '删除') {
+        this.$emit('deleteitem', data);
+      }
+      if (btn.name === '通知专家') {
+        this.$emit('notice', data);
+      }
     }
   }
 }
@@ -117,10 +116,9 @@ export default {
         font-size: 14px;
         font-weight: 400;
         color: rgba(89, 89, 89, 1);
-        line-height: 22px;
         border-bottom: 1px solid rgba(232, 232, 232, 1);
-        padding-top: 18px;
-        padding-bottom: 18px;
+        height: 58px;
+        align-items: center;
         .item {
           box-sizing: border-box;
           padding-left: 16px;

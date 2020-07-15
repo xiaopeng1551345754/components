@@ -2,7 +2,10 @@
   <tablelist :table-list="tableList"
              style="width: 1088px;"
              @changestatus="changestatus"
-             @clickbtn="clickbtn"></tablelist>
+             @viewdetail="viewdetail"
+             @handle="handle"
+             @deleteitem="deleteitem"
+             @notice="notice"></tablelist>
 </template>
 <script>
 export default {
@@ -58,7 +61,7 @@ export default {
               }, {
                 name: '处理',
                 background: '#fff',
-                color: '#595959',
+                color: '#BFBFBF',
                 width: '60'
               }, {
                 name: '删除',
@@ -354,11 +357,20 @@ export default {
     }
   },
   methods: {
-    changestatus (data, index, btn) {
-      // console.log(data, index, btn);
+    changestatus (data) {
+      // console.log(data);
     },
-    clickbtn (data, index, btn) {
-      // console.log(data, index, btn);
+    viewdetail (data) {
+      // console.log(data, 'view');
+    },
+    handle (data) {
+      // console.log(data, 'handle');
+    },
+    deleteitem (data) {
+      // console.log(data, 'delete');
+    },
+    notice (data) {
+      // console.log(data, 'notice');
     }
   }
 
