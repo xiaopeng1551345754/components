@@ -14,12 +14,16 @@
              v-for="(key,body) in tableList[1]"
              :key="key">
           <div class="item"
+               v-if=" body.name"
                :style="{'width': bodyWidth[0] + 'px'}">{{ body.name}}</div>
           <div class="item"
+               v-if=" body.leader"
                :style="{'width': bodyWidth[1] + 'px'}">{{ body.leader}}</div>
           <div class="item"
+               v-if="body.phone"
                :style="{'width': bodyWidth[2] + 'px'}">{{ body.phone }}</div>
           <div class="item"
+               v-if="body.status"
                :style="{'width': bodyWidth[3] + 'px'}">
             <p v-if="body.status === 1">组队中</p>
             <p v-if="body.status === 2"
@@ -27,6 +31,7 @@
             <p v-if="body.status === 3">通过</p>
           </div>
           <div class="item"
+               v-if="body.isPublic || body.isPublic === false || body.isPublic === true"
                :style="{'width': bodyWidth[4] + 'px'}">
             <input type="checkbox"
                    :checked="body.isPublic"
@@ -34,6 +39,7 @@
                    @click="changestatus(body)">
           </div>
           <div class="item btn"
+               v-if="body.handle && body.handle.length > 0"
                :style="{'width': bodyWidth[5] + 'px'}">
             <button :style="{
                       'background': btn.background,
@@ -65,6 +71,9 @@ export default {
   computed: {
     bodyWidth () {
       return this.tableList[0].map(v => v.width)
+    },
+    bodyList () {
+      return this.tableList[0].map(v => v.label)
     }
   },
   methods: {
@@ -73,18 +82,7 @@ export default {
       this.$emit('changestatus', data);
     },
     clickbtn (data, btn) {
-      if (btn.name === '查看') {
-        this.$emit('viewdetail', data);
-      }
-      if (btn.name === '处理') {
-        this.$emit('handle', data);
-      }
-      if (btn.name === '删除') {
-        this.$emit('deleteitem', data);
-      }
-      if (btn.name === '通知专家') {
-        this.$emit('notice', data);
-      }
+      this.$emit('clickbtn', data, btn);
     }
   }
 }

@@ -2,10 +2,7 @@
   <tablelist :table-list="tableList"
              style="width: 1088px;"
              @changestatus="changestatus"
-             @viewdetail="viewdetail"
-             @handle="handle"
-             @deleteitem="deleteitem"
-             @notice="notice"></tablelist>
+             @clickbtn="clickbtn"></tablelist>
 </template>
 <script>
 export default {
@@ -360,17 +357,8 @@ export default {
     changestatus (data) {
       // console.log(data);
     },
-    viewdetail (data) {
-      // console.log(data, 'view');
-    },
-    handle (data) {
-      // console.log(data, 'handle');
-    },
-    deleteitem (data) {
-      // console.log(data, 'delete');
-    },
-    notice (data) {
-      // console.log(data, 'notice');
+    clickbtn (data, btn) {
+      // console.log(data, btn);
     }
   }
 
