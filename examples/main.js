@@ -94,6 +94,11 @@ router.map({
     component: function (resolve) {
       require(['./routers/tablelist.vue'], resolve);
     }
+  },
+  '/ronglvtable': {
+    component: function (resolve) {
+      require(['./routers/ronglvtable.vue'], resolve);
+    }
   }
 });
 
