@@ -1,28 +1,24 @@
 <template>
-  <div class="card_menu" v-el:wrap>
-    <div
-      v-el:card
-      class="card"
-      v-for="(idx, card) in list"
-      :key="idx"
-      :class="{ active: active >= idx }"
-      @touchstart="touchStart"
-      @touchmove="touchMove"
-      @touchend="touchEnd"
-    >
-      <div class="card_name" @click="changeCard(idx)">
+  <div class="card_menu"
+       v-el:wrap>
+    <div v-el:card
+         class="card"
+         v-for="(idx, card) in list"
+         :key="idx"
+         :class="{ active: active >= idx }"
+         @touchstart="touchStart"
+         @touchmove="touchMove"
+         @touchend="touchEnd">
+      <div class="card_name"
+           @click="changeCard(idx)">
         {{ card.name }}
       </div>
-      <div
-        class="items"
-        :style="{ overflow: disabled || active !== idx ? 'hidden' : 'auto' }"
-      >
-        <div
-          class="item"
-          v-for="(idx2, item) in card.children"
-          :key="idx2"
-          @click="select(item, card)"
-        >
+      <div class="items"
+           :style="{ overflow: disabled || active !== idx ? 'hidden' : 'auto' }">
+        <div class="item"
+             v-for="(idx2, item) in card.children"
+             :key="idx2"
+             @click="select(item, card)">
           <div class="item_icon">
             <img :src="item.image" />
           </div>
@@ -46,7 +42,7 @@ export default {
   props: {
     list: {
       type: Array,
-      default() {
+      default () {
         return [];
       },
     },
@@ -59,7 +55,7 @@ export default {
       default: false,
     },
   },
-  data() {
+  data () {
     return {
       active: 0,
       start: 0,
@@ -68,7 +64,7 @@ export default {
     };
   },
   methods: {
-    touchStart(e) {
+    touchStart (e) {
       e = e || event;
       this.start =
         e.targetTouches[0].clientY - this.dom.getBoundingClientRect().top;
@@ -76,7 +72,7 @@ export default {
         this.onoff = true;
       }
     },
-    touchMove(e) {
+    touchMove (e) {
       e = e || event;
       if (this.onoff) {
         const tar = document.querySelectorAll(".card")[this.active].children[1];
@@ -107,13 +103,13 @@ export default {
         }
       }
     },
-    touchEnd() {
+    touchEnd () {
       this.onoff = false;
     },
-    select(item, card) {
+    select (item, card) {
       this.$emit("select", item, card);
     },
-    changeCard(idx) {
+    changeCard (idx) {
       const tar = document.querySelectorAll(".card")[this.active].children[1];
       if (tar && tar.scrollTo) {
         tar.scrollTo(0, 0);
@@ -124,7 +120,7 @@ export default {
   watch: {
     defaultActive: {
       immediate: true,
-      handler(n) {
+      handler (n) {
         if (n) {
           this.active = n;
         }
@@ -132,12 +128,12 @@ export default {
     },
     active: {
       immediate: true,
-      handler(n) {
+      handler (n) {
         this.$emit("active", n);
       },
     },
   },
-  ready() {
+  ready () {
     this.dom = this.$els.wrap;
   },
 };
@@ -160,13 +156,13 @@ export default {
     bottom: 0;
     transition: 0.3s;
     background: #fff;
-    padding: 0 36px;
+    padding: 0 54px 0 36px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    & + .card {
-      box-shadow: 0 3px 6px 1px rgba(0, 0, 0, 0.5);
-    }
+    // & + .card {
+    //   box-shadow: 0 3px 6px 1px rgba(0, 0, 0, 0.5);
+    // }
     &.active {
       .loop(@i) when (@i<10) {
         &:nth-child(@{i}) {
@@ -182,7 +178,6 @@ export default {
       color: rgba(47, 45, 41, 1);
       line-height: 25px;
       padding-top: 30px;
-      padding-bottom: 25px;
       flex-shrink: 0;
     }
     .items {
@@ -193,7 +188,7 @@ export default {
       }
       .item {
         padding: 20px 0;
-        border-bottom: 1px solid #f4f4f4;
+        border-bottom: 1px solid #e8e8e8;
         display: flex;
         .item_icon {
           width: 44px;

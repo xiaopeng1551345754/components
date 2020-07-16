@@ -44,7 +44,7 @@
             v-for="(key, item) in dataList[1]"
             :key="key">
           <td class="body-item"
-              v-if="item[bodyList[0]] || item[bodyList[0]] === ''">
+              v-if="item[bodyList[0]] || item[bodyList[0]].length === 0">
             <p class="tag"
                :class="{
                     'tag-a' : item[bodyList[0]] === '环境',
@@ -55,7 +55,7 @@
                     'tag-g' :  item[bodyList[0]] === '有媒体'
                   }">{{ item[bodyList[0]] }}</p>
           </td>
-          <td v-if="item[bodyList[1]] || item[bodyList[1]] === ''"
+          <td v-if="item[bodyList[1]] || item[bodyList[1]].length === 0"
               class="body-item">
             <p class="tag"
                :class="{
@@ -67,7 +67,7 @@
                     'tag-g' :  item[bodyList[1]] === '有媒体'
                   }">{{ item[bodyList[1]] }}</p>
           </td>
-          <td v-if="item[bodyList[2]] || item[bodyList[2]] === ''"
+          <td v-if="item[bodyList[2]] || item[bodyList[2]].length === 0"
               class="body-item">
             <p class="tag"
                :class="{
@@ -79,7 +79,7 @@
                     'tag-g' :  item[bodyList[2]] === '有媒体'
                   }">{{ item[bodyList[2]] }}</p>
           </td>
-          <td v-if="item[bodyList[3]] || item[bodyList[3]] === ''"
+          <td v-if="item[bodyList[3]] || item[bodyList[3]].length === 0"
               class="body-item">
             <p class="tag"
                :class="{
@@ -91,7 +91,7 @@
                     'tag-g' :  item[bodyList[3]] === '有媒体'
                   }">{{ item[bodyList[3]] }}</p>
           </td>
-          <td v-if="item[bodyList[4]] || item[bodyList[4]] === ''"
+          <td v-if="item[bodyList[4]] || item[bodyList[4]].length === 0"
               class="body-item">
             <p class="tag"
                :class="{
@@ -103,7 +103,7 @@
                     'tag-g' :  item[bodyList[4]] === '有媒体'
                   }">{{ item[bodyList[4]] }}</p>
           </td>
-          <td v-if="item[bodyList[5]] || item[bodyList[5]] === ''"
+          <td v-if="item[bodyList[5]] || item[bodyList[5]].length === 0"
               class="body-item">
             <p class="tag"
                :class="{
@@ -115,7 +115,7 @@
                     'tag-g' :  item[bodyList[5]] === '有媒体'
                   }">{{ item[bodyList[5]] }}</p>
           </td>
-          <td v-if="item[bodyList[6]] || item[bodyList[6]] === ''"
+          <td v-if="item[bodyList[6]] || item[bodyList[6]].length === 0"
               class="body-item">
             <p class="tag"
                :class="{
@@ -127,7 +127,7 @@
                     'tag-g' :  item[bodyList[6]] === '有媒体'
                   }">{{ item[bodyList[6]]}}</p>
           </td>
-          <td v-if="item[bodyList[7]] || item[bodyList[7]] === ''"
+          <td v-if="item[bodyList[7]] || item[bodyList[7]].length === 0"
               class="body-item">
             <p class="tag"
                :class="{
@@ -139,7 +139,7 @@
                     'tag-g' :  item[bodyList[7]] === '有媒体'
                   }">{{ item[bodyList[7]] }}</p>
           </td>
-          <td v-if="item[bodyList[8]] || item[bodyList[8]] === ''"
+          <td v-if="item[bodyList[8]] || item[bodyList[8]].length === 0"
               class="body-item">
             <p class="tag"
                :class="{
