@@ -2,57 +2,44 @@
   <div class="table-wrapper">
     <div class="table-list">
       <div class="table-header">
-        <div class="header"
-             :style="{'width': header.width + 'px'}"
-             v-for="header in tableList[0]"
-             :key="header.id">
-          {{header.name}}
+        <div class="table-column-group">
+          <div class="column"
+               :style="{'width': item.width + 'px', 'text-align': item.textAlign}"
+               v-for="(index, item) in tableList[0]"
+               :key="index">{{ item.name }}
+          </div>
         </div>
       </div>
       <div class="table-body">
-        <div class="body"
-             v-for="(key,body) in tableList[1]"
-             :key="key">
-          <div class="item"
-               v-if=" body.name"
-               :style="{'width': bodyWidth[0] + 'px'}">{{ body.name}}</div>
-          <div class="item"
-               v-if=" body.leader"
-               :style="{'width': bodyWidth[1] + 'px'}">{{ body.leader}}</div>
-          <div class="item"
-               v-if="body.phone"
-               :style="{'width': bodyWidth[2] + 'px'}">{{ body.phone }}</div>
-          <div class="item"
-               v-if="body.status"
-               :style="{'width': bodyWidth[3] + 'px'}">
-            <p v-if="body.status === 1">组队中</p>
-            <p v-if="body.status === 2"
-               style="color: #FB5004">驳回</p>
-            <p v-if="body.status === 3">通过</p>
-          </div>
-          <div class="item"
-               v-if="body.isPublic || body.isPublic === false || body.isPublic === true"
-               :style="{'width': bodyWidth[4] + 'px'}">
-            <input type="checkbox"
-                   :checked="body.isPublic"
-                   class="switch"
-                   @click="changestatus(body)">
-          </div>
-          <div class="item btn"
-               v-if="body.handle && body.handle.length > 0"
-               :style="{'width': bodyWidth[5] + 'px'}">
-            <button :style="{
+        <div class="table-row-group"
+             v-for="(index, item) in tableList[1]"
+             :key="index">
+          <div class="row"
+               :style="{'width': column.width + 'px', 'text-align': column.textAlign}"
+               v-for="(key, column) in tableList[0]"
+               :key="key">
+            <div v-if="column.label !== 'button' && column.type !== 'switch'"
+                 class="row-content"
+                 :class="{
+                  'text-color' : item[column.label] === '驳回'
+                }">{{ item[column.label] }}</div>
+            <input class="switch"
+                   v-if="column.label !== 'button' && column.type == 'switch' && item[column.label] || item[column.label] === false"
+                   type="checkbox"
+                   :checked="item[column.label]"
+                   @click="changestatus(item, column.label)">
+            <div v-if="column.label === 'button'">
+              <button class="row-btn"
+                      v-for="(idx, btn) in item[column.label]"
+                      :key="idx"
+                      :style="{
                       'background': btn.background,
                       'color': btn.color, 
                       'width':btn.width + 'px',
-                      'border-color': btn.name === '已通知专家' ? btn.color : ''
+                      'border-color': btn.bdcolor
                     }"
-                    type="button"
-                    v-for="(i,btn) in body.handle"
-                    :key="i"
-                    @click="clickbtn(body, btn)">
-              {{ btn.name }}
-            </button>
+                      @click="clickbtn(item, btn)">{{ btn.name }}</button>
+            </div>
           </div>
         </div>
       </div>
@@ -68,17 +55,9 @@ export default {
       default: () => []
     }
   },
-  computed: {
-    bodyWidth () {
-      return this.tableList[0].map(v => v.width)
-    },
-    bodyList () {
-      return this.tableList[0].map(v => v.label)
-    }
-  },
   methods: {
-    changestatus (data) {
-      data.isPublic = !data.isPublic;
+    changestatus (data, type) {
+      data[type] = !data[type]
       this.$emit('changestatus', data);
     },
     clickbtn (data, btn) {
@@ -93,37 +72,34 @@ export default {
   height: 100%;
   .table-list {
     .table-header {
-      display: flex;
-      height: 58px;
-      background: rgba(250, 250, 250, 1);
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(38, 38, 38, 1);
-      line-height: 58px;
-      .header:last-child {
-        text-align: center;
-      }
-      .header {
-        padding-left: 16px;
-        box-sizing: border-box;
+      .table-column-group {
+        display: flex;
+        height: 58px;
+        background: rgba(250, 250, 250, 1);
+        font-size: 14px;
+        font-weight: 500;
+        color: rgba(38, 38, 38, 1);
+        line-height: 58px;
+        .column {
+          padding-left: 16px;
+          box-sizing: border-box;
+        }
       }
     }
     .table-body {
-      .body {
+      .table-row-group {
         display: flex;
+        height: 58px;
         font-size: 14px;
         font-weight: 400;
         color: rgba(89, 89, 89, 1);
         border-bottom: 1px solid rgba(232, 232, 232, 1);
-        height: 58px;
         align-items: center;
-        .item {
+        .row {
           box-sizing: border-box;
           padding-left: 16px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
           input[type="checkbox"].switch {
+            cursor: pointer;
             outline: none;
             appearance: none;
             -webkit-appearance: none;
@@ -151,7 +127,6 @@ export default {
             position: absolute;
             left: -2px;
           }
-
           input[type="checkbox"].switch:checked {
             background: rgba(70, 212, 105, 1);
             border: 1px solid rgba(70, 212, 105, 1);
@@ -162,10 +137,16 @@ export default {
             position: absolute;
             left: 47%;
           }
-        }
-        .btn {
-          display: flex;
+          .row-content {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          .text-color {
+            color: #fb5004;
+          }
           button {
+            cursor: pointer;
             outline: 0;
             box-sizing: border-box;
             height: 32px;
