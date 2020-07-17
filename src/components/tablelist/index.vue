@@ -99,6 +99,7 @@ export default {
           box-sizing: border-box;
           padding-left: 16px;
           input[type="checkbox"].switch {
+            cursor: pointer;
             outline: none;
             appearance: none;
             -webkit-appearance: none;
@@ -145,6 +146,7 @@ export default {
             color: #fb5004;
           }
           button {
+            cursor: pointer;
             outline: 0;
             box-sizing: border-box;
             height: 32px;
