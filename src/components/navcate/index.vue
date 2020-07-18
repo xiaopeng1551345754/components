@@ -1,5 +1,10 @@
 <template>
-  <div class="hex-cate" @mouseleave="mouseLeave" v-click-out-side='hiddenMenu' :class='{"oh":level!==1,"sd":selectedFirst,"onlyOne":level===1}'>
+  <div
+    class="hex-cate"
+    @mouseleave="mouseLeave"
+    v-click-out-side="hiddenMenu"
+    :class="{"oh":level!==1,"sd":selectedFirst,"onlyOne":level===1}"
+  >
     <!-- level：1 只有一级菜单 -->
     <template v-if="level===1">
       <div class="first-menu common-scrollbar">
@@ -86,14 +91,14 @@ export default {
   props: {
     defaultData: {
       type: Array,
-      default () {
+      default() {
         return [];
       }
     },
     list: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     level: {
@@ -105,7 +110,7 @@ export default {
       default: "click"
     }
   },
-  data () {
+  data() {
     return {
       selectedFirst: true, // 是否选中一级栏目
       secondList: [],
@@ -116,16 +121,16 @@ export default {
   },
   filters: {
     subStringName: value => {
-      return value.length > 6 ? `${value.substring(0, 6)}...` : value;
+      return value.length > 30 ? `${value.substring(0, 30)}...` : value;
     }
   },
   computed: {},
-  ready () {
+  ready() {
     this.init();
   },
   methods: {
     // init waterfall instance
-    init () {
+    init() {
       let that = this;
       // 处理menulist格式
       this.list.forEach((element, index) => {
@@ -134,7 +139,7 @@ export default {
       // 设置默认值
       this.setDefaultData();
     },
-    setDefaultData () {
+    setDefaultData() {
       if (this.defaultData.length <= 0) return false;
       let that = this;
       let data = this.defaultData;
@@ -148,18 +153,18 @@ export default {
         if (data[1] && fItem.children) {
           let sid = data[1].id || -1;
           let sIndex = this.setSelected(fItem.children, sid);
-          this.secMenu = data[1]
+          this.secMenu = data[1];
           //三级菜单
           let sItem = fItem.children[sIndex];
           if (data[2] && sItem.children) {
             let tid = data[2].id || -1;
             this.setSelected(sItem.children, tid);
-            this.thiMenu = data[2]
+            this.thiMenu = data[2];
           }
         }
       }
     },
-    setSelected (list, id) {
+    setSelected(list, id) {
       // 循环设置menulist数据
       let resultIndex = -1;
       list.forEach((element, index) => {
@@ -170,31 +175,31 @@ export default {
       });
       return resultIndex;
     },
-    selectFirstMenu (type, item, index) {
+    selectFirstMenu(type, item, index) {
       if (type != this.eventType) return false;
       this.reset();
       this.selectedFirst = true;
-      this.firstMenu = item
+      this.firstMenu = item;
       let menu = this.list[index];
       menu.selected = true;
       this.list.$set(index, menu);
       this.secondList = menu.children;
     },
-    selectLinkMenu (item, second) {
+    selectLinkMenu(item, second) {
       if (second) {
-        this.secMenu = second
-        this.thiMenu = item
+        this.secMenu = second;
+        this.thiMenu = item;
       } else {
-        this.secMenu = item
+        this.secMenu = item;
       }
       if (second === 1) {
-        this.firstMenu = item
+        this.firstMenu = item;
       }
-      item.selected = true
+      item.selected = true;
       this.$emit("select", item, second, this.firstMenu);
       this.reset();
     },
-    reset () {
+    reset() {
       let that = this;
       let list = this.list;
       list.forEach((element, index) => {
@@ -203,11 +208,11 @@ export default {
       });
       // this.selectedFirst = false;
     },
-    mouseLeave () {
+    mouseLeave() {
       if (this.eventType === "hover") this.reset();
     },
-    hiddenMenu () {
-      this.$emit("clickoutside")
+    hiddenMenu() {
+      this.$emit("clickoutside");
       this.reset();
     }
   }
