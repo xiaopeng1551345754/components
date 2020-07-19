@@ -3,7 +3,7 @@
     class="hex-cate"
     @mouseleave="mouseLeave"
     v-click-out-side="hiddenMenu"
-    :class="{"oh":level!==1,"sd":selectedFirst,"onlyOne":level===1}"
+    :class="{'oh': level !== 1, 'sd': selectedFirst, 'onlyOne': level ===1}"
   >
     <!-- level：1 只有一级菜单 -->
     <template v-if="level===1">
@@ -91,13 +91,13 @@ export default {
   props: {
     defaultData: {
       type: Array,
-      default() {
+      default () {
         return [];
       }
     },
     list: {
       type: Array,
-      default() {
+      default () {
         return [];
       }
     },
@@ -110,7 +110,7 @@ export default {
       default: "click"
     }
   },
-  data() {
+  data () {
     return {
       selectedFirst: true, // 是否选中一级栏目
       secondList: [],
@@ -125,12 +125,12 @@ export default {
     }
   },
   computed: {},
-  ready() {
+  ready () {
     this.init();
   },
   methods: {
     // init waterfall instance
-    init() {
+    init () {
       let that = this;
       // 处理menulist格式
       this.list.forEach((element, index) => {
@@ -139,7 +139,7 @@ export default {
       // 设置默认值
       this.setDefaultData();
     },
-    setDefaultData() {
+    setDefaultData () {
       if (this.defaultData.length <= 0) return false;
       let that = this;
       let data = this.defaultData;
@@ -164,7 +164,7 @@ export default {
         }
       }
     },
-    setSelected(list, id) {
+    setSelected (list, id) {
       // 循环设置menulist数据
       let resultIndex = -1;
       list.forEach((element, index) => {
@@ -175,7 +175,7 @@ export default {
       });
       return resultIndex;
     },
-    selectFirstMenu(type, item, index) {
+    selectFirstMenu (type, item, index) {
       if (type != this.eventType) return false;
       this.reset();
       this.selectedFirst = true;
@@ -185,7 +185,7 @@ export default {
       this.list.$set(index, menu);
       this.secondList = menu.children;
     },
-    selectLinkMenu(item, second) {
+    selectLinkMenu (item, second) {
       if (second) {
         this.secMenu = second;
         this.thiMenu = item;
@@ -199,7 +199,7 @@ export default {
       this.$emit("select", item, second, this.firstMenu);
       this.reset();
     },
-    reset() {
+    reset () {
       let that = this;
       let list = this.list;
       list.forEach((element, index) => {
@@ -208,10 +208,10 @@ export default {
       });
       // this.selectedFirst = false;
     },
-    mouseLeave() {
+    mouseLeave () {
       if (this.eventType === "hover") this.reset();
     },
-    hiddenMenu() {
+    hiddenMenu () {
       this.$emit("clickoutside");
       this.reset();
     }
