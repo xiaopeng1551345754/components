@@ -19,17 +19,21 @@ export default {
                     },
                     {
                         name: '风险类型',
-                        label: 'type'
+                        label: 'type' // 
                     }, {
                         name: '事件概述',
                         label: 'overview'
                     }, {
                         name: '来源类别',
-                        label: 'source'
+                        label: 'source' //
                     },
                     {
                         name: '事件跟踪',
                         label: 'trace'
+                    },
+                    {
+                        name: '风险级别',
+                        label: 'level'  // 
                     }
                 ],
                 [
@@ -51,14 +55,14 @@ export default {
                         trace: '',
                         name: '中国平安',
                         index: '2',
-                        level: '',
+                        level: '低',
                         time: '2020/06/13',
                         company: '房地产'
                     },
                     {
                         name: '中国平安',
                         index: '3',
-                        level: '高',
+                        level: '中',
                         type: '社会',
                         overview: '因违反环境影响评价制度遭到相关部门罚款10万大脑神经可能分开几点能吃',
                         source: '媒体',

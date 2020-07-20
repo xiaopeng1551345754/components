@@ -19,18 +19,21 @@
                 <tr class="table-body-contant" v-for="(key, item) in tableData[1]" :key="key">
 
                     <td class="body-item" v-for="(i, k) in bodyList" :key="i">
-                        <!-- <p class="tag">{{ item[k]}}</p> -->
-                        <input type="text" :value="item[k]" class="item-input" :disabled='!editor' @input="save">
+                        <p class="tag" :class="[style[item[k]], {'trace': k == 'trace'}, {'ellipsis': !style[item[k]]}]">{{ item[k]}}</p>
+                        <!-- <input type="text" :value="item[k]" class="item-input" disabled='disabled' @input="save"> -->
                     </td>
-                    <td class="body-operation">
+                    <td class="body-operation" :class="{'body-look': !editor}">
                         <!-- @click="clicknode(item)" -->
-                        <div class="delete scale" @click="handlerDel(key, item)">删除</div>
-                        <div class="sort">
-                            <div class="up scale" @click="handlerUp(key, item)">
-                                <div class="triangle"></div>
-                            </div>
-                            <div class="down scale" @click="handlerDown(key, item)">
-                                <div class="triangle"></div>
+                        <span @click="clicknode(item)" class="look tag" v-if="!editor">查看</span>
+                        <div class="editor" v-else>
+                            <div class="delete scale tag" @click="handlerDel(key, item)">删除</div>
+                            <div class="sort">
+                                <div class="up scale " @click="handlerUp(key, item)">
+                                    <div class="triangle"></div>
+                                </div>
+                                <div class="down scale" @click="handlerDown(key, item)">
+                                    <div class="triangle"></div>
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -80,10 +83,23 @@ export default {
             arrow_down_active: arrow_down_active,
             up: up,
             down: down,
-            tableData: []
+            tableData: [],
+            style: {
+                '媒体': 'media',
+                '监管': 'supervise',
+                '环境': 'environment',
+                "社会": 'society',
+                '治理': 'govern',
+                '高': 'high',
+                '中': 'middle',
+                '低': 'low'
+            }
         }
     },
     methods: {
+        clicknode(item) {
+            this.$emit('clicknode', item)
+        },
         save() {
             this.$emit('save', JSON.parse(JSON.stringify(this.tableData)))
         },
@@ -221,9 +237,6 @@ export default {
                 }
                 .tag {
                     max-width: 322px;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
                     box-sizing: border-box;
                     padding: 2px 12px;
                     border-radius: 4px;
@@ -286,9 +299,7 @@ export default {
                 }
                 .tag {
                     max-width: 322px;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
+
                     box-sizing: border-box;
                     padding: 2px 12px;
                     border-radius: 4px;
@@ -336,31 +347,37 @@ export default {
             height: 48px;
             user-select: none;
             min-width: 8em;
+            .editor {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+            }
             .delete {
                 padding: 0 1em;
-                line-height: 2.5em;
+                line-height: 2em;
                 border: 1px solid red;
                 color: red;
                 border-radius: 4px;
-                margin-right: 1em;
+                margin-right: 0.5em;
             }
             .sort {
                 display: flex;
                 flex-direction: column;
-                height: 2.5em;
+                height: 2em;
                 justify-content: space-between;
             }
             .triangle {
                 width: 0;
                 height: 0;
-                border-left: 1em solid transparent;
-                border-right: 1em solid transparent;
+                border-left: 0.7em solid transparent;
+                border-right: 0.7em solid transparent;
             }
             .up .triangle {
-                border-bottom: 1em solid #ccc;
+                border-bottom: 0.7em solid #ccc;
             }
             .down .triangle {
-                border-top: 1em solid #ccc;
+                border-top: 0.7em solid #ccc;
             }
         }
     }
@@ -370,6 +387,88 @@ export default {
 }
 .scale:active {
     transform: scale(0.9);
+}
+.body-look {
+    justify-content: center;
+    .look {
+        line-height: 2em;
+        padding: 0 1em;
+        border-radius: 4px;
+        background: #598abe;
+        color: #fff;
+    }
+}
+.media {
+    line-height: 2em;
+    padding: 0 1em;
+    border-radius: 4px;
+    background: rgba(89, 138, 190, 0.1);
+    color: #598abe;
+    display: inline-block;
+}
+.supervise {
+    line-height: 2em;
+    padding: 0 1em;
+    border-radius: 4px;
+    background: rgba(236, 162, 15, 0.1);
+    color: #eca20f;
+    display: inline-block;
+}
+.environment {
+    line-height: 2em;
+    padding: 0 1em;
+    border-radius: 4px;
+    background: rgba(91, 144, 123, 0.1);
+    color: rgba(91, 144, 123, 1);
+    display: inline-block;
+}
+.society {
+    line-height: 2em;
+    padding: 0 1em;
+    border-radius: 4px;
+    background: rgba(255, 151, 64, 0.1);
+    color: rgba(255, 151, 64, 1);
+    display: inline-block;
+}
+.govern {
+    line-height: 2em;
+    padding: 0 1em;
+    border-radius: 4px;
+    background: rgba(49, 122, 222, 0.1);
+    color: rgba(49, 122, 222, 1);
+    display: inline-block;
+}
+.high {
+    line-height: 2em;
+    padding: 0 1em;
+    border-radius: 4px;
+    background: rgba(235, 68, 9, 0.2);
+    color: #eb4409;
+    display: inline-block;
+}
+.middle {
+    line-height: 2em;
+    padding: 0 1em;
+    border-radius: 4px;
+    background: rgba(255, 156, 121, 0.2);
+    color: #eb4409;
+    display: inline-block;
+}
+.low {
+    line-height: 2em;
+    padding: 0 1em;
+    border-radius: 4px;
+    background: rgba(255, 219, 206, 0.1);
+    color: #eb4409;
+    display: inline-block;
+}
+.trace {
+    color: #f5614d;
+}
+.ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 </style>
 
