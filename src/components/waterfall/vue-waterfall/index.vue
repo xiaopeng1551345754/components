@@ -290,6 +290,8 @@ export default {
     imgsArr (newV, oldV) {
       let self = this;
       if (this.imagesList.length > newV.length || (this.imagesList.length > 0 && newV[0] && !newV[0]._height)) {
+        const scrollEl = this.$el.querySelector(".vue-waterfall-easy-scroll");
+        scrollEl.scrollTop = 0; // reset scroll
         this.reset();
       }
       this.preload().then(res => {
