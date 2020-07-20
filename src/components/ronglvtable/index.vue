@@ -132,17 +132,12 @@ export default {
     watch: {
         dataList: {
             handler(val) {
-                console.log(val, 'watch')
                 this.tableData = JSON.parse(JSON.stringify(val))
             },
             immediate: true
         }
     },
     ready() {
-        console.log(this.dataList, '```````````````')
-        setTimeout(() => {
-            console.log(this.dataList, '2222222222')
-        }, 1000)
     }
 }
 </script>
