@@ -1,23 +1,29 @@
 <template>
-  <div class="wrap" v-click-out-side="blur">
-    <div class="search" :class="{ active: active }">
-      <input
-        type="text"
-        v-model="search"
-        :placeholder="placeholder"
-        class="search-input"
-        @focus="focus"
-      />
+  <div class="wrap"
+       v-click-out-side="blur">
+    <div class="search">
+      <input type="text"
+             v-model="search"
+             :placeholder="placeholder"
+             class="search-input"
+             @focus="focus" />
+      <div class="del-icon"
+           v-show="search && showDel"
+           @click.stop="clearvalue"></div>
+      <div class="arrow-icon"
+           :class="{
+             active: active,
+             'arrow': search && showDel
+            }"></div>
     </div>
-    <div class="items" v-show="active">
-      <div
-        class="item"
-        v-for="(idx, item) in filterSearch"
-        :key="idx"
-        :value="item[value]"
-        :class="{ selected: item[value] === selected[value] }"
-        @click="select(item)"
-      >
+    <div class="items"
+         v-show="active">
+      <div class="item"
+           v-for="(idx, item) in filterSearch"
+           :key="idx"
+           :value="item[value]"
+           :class="{ selected: item[value] === selected[value] }"
+           @click="select(item)">
         {{ item[key] }}
       </div>
     </div>
@@ -31,7 +37,7 @@ export default {
   props: {
     list: {
       type: Array,
-      default() {
+      default () {
         return [];
       },
     },
@@ -57,18 +63,22 @@ export default {
     },
     selected: {
       type: Object,
-      default() {
+      default () {
         return {};
       },
     },
+    showDel: {
+      type: Boolean,
+      default: true
+    }
   },
-  data() {
+  data () {
     return {
-      active: false,
+      active: false
     };
   },
   computed: {
-    filterSearch() {
+    filterSearch () {
       let arr = this.list.filter(
         (item) =>
           item[this.key] && (item[this.key] + "").indexOf(this.search) !== -1
@@ -77,21 +87,24 @@ export default {
     },
   },
   methods: {
-    select(item) {
+    select (item) {
       this.selected = item;
       this.search = item[this.key] + "";
       this.$emit("select");
       this.blur();
     },
-    focus() {
+    focus () {
       this.active = true;
     },
-    blur() {
+    blur () {
       this.active = false;
     },
+    clearvalue () {
+      this.search = '';
+    }
   },
   watch: {
-    search(n) {
+    search (n) {
       this.$emit("search", n);
     },
   },
@@ -110,24 +123,55 @@ export default {
     width: 100%;
     height: 100%;
     position: relative;
-    &.active {
-      &::before {
-        transform: translateY(-30%) rotate(45deg);
-      }
+    display: block;
+    &:hover .del-icon {
+      display: block;
     }
-    &::before {
-      content: "";
-      width: 6px;
-      height: 6px;
+    &:hover .arrow {
+      display: none;
+    }
+    .del-icon {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
       border: 1px solid gray;
-      border-right: none;
-      border-bottom: none;
       position: absolute;
       right: 16px;
       top: 50%;
-      transform: translateY(-100%) rotate(-135deg);
-      z-index: 1;
-      transition: 0.2s;
+      transform: translateY(-50%);
+      display: none;
+      &::before {
+        content: "x";
+        color: gray;
+        position: relative;
+        top: -8px;
+        left: 3px;
+        font-size: 10px;
+      }
+    }
+    .arrow {
+      display: block;
+    }
+    .arrow-icon {
+      &.active {
+        &::before {
+          transform: translateY(-30%) rotate(45deg);
+        }
+      }
+      &::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border: 1px solid gray;
+        border-right: none;
+        border-bottom: none;
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-100%) rotate(-135deg);
+        z-index: 1;
+        transition: 0.2s;
+      }
     }
     .search-input {
       position: absolute;

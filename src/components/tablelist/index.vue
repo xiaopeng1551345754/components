@@ -4,7 +4,7 @@
       <div class="table-header">
         <div class="table-column-group">
           <div class="column"
-               :style="{'width': item.width + 'px', 'text-align': item.textAlign}"
+               :style="{'width': item.width.slice(-1) === '%' ? item.width : item.width + 'px', 'text-align': item.textAlign}"
                v-for="(index, item) in tableList[0]"
                :key="index">{{ item.name }}
           </div>
@@ -15,7 +15,7 @@
              v-for="(index, item) in tableList[1]"
              :key="index">
           <div class="row"
-               :style="{'width': column.width + 'px', 'text-align': column.textAlign}"
+               :style="{'width': column.width.slice(-1) === '%' ? column.width : column.width + 'px', 'text-align': column.textAlign}"
                v-for="(key, column) in tableList[0]"
                :key="key">
             <div v-if="column.label !== 'button' && column.type !== 'switch'"
@@ -35,7 +35,7 @@
                       :style="{
                       'background': btn.background,
                       'color': btn.color, 
-                      'width':btn.width + 'px',
+                      'width': btn.width.slice(-1) === '%' ? btn.width : btn.width + 'px',
                       'border-color': btn.bdcolor
                     }"
                       @click="clickbtn(item, btn)">{{ btn.name }}</button>
