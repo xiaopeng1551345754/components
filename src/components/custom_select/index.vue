@@ -136,7 +136,7 @@ export default {
       border-radius: 50%;
       border: 1px solid gray;
       position: absolute;
-      right: 16px;
+      right: 11px;
       top: 50%;
       transform: translateY(-50%);
       display: none;
