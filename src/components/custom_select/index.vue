@@ -9,7 +9,10 @@
              @focus="focus" />
       <div class="del-icon"
            v-show="search && showDel"
-           @click.stop="clearvalue"></div>
+           @click.stop="clearvalue">
+        <img src="./img/del.png"
+             alt="">
+      </div>
       <div class="arrow-icon"
            :class="{
              active: active,
@@ -131,22 +134,14 @@ export default {
       display: none;
     }
     .del-icon {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 1px solid gray;
       position: absolute;
       right: 11px;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(-40%);
       display: none;
-      &::before {
-        content: "x";
-        color: gray;
-        position: relative;
-        top: -8px;
-        left: 3px;
-        font-size: 10px;
+      img {
+        width: 15px;
+        height: 15px;
       }
     }
     .arrow {
