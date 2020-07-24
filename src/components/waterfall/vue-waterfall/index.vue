@@ -1,35 +1,39 @@
 <template>
-  <div
-    class="vue-waterfall-easy-container"
-    :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height}"
-    :class='{none: noneText && noneData}'
-  >
-  <!-- <button @click="recalculate">布局</button> -->
-    <div class="loading ball-beat" v-show="isPreloading_c" :class="{first:isFirstLoad}">
-      <div class="dot-box" :isFirstLoad="isFirstLoad">
-        <div class="dot" v-for="n in loadingDotCount" :key="n" :style="loadingDotStyle"></div>
+  <div class="vue-waterfall-easy-container"
+       :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height}"
+       :class='{none: noneText && noneData}'>
+    <!-- <button @click="recalculate">布局</button> -->
+    <div class="loading ball-beat"
+         v-show="isPreloading_c"
+         :class="{first:isFirstLoad}">
+      <div class="dot-box"
+           :isFirstLoad="isFirstLoad">
+        <div class="dot"
+             v-for="n in loadingDotCount"
+             :key="n"
+             :style="loadingDotStyle"></div>
       </div>
     </div>
     <div class="vue-waterfall-easy-scroll">
-      <div
-        class="vue-waterfall-easy"
-        :style="isMobile? '' :{width: colWidth*cols+'px',left:'50%', marginLeft: -1*colWidth*cols/2 +'px'}"
-        :class="{mobile: isMobile}"
-      >
-        <div
-          class="img-box"
-          v-for="(index, v) in imagesList"
-          track-by="$index"
-          :key="$index"
-          :class="[cardAnimationClass, {__err__: v._error}]"
-          :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : getColWidth(v)+'px'}"
-          :data-index="$index"
-        >
-          <div class="img-inner-box static-box" v-if="v.type==='static'"
-           :class="{fixed: !inValidImgSize(v)}"
-           :style="getImgSize(v)" :data-index="$index">
-            <div class="img-wraper" >
-              <img :src="v.realPath" :height="getImageHeight(v)" alt />
+      <div class="vue-waterfall-easy"
+           :style="isMobile? '' :{width: colWidth*cols+'px',left:'50%', marginLeft: -1*colWidth*cols/2 +'px'}"
+           :class="{mobile: isMobile}">
+        <div class="img-box"
+             v-for="(index, v) in imagesList"
+             track-by="$index"
+             :key="$index"
+             :class="[cardAnimationClass, {__err__: v._error}]"
+             :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : getColWidth(v)+'px'}"
+             :data-index="$index">
+          <div class="img-inner-box static-box"
+               v-if="v.type==='static'"
+               :class="{fixed: !inValidImgSize(v)}"
+               :style="getImgSize(v)"
+               :data-index="$index">
+            <div class="img-wraper">
+              <img :src="v.realPath"
+                   :height="getImageHeight(v)"
+                   alt />
             </div>
             <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
               <p class="title">{{v.title}}</p>
@@ -37,25 +41,37 @@
             </div>
           </div>
 
-          <div :style="getImgSize(v)" class="img-inner-box live-box" v-if="v.type==='live'" 
-          :class="{fixed: !inValidImgSize(v)}"
-          :data-index="$index">
+          <div :style="getImgSize(v)"
+               class="img-inner-box live-box"
+               v-if="v.type==='live'"
+               :class="{fixed: !inValidImgSize(v)}"
+               :data-index="$index">
             <div class="img-wraper">
-              <img :src="v.realPath" :height="getImageHeight(v)" alt />
+              <img :src="v.realPath"
+                   :height="getImageHeight(v)"
+                   alt />
             </div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="doing-tag"  v-if="v.status==='doing'">{{t('doing', v.liveType)}}</div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="done-tag"  v-if="v.status==='done'">{{t('over', v.liveType)}}</div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="nostart-tag"  v-if="v.status==='nostart'">{{t('nostart', v.liveType)}}</div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
+                 class="doing-tag"
+                 v-if="v.status==='doing'">{{t('doing', v.liveType)}}</div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
+                 class="done-tag"
+                 v-if="v.status==='done'">{{t('over', v.liveType)}}</div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
+                 class="nostart-tag"
+                 v-if="v.status==='nostart'">{{t('nostart', v.liveType)}}</div>
             <template v-if="type === 'pc'">
-            <div class="play-icon"><img src="../images/play.png" alt /></div>
-            <div class="img-info-bg"></div>
-            <div class="img-info">
-              <p class="title">{{v.title}}</p>
-              <p class="desc">{{v.exhibition_name}}</p>
-            </div>
+              <div class="play-icon"><img src="../images/play.png"
+                     alt /></div>
+              <div class="img-info-bg"></div>
+              <div class="img-info">
+                <p class="title">{{v.title}}</p>
+                <p class="desc">{{v.exhibition_name}}</p>
+              </div>
             </template>
             <template v-else>
-              <div class="play-icon-mobile"><img src="../images/play-mobile.png" alt /></div>
+              <div class="play-icon-mobile"><img src="../images/play-mobile.png"
+                     alt /></div>
               <div class="live-info">
                 <p class="title">{{v.title}}</p>
                 <p class="desc">{{v.exhibition_name}}</p>
@@ -65,7 +81,12 @@
         </div>
       </div>
     </div>
-    <div class="text" v-show='noneText && noneData'>已经全部加载完毕</div>
+    <div class="text"
+         v-show="showLoading && imagesList.length > 0 &&  !noneData">
+      数据加载中...
+    </div>
+    <div class="text"
+         v-show='noneText && noneData'>已经全部加载完毕</div>
   </div>
 </template>
 
@@ -183,6 +204,9 @@ export default {
       type: String
     },
     noneData: {
+      type: Boolean
+    },
+    showLoading: {
       type: Boolean
     }
   },

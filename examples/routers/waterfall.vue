@@ -7,18 +7,17 @@
     </div> -->
     <button @click="change">修改</button>
     <button @click="changeNoneData">修改空数据</button>
-    <waterfall
-      :loading-img="loadingImg"
-      :list="list"
-      :lang="'en'"
-      :img-size="imgSize"
-      :img-width="294"
-      :none-data='noneData'
-      :gap='8'
-      :type="type"
-      @scroll-bottom="scrollBottom"
-      @select-item="selectItem"
-    ></waterfall>
+    <waterfall :loading-img="loadingImg"
+               :list="list"
+               :lang="'en'"
+               :img-size="imgSize"
+               :img-width="294"
+               :none-data='noneData'
+               :gap='8'
+               :type="type"
+               :show-loading="showLoading"
+               @scroll-bottom="scrollBottom"
+               @select-item="selectItem"></waterfall>
   </div>
 </template>
 <script>
@@ -38,7 +37,8 @@ export default {
       loadingImg: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       noneData: false,
       list: [],
-      type: 'pc'
+      type: 'pc',
+      showLoading: false
     };
   },
   created () {
@@ -78,6 +78,7 @@ export default {
     // 抓取数据
     getWaterfall () {
       const self = this;
+      self.showLoading = true
       $.post({
         url: 'https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95',
         data: {},
@@ -99,6 +100,7 @@ export default {
               return item;
             });
             self.list = self.list.concat(list);
+            self.showLoading = false;
           }
         }
       });
