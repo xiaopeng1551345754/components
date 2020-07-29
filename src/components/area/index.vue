@@ -88,7 +88,7 @@ export default {
     // },
     defaultData: {
       type: Array,
-      default() {
+      default () {
         return [];
       }
     },
@@ -102,7 +102,7 @@ export default {
     },
     list: {
       type: Array,
-      default() {
+      default () {
         return [];
       }
     },
@@ -130,7 +130,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       show: false,
       contries: [],
@@ -149,7 +149,7 @@ export default {
     };
   },
   computed: {
-    selectText() {
+    selectText () {
       return (
         (this.current.country.name || "") +
         (this.current.province.name || "") +
@@ -158,12 +158,12 @@ export default {
     }
   },
   methods: {
-    t(keypath) {
+    t (keypath) {
       const o = this.langInfo[this.lang] || {}
       const keys = keypath.split('.')
       let r = o
       let key
-      for(let i = 0; i < keys.length; i++) {
+      for (let i = 0; i < keys.length; i++) {
         key = keys[i]
         if (key && typeof r === 'object') {
           r = r[key]
@@ -172,14 +172,14 @@ export default {
       return r || ''
     },
     // init waterfall instance
-    init() {
+    init () {
       // 设置国家列表
       this.setContries(this.list);
       this.setDefaultData();
       console.log('init')
     },
     // 设置初始数据
-    setDefaultData() {
+    setDefaultData () {
       if (this.defaultData.length <= 0) return false;
       let that = this;
       let data = this.defaultData;
@@ -208,7 +208,7 @@ export default {
         }
       }
     },
-    setSelected(list, key, val) {
+    setSelected (list, key, val) {
       return list.findIndex(x => x[key] === val)
       // // 循环设置menulist数据
       // let resultIndex = -1;
@@ -221,23 +221,23 @@ export default {
       // return resultIndex;
     },
     // 设置国家列表
-    setContries(list) {
+    setContries (list) {
       this.contries = list;
     },
     // 设置省份列表
-    setProvinces(id, list) {
+    setProvinces (id, list) {
       this.cities = [];
       this.provinces = list;
     },
     // 设置市级列表
-    setCities(id, list) {
+    setCities (id, list) {
       this.cities = list;
     },
     /**
      * 选中列表节点
      * type: init selected
      */
-    selectNode(from, index, type) {
+    selectNode (from, index, type) {
       let data = {};
       if (from === "country") {
         data = this.contries[index];
@@ -277,7 +277,7 @@ export default {
       this.current[from] = data;
     },
     // 清除国家列表选中状态
-    clearContries() {
+    clearContries () {
       let that = this;
       this.contries &&
         this.contries.forEach((element, index) => {
@@ -287,7 +287,7 @@ export default {
         });
     },
     // 清除省份列表选中状态
-    clearProvinces() {
+    clearProvinces () {
       let that = this;
       this.provinces &&
         this.provinces.forEach((element, index) => {
@@ -297,7 +297,7 @@ export default {
         });
     },
     // 清除市级列表选中状态
-    clearCities() {
+    clearCities () {
       let that = this;
       this.cities &&
         this.cities.forEach((element, index) => {
@@ -307,7 +307,7 @@ export default {
         });
     },
     // 重置列表
-    reset() {
+    reset () {
       this.clearContries();
       this.clearProvinces();
       this.clearCities();
@@ -342,6 +342,7 @@ export default {
     }
     .content {
       height: 192px;
+      min-height: auto;
       .content-scroll {
         height: 100%;
         padding-right: 5px;
@@ -350,7 +351,7 @@ export default {
           width: 5px;
         }
         &::-webkit-scrollbar-thumb {
-          background:rgba(0,0,0,0.45);
+          background: rgba(0, 0, 0, 0.45);
           border-radius: 2.5px;
         }
       }
