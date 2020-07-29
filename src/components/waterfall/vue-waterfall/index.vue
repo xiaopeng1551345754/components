@@ -1,39 +1,35 @@
 <template>
-  <div class="vue-waterfall-easy-container"
-       :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height}"
-       :class='{none: noneText && noneData}'>
-    <!-- <button @click="recalculate">布局</button> -->
-    <div class="loading ball-beat"
-         v-show="isPreloading_c"
-         :class="{first:isFirstLoad}">
-      <div class="dot-box"
-           :isFirstLoad="isFirstLoad">
-        <div class="dot"
-             v-for="n in loadingDotCount"
-             :key="n"
-             :style="loadingDotStyle"></div>
+  <div
+    class="vue-waterfall-easy-container"
+    :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height}"
+    :class='{none: noneText && noneData}'
+  >
+  <!-- <button @click="recalculate">布局</button> -->
+    <div class="loading ball-beat" v-show="isPreloading_c" :class="{first:isFirstLoad}">
+      <div class="dot-box" :isFirstLoad="isFirstLoad">
+        <div class="dot" v-for="n in loadingDotCount" :key="n" :style="loadingDotStyle"></div>
       </div>
     </div>
     <div class="vue-waterfall-easy-scroll">
-      <div class="vue-waterfall-easy"
-           :style="isMobile? '' :{width: colWidth*cols+'px',left:'50%', marginLeft: -1*colWidth*cols/2 +'px'}"
-           :class="{mobile: isMobile}">
-        <div class="img-box"
-             v-for="(index, v) in imagesList"
-             track-by="$index"
-             :key="$index"
-             :class="[cardAnimationClass, {__err__: v._error}]"
-             :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : getColWidth(v)+'px'}"
-             :data-index="$index">
-          <div class="img-inner-box static-box"
-               v-if="v.type==='static'"
-               :class="{fixed: !inValidImgSize(v)}"
-               :style="getImgSize(v)"
-               :data-index="$index">
-            <div class="img-wraper">
-              <img :src="v.realPath"
-                   :height="getImageHeight(v)"
-                   alt />
+      <div
+        class="vue-waterfall-easy"
+        :style="isMobile? '' :{width: colWidth*cols+'px',left:'50%', marginLeft: -1*colWidth*cols/2 +'px'}"
+        :class="{mobile: isMobile}"
+      >
+        <div
+          class="img-box"
+          v-for="(index, v) in imgsArr_c"
+          track-by="$index"
+          :key="$index"
+          :class="[cardAnimationClass, {__err__: v._error}]"
+          :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : getColWidth(v)+'px'}"
+          :data-index="$index"
+        >
+          <div class="img-inner-box static-box" v-if="v.type==='static'"
+           :class="{fixed: !inValidImgSize(v)}"
+           :style="getImgSize(v)" :data-index="$index">
+            <div class="img-wraper" >
+              <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
             <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
               <p class="title">{{v.title}}</p>
@@ -41,37 +37,25 @@
             </div>
           </div>
 
-          <div :style="getImgSize(v)"
-               class="img-inner-box live-box"
-               v-if="v.type==='live'"
-               :class="{fixed: !inValidImgSize(v)}"
-               :data-index="$index">
+          <div :style="getImgSize(v)" class="img-inner-box live-box" v-if="v.type==='live'" 
+          :class="{fixed: !inValidImgSize(v)}"
+          :data-index="$index">
             <div class="img-wraper">
-              <img :src="v.realPath"
-                   :height="getImageHeight(v)"
-                   alt />
+              <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
-                 class="doing-tag"
-                 v-if="v.status==='doing'">{{t('doing', v.liveType)}}</div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
-                 class="done-tag"
-                 v-if="v.status==='done'">{{t('over', v.liveType)}}</div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
-                 class="nostart-tag"
-                 v-if="v.status==='nostart'">{{t('nostart', v.liveType)}}</div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="doing-tag"  v-if="v.status==='doing'">{{t('doing', v.liveType)}}</div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="done-tag"  v-if="v.status==='done'">{{t('over', v.liveType)}}</div>
+            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="nostart-tag"  v-if="v.status==='nostart'">{{t('nostart', v.liveType)}}</div>
             <template v-if="type === 'pc'">
-              <div class="play-icon"><img src="../images/play.png"
-                     alt /></div>
-              <div class="img-info-bg"></div>
-              <div class="img-info">
-                <p class="title">{{v.title}}</p>
-                <p class="desc">{{v.exhibition_name}}</p>
-              </div>
+            <div class="play-icon"><img src="../images/play.png" alt /></div>
+            <div class="img-info-bg"></div>
+            <div class="img-info">
+              <p class="title">{{v.title}}</p>
+              <p class="desc">{{v.exhibition_name}}</p>
+            </div>
             </template>
             <template v-else>
-              <div class="play-icon-mobile"><img src="../images/play-mobile.png"
-                     alt /></div>
+              <div class="play-icon-mobile"><img src="../images/play-mobile.png" alt /></div>
               <div class="live-info">
                 <p class="title">{{v.title}}</p>
                 <p class="desc">{{v.exhibition_name}}</p>
@@ -81,12 +65,7 @@
         </div>
       </div>
     </div>
-    <div class="text"
-         v-show="showLoading && imagesList.length > 0 &&  !noneData">
-      数据加载中...
-    </div>
-    <div class="text"
-         v-show='noneText && noneData'>已经全部加载完毕</div>
+    <div class="text" v-show='noneText && noneData'>没有更多了…</div>
   </div>
 </template>
 
@@ -205,19 +184,15 @@ export default {
     },
     noneData: {
       type: Boolean
-    },
-    showLoading: {
-      type: Boolean
     }
   },
   data () {
     return {
       msg: "this is from  .vue",
       isMobile: !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i), // 初始化移动端
-      // isMobile: false,
       isPreloading: true, // 正在预加载中，显示加载动画
       isPreloading_c: true,
-      imagesList: [], // 待图片预加载imgsArr完成，插入新的字段height之后,才会生成imagesList，这时才开始渲染
+      imgsArr_c: [], // 待图片预加载imgsArr完成，插入新的字段height之后,才会生成imgsArr_c，这时才开始渲染
       loadedCount: 0,
       cols: NaN, // 需要根据窗口宽度初始化
       imgBoxEls: null, // 所有的.img-box元素
@@ -229,23 +204,20 @@ export default {
       over: false, // 结束waterfall加载
       scrollEl: null, // 滚动的div
       prev: 0,
-      noneText: true
+      noneText: false
     };
   },
   computed: {
     colWidth () {
       // 每一列的宽度
-      let width = 0;
-      try {
-        width = Math.max(this.imgSize['live'].width, this.imgSize['static'].width);
-        return width + this.gap;
-      } catch (error) { }
-      width = this.getTargetWidth() || this.imgWidth
+      let width = this.getTargetWidth() || this.imgWidth
       return width + this.gap;
     },
     imgWidth_c () {
       // 对于移动端重新计算图片宽度`
-      return this.isMobile ? window.innerWidth / 2 - this.mobileGap : (this.getTargetWidth() || this.imgWidth);
+      return this.isMobile
+        ? window.innerWidth / 2 - this.mobileGap
+        : (this.getTargetWidth() || this.imgWidth);
     },
     hasLoadingSlot () {
       return !!this.$scopedSlots.loading;
@@ -255,28 +227,22 @@ export default {
     this.bindClickEvent();
     this.loadingMiddle();
 
-    // this.preload();
+    this.preload();
     this.cols = this.calcuCols();
-
-    this.$on('preloaded', () => {
-      console.log('preloaded')
-      this.imagesList = this.imgsArr.concat([]);
+    this.$on("preloaded", () => {
+      this.isFirstLoad = false;
+      this.imgsArr_c = this.imgsArr.concat([]); // 预加载完成，这时才开始渲染
       this.$nextTick(() => {
         this.isPreloading = false;
         this.imgBoxEls = this.$el.getElementsByClassName("img-box");
         this.beginIndex = 0;
         this.waterfall();
       });
+
     });
-
-    if (!this.isMobile && !this.width) {
+    if (!this.isMobile && !this.width)
       window.addEventListener("resize", this.response);
-    }
-
-    if (this.isMobile && this.enablePullDownEvent) {
-      this.pullDown();
-    }
-
+    if (this.isMobile && this.enablePullDownEvent) this.pullDown();
     this.scroll();
 
     if (this.domId) {
@@ -313,9 +279,10 @@ export default {
     },
     imgsArr (newV, oldV) {
       let self = this;
-      if (this.imagesList.length > newV.length || (this.imagesList.length > 0 && newV[0] && !newV[0]._height)) {
-        const scrollEl = this.$el.querySelector(".vue-waterfall-easy-scroll");
-        scrollEl.scrollTop = 0; // reset scroll
+      if (
+        this.imgsArr_c.length > newV.length ||
+        (this.imgsArr_c.length > 0 && newV[0] && !newV[0]._height)
+      ) {
         this.reset();
       }
       this.preload().then(res => {
@@ -374,7 +341,7 @@ export default {
       }
       // Trick
       if (liveType === 'MEETING') {
-        r = r.replace('直播', '')
+        r = r.replace('直播', '会议')
       }
       return r || ''
     },
@@ -391,18 +358,6 @@ export default {
       }
       return '';
     },
-    // 优化加载地址
-    getOptimizedSrc (imageURL, type) {
-      return imageURL;
-      this.imgSize = this.imgSize || {};
-      const define = this.imgSize[type] || { width: this.imgWidth };
-      const width = Math.ceil(define.width || 400);
-      if (width && imageURL && imageURL.indexOf('aliyuncs.com') !== -1 && imageURL.indexOf('oss') !== -1) {
-        imageURL += `?x-oss-process=image/resize,w_${width}`
-        return imageURL;
-      }
-      return imageURL;
-    },
     // ==1== 预加载
     preload (src, imgIndex) {
       return new Promise((resolve, reject) => {
@@ -410,7 +365,6 @@ export default {
         this.imgsArr.forEach((imgItem, imgIndex) => {
           if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
           this.imgsArr[imgIndex].realPath = this.loadingImg
-          // this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
 
           // 无图时
           if (!imgItem[this.srcKey]) {
@@ -419,57 +373,46 @@ export default {
 
             // 支持无图模式
             if (this.loadedCount == this.imgsArr.length) {
-              // this.$emit("preloaded");
+              this.$emit("preloaded");
+              resolve()
             }
             return;
           }
 
-          const optimizedImage = this.getOptimizedSrc(imgItem[this.srcKey], imgItem.type);
-
           var oImg = new Image();
-          oImg.src = optimizedImage;
+          oImg.src = imgItem[this.srcKey];
 
           // 图片加载成功处理逻辑
           const onload = e => {
             // console.log("onload", imgIndex);
-            // 预加载图片, 计算图片容器的高
+            this.loadedCount++;
+            // 预加载图片，计算图片容器的高
 
             if (e.type === 'load') {
               const imageHeight = Math.round(this.imgWidth_c / (oImg.width / oImg.height));
+              // console.log(e.target, oImg.width, oImg.height, imageHeight);
               this.imgsArr[imgIndex]._height = imageHeight;
               this.imgsArr[imgIndex]._load = true;
             } else {
               this.imgsArr[imgIndex]._height = this.isMobile ? this.imgWidth_c : this.imgWidth;
             }
 
-            this.loadedCount++;
-            if (this.loadedCount == this.imgsArr.length) {
-              // this.$emit("preloaded");
+            if (e.type == "error") {
+              this.imgsArr[imgIndex]._error = true;
+              this.$emit("imgError", this.imgsArr[imgIndex]);
+              reject(this.imgsArr[imgIndex])
             }
-            // console.log('load img', imgIndex, optimizedImage);
-            this.imgsArr[imgIndex].realPath = optimizedImage;
-            this.imagesList[imgIndex].realPath = optimizedImage;
+
+            if (this.loadedCount == this.imgsArr.length) {
+              this.$emit("preloaded");
+              resolve()
+            }
+            this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
           };
 
-          const onerror = e => {
-            console.log('img load error', e);
-            this.loadedCount++;
-            if (this.loadedCount == this.imgsArr.length) {
-              // this.$emit("preloaded");
-            }
-            // if (e.type == "error") {
-            //   this.imgsArr[imgIndex]._error = true;
-            //   this.$emit("imgError", this.imgsArr[imgIndex]);
-            //   reject(this.imgsArr[imgIndex])
-            // }
-          }
-
           oImg.onload = onload;
-          oImg.onerror = onerror;
+          oImg.onerror = onload;
         });
-        // 循环预处理结束
-        this.$emit("preloaded");
-        resolve();
       })
     },
     // ==2== 计算cols
@@ -483,9 +426,7 @@ export default {
     // ==3== waterfall 布局
     waterfall () {
       // console.log('瀑布流布局计算', this.imgsArr.length, this.beginIndex);
-      if (!this.imgBoxEls || !this.imgBoxEls.length) {
-        return false;
-      }
+      if (!this.imgBoxEls) return;
       var top;
       var left;
       var height;
@@ -564,6 +505,7 @@ export default {
           minHeight - this.reachBottomDistance
         ) {
           this.isPreloading = true;
+          // console.log('scroll-bottom')
           this.$emit("scroll-bottom"); // 滚动触底
         }
       }
@@ -620,7 +562,7 @@ export default {
             targetEl = targetEl.parentNode;
           }
           var index = targetEl.getAttribute("data-index");
-          this.$emit("select-item", e, this.imagesList[index]);
+          this.$emit("select-item", e, this.imgsArr_c[index]);
         });
     },
     // ==7== 下拉事件
@@ -656,7 +598,7 @@ export default {
         -scrollbarWidth / 2 + "px";
     },
     reset () {
-      this.imagesList = [];
+      this.imgsArr_c = [];
       this.beginIndex = 0;
       this.loadedCount = 0;
       this.isFirstLoad = true;
@@ -733,7 +675,6 @@ export default {
       }
     }
     .img-wraper {
-      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;

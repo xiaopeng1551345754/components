@@ -1,21 +1,22 @@
 <template>
   <div class="hex-waterfall">
-    <vue-waterfall :imgs-arr="list"
-                   @scroll-bottom="scrollBottom"
-                   @select-item="selectItem"
-                   @scroll="scroll"
-                   :gap="gap"
-                   :max-cols="maxCols"
-                   :loading-img="loadingImg"
-                   :lang="lang"
-                   :lang-info="langInfo"
-                   :dom-id="domId"
-                   :img-size="imgSize"
-                   :img-width="imgWidth"
-                   :none-data='noneData'
-                   :vertical-gap="verticalGap"
-                   :type="type"
-                   :show-loading="showLoading">
+    <vue-waterfall
+      :imgs-arr="list"
+      @scroll-bottom="scrollBottom"
+      @select-item="selectItem"
+      @scroll="scroll"
+      :gap="gap"
+      :max-cols="maxCols"
+      :loading-img="loadingImg"
+      :lang="lang"
+      :lang-info="langInfo"
+      :dom-id="domId"
+      :img-size="imgSize"
+      :img-width="imgWidth"
+      :none-data='noneData'
+      :vertical-gap="verticalGap"
+      :type="type"
+    >
     </vue-waterfall>
   </div>
 </template>
@@ -90,9 +91,6 @@ export default {
     type: {
       type: String,
       default: 'pc'
-    },
-    showLoading: {
-      type: Boolean
     }
   },
   data () {
