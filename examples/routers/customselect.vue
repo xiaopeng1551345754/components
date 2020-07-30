@@ -2,23 +2,26 @@
   <div class="screen">
     {{ selected.value }} {{ search }}
     <div class="control">
-      <customselect :list="list"
-                    :search.sync="search"
-                    :placeholder="placeholder"
-                    :key="key"
-                    :value="value"
-                    :disabled="disabled"
-                    :selected.sync="selected"
-                    :show-del="showDel"
-                    @search="searchT"
-                    @select="select"></customselect>
+      <customselect
+        :list="list"
+        :search.sync="search"
+        :placeholder="placeholder"
+        :key="key"
+        :value="value"
+        :disabled="disabled"
+        :selected.sync="selected"
+        :show-del="showDel"
+        :filter="filter"
+        @search="searchT"
+        @select="select"
+      ></customselect>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       list: [],
       search: "",
@@ -30,18 +33,19 @@ export default {
         text: 7,
         value: 7,
       },
-      showDel: true
+      showDel: true,
+      filter: false,
     };
   },
   methods: {
-    select () {
+    select() {
       // console.log(this.selected);
     },
-    searchT () {
+    searchT() {
       console.log(this.search);
     },
   },
-  ready () {
+  ready() {
     setTimeout(() => {
       for (let i = 1; i <= 10; i++) {
         this.list.push({
