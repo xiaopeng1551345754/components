@@ -1,52 +1,38 @@
 <template>
   <div class="ali_time_line">
     <div class="ali_time_line_head">
-      <div class="items time">
-        {{t('time')}}
-      </div>
+      <div class="items time">{{ t("time") }}</div>
       <div class="items line_wrap"></div>
-      <div class="items theme">
-        {{t('theme')}}
-      </div>
-      <div class="items type">
-        {{t('type')}}
-      </div>
-      <div class="items people">
-        {{t('people')}}
-      </div>
-      <div class="items select">
-        {{t('select')}}
-      </div>
+      <div class="items theme">{{ t("theme") }}</div>
+      <div class="items type">{{ t("type") }}</div>
+      <div class="items people">{{ t("people") }}</div>
+      <div class="items select">{{ t("select") }}</div>
     </div>
     <div class="ali_time_line_item_wrap">
-      <div class="ali_time_line_item" v-for='(idx, item) in data' :key='idx'>
-        <div class="items time">
-          {{item.time}}
-        </div>
-        <div class="items line_wrap" :class="{'first':idx===0,'end':idx === data.length-1,'only':data.length === 1}">
-          <div class="line">
-
-          </div>
+      <div class="ali_time_line_item" v-for="(idx, item) in data" :key="idx">
+        <div class="items time">{{ item.time }}</div>
+        <div
+          class="items line_wrap"
+          :class="{
+            first: idx === 0,
+            end: idx === data.length - 1,
+            only: data.length === 1,
+          }"
+        >
+          <div class="line"></div>
           <div class="circle">
-            <div class="inner">
-
-            </div>
+            <div class="inner"></div>
           </div>
         </div>
         <div class="right_wrap">
           <div class="right">
-            <div class="items theme">
-              {{item.theme}}
+            <div class="items theme">{{ item.theme }}</div>
+            <div class="items type">{{ item.type }}</div>
+            <div class="items people">{{ item.people }}</div>
+            <div class="items select" @click="select(item)">
+              {{ t("watch") }}
             </div>
-            <div class="items type">
-              {{item.type}}
-            </div>
-            <div class="items people">
-              {{item.people}}
-            </div>
-            <div class="items select" @click='select(item)'>
-              {{t('watch')}}
-            </div>
+            <div class="items select" @click="del(item)">{{ t("del") }}</div>
           </div>
         </div>
       </div>
@@ -56,13 +42,13 @@
 
 <script>
 export default {
-  name: 'timeline',
+  name: "timeline",
   props: {
     data: {
       type: Array,
-      default () {
-        return []
-      }
+      default() {
+        return [];
+      },
     },
     lang: {
       type: String,
@@ -70,50 +56,55 @@ export default {
     },
     langInfo: {
       type: Object,
-      default () {
+      default() {
         return {
           zh: {
-            time: '时间',
-            theme: '主题',
-            type: '类型',
-            people: '主要人员',
-            select: '操作',
-            watch: '查看'
+            time: "时间",
+            theme: "主题",
+            type: "类型",
+            people: "主要人员",
+            select: "操作",
+            watch: "查看",
+            del: "删除",
           },
           en: {
-            time: 'time',
-            theme: 'theme',
-            type: 'type',
-            people: 'members',
-            select: 'handle',
-            watch: 'see'
-          }
-        }
-      }
-    }
+            time: "time",
+            theme: "theme",
+            type: "type",
+            people: "members",
+            select: "handle",
+            watch: "see",
+            del: "delete",
+          },
+        };
+      },
+    },
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {
     t(keypath) {
-      const o = this.langInfo[this.lang] || {}
-      const keys = keypath.split('.')
-      let r = o
-      let key
-      for(let i = 0; i < keys.length; i++) {
-        key = keys[i]
-        if (key && typeof r === 'object') {
-          r = r[key]
+      const o = this.langInfo[this.lang] || {};
+      const keys = keypath.split(".");
+      let r = o;
+      let key;
+      for (let i = 0; i < keys.length; i++) {
+        key = keys[i];
+        if (key && typeof r === "object") {
+          r = r[key];
         }
       }
-      return r || ''
+      return r || "";
     },
-    select (item) {
-      this.$emit('select', item)
-    }
-  }
-}
+    select(item) {
+      this.$emit("select", item);
+    },
+    del(item) {
+      this.$emit("del", item);
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -130,22 +121,25 @@ export default {
       display: none;
     }
   }
-  .ali_time_line_head, .ali_time_line_item{
+  .ali_time_line_head,
+  .ali_time_line_item {
     flex-shrink: 0;
     display: flex;
     cursor: pointer;
-    &:hover .right{
-      background:#fff !important;
-      border:1px solid rgba(46,76,244,1) !important;
-      box-shadow:1px 1px 2px 0px rgba(0,0,0,0.25),-6px 8px 7px 2px rgba(69,86,89,0.15) !important;
-      transition: .3s;
+    &:hover .right {
+      background: #fff !important;
+      border: 1px solid rgba(46, 76, 244, 1) !important;
+      box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.25),
+        -6px 8px 7px 2px rgba(69, 86, 89, 0.15) !important;
+      transition: 0.3s;
       &::before {
-        border-bottom: 1px solid rgba(46,76,244,1) !important ;
-        border-left: 1px solid rgba(46,76,244,1) !important ;
-        transition: .3s;
+        border-bottom: 1px solid rgba(46, 76, 244, 1) !important ;
+        border-left: 1px solid rgba(46, 76, 244, 1) !important ;
+        transition: 0.3s;
         z-index: 0;
         background: #fff !important;
-        box-shadow:0px 0px 0px 0px rgba(0,0,0,0.25),-6px 8px 7px 2px rgba(69,86,89,0.15) !important;
+        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.25),
+          -6px 8px 7px 2px rgba(69, 86, 89, 0.15) !important;
       }
       // &::after {
       //   position: absolute;
@@ -167,8 +161,8 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       font-size: 18px;
-      color:rgba(0,0,0,0.65);
-      text-shadow:1px 1px 2px rgba(0,0,0,0.25);
+      color: rgba(0, 0, 0, 0.65);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
       line-height: 22px;
       padding: 12px 0;
     }
@@ -178,14 +172,15 @@ export default {
       .right {
         display: flex;
         font-size: 18px;
-        background:#f5f5f5;
-        box-shadow:1px 1px 2px 0px rgba(0,0,0,0.25),0px 0px 2px 0px rgba(0,0,0,0.15);
+        background: #f5f5f5;
+        box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.25),
+          0px 0px 2px 0px rgba(0, 0, 0, 0.15);
         padding-left: 14px;
         position: relative;
-        border:1px solid rgba(0,0,0,0);
+        border: 1px solid rgba(0, 0, 0, 0);
         &:before {
           position: absolute;
-          content: '';
+          content: "";
           right: 100%;
           top: 50%;
           transform: translate(47.5%, -50%) rotate(45deg);
@@ -195,13 +190,13 @@ export default {
         }
       }
     }
-    .time{
+    .time {
       width: 140px;
       text-align: right;
-      color:rgba(0,0,0,0.65);
-      font-size:24px;
-    } 
-    .line_wrap{
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 24px;
+    }
+    .line_wrap {
       margin-left: 16px;
       width: 28px;
       position: relative;
@@ -212,7 +207,7 @@ export default {
         left: 50%;
         top: 0;
         transform: translateX(-50%);
-        background: #2E4CF4;
+        background: #2e4cf4;
       }
       .circle {
         width: 14px;
@@ -221,7 +216,7 @@ export default {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        border: 1px solid #2E4CF4;
+        border: 1px solid #2e4cf4;
         border-radius: 50%;
         .inner {
           width: 10px;
@@ -230,7 +225,7 @@ export default {
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-          background: #2E4CF4;
+          background: #2e4cf4;
           border-radius: 50%;
         }
       }
@@ -251,18 +246,18 @@ export default {
         height: 0;
       }
     }
-    .theme{
+    .theme {
       width: 282px;
     }
-    .type{
+    .type {
       width: 150px;
     }
-    .people{
+    .people {
       width: 322px;
     }
-    .select{
+    .select {
       width: 70px;
-      color: #2E4CF4;
+      color: #2e4cf4;
       text-shadow: 0;
       cursor: pointer;
     }
@@ -270,8 +265,8 @@ export default {
   .ali_time_line_head {
     .items {
       font-size: 20px;
-      color:rgba(0,0,0,0.85);
-      text-shadow:1px 1px 2px rgba(0,0,0,0.25);
+      color: rgba(0, 0, 0, 0.85);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
     }
     .theme {
       margin-left: 28px;
