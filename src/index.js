@@ -1,4 +1,6 @@
+import './styles/style.css'
 import navCate from "./components/navcate/index.vue";
+import r3checked from "./components/navcate/second.vue"; //三级联动多选
 import waterfall from "./components/waterfall/index.vue";
 import area from "./components/area/index.vue";
 import timeline from "./components/timeline/index.vue";
@@ -31,7 +33,8 @@ const Components = {
   menulist,
   customselect,
   tablelist,
-  ronglvtable
+  ronglvtable,
+  r3checked,
 };
 
 const install = function (Vue, opts = {}) {
@@ -45,4 +48,6 @@ if (typeof window !== "undefined" && window.Vue) {
   install(window.Vue);
 }
 
-module.exports = Object.assign(Components, { install }); // eslint-disable-line no-undef
+module.exports = Object.assign(Components, {
+  install
+}); // eslint-disable-line no-undef
