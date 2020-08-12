@@ -30,6 +30,11 @@ router.map({
       require(["./routers/navcate.vue"], resolve);
     },
   },
+  "/r3checked": {
+    component: function (resolve) {
+      require(["./routers/r3checked.vue"], resolve);
+    },
+  },
   "/area": {
     component: function (resolve) {
       require(["./routers/area.vue"], resolve);
@@ -106,7 +111,7 @@ router.beforeEach(function () {
   window.scrollTo(0, 0);
 });
 
-router.afterEach(function (transition) { });
+router.afterEach(function (transition) {});
 
 router.redirect({
   "*": "/customselect",
