@@ -14,7 +14,7 @@ import menulist from "./components/menulist/index.vue";
 import customselect from "./components/custom_select/index.vue";
 import tablelist from './components/tablelist/index.vue';
 import ronglvtable from './components/ronglvtable/index.vue';
-
+import datetimepicker from './components/datetimepicker/index.vue';
 const Components = {
   navCate,
   waterfall,
@@ -31,7 +31,8 @@ const Components = {
   menulist,
   customselect,
   tablelist,
-  ronglvtable
+  ronglvtable,
+  datetimepicker
 };
 
 const install = function (Vue, opts = {}) {
@@ -45,4 +46,6 @@ if (typeof window !== "undefined" && window.Vue) {
   install(window.Vue);
 }
 
-module.exports = Object.assign(Components, { install }); // eslint-disable-line no-undef
+module.exports = Object.assign(Components, {
+  install
+}); // eslint-disable-line no-undef

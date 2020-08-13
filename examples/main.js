@@ -99,6 +99,11 @@ router.map({
     component: function (resolve) {
       require(['./routers/ronglvtable.vue'], resolve);
     }
+  },
+  '/datetimepicker': {
+    component: function (resolve) {
+      require(['./routers/datetimepicker.vue'], resolve);
+    }
   }
 });
 
@@ -106,7 +111,7 @@ router.beforeEach(function () {
   window.scrollTo(0, 0);
 });
 
-router.afterEach(function (transition) { });
+router.afterEach(function (transition) {});
 
 router.redirect({
   "*": "/customselect",
