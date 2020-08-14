@@ -120,7 +120,11 @@ export default {
       this.visible = false;
     },
     cancel () {
-      this.lastDate = this.seletedData;
+      if (this.seletedData) {
+        this.lastDate = this.seletedData;
+      } else {
+        this.lastDate = this.defaultDate;
+      }
       this.visible = false;
       this.$emit('cancel');
     },
