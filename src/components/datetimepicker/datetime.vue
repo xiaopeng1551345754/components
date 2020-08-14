@@ -8,9 +8,9 @@
     <div class="item-scroll"
          :style="{transform: transY}">
       <div class="item"
-           :data-value="data[selectIndex].name"
+           :data-value="data[selectIndex]"
            v-for="(index,item) in data"
-           :key="index">{{ item.name }}</div>
+           :key="index">{{ item }}</div>
     </div>
   </div>
 </template>
@@ -27,6 +27,10 @@ export default {
     defaultDate: {
       type: String,
       default: ''
+    },
+    lastDate: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -37,7 +41,8 @@ export default {
       idx: 0,
       itemHeight: 34,
       selectIndex: 0,
-      flag: true
+      flag: true,
+      lastFlag: false
     }
   },
   computed: {
@@ -46,24 +51,13 @@ export default {
     },
     transY () {
       if (this.defaultDate && this.flag) {
-        var defDate = this.defaultDate.split(' ');
-        for (let i = 0; i < this.data.length; i++) {
-          for (let j = 0; j < defDate.length; j++) {
-            if (this.data[i].name === defDate[j]) {
-              this.idx = i - 2;
-            }
-          }
-        }
+        this.handle(this.defaultDate);
       }
       if (!this.defaultDate && this.flag) {
-        var defDate = this.formatter().split(' ');
-        for (let i = 0; i < this.data.length; i++) {
-          for (let j = 0; j < defDate.length; j++) {
-            if (this.data[i].name === defDate[j]) {
-              this.idx = i - 2;
-            }
-          }
-        }
+        this.handle(this.formatter());
+      }
+      if (this.lastDate && !this.lastFlag) {
+        this.handle(this.lastDate);
       }
       this.selectIndex = this.idx + 2;
       return `translateY(${-(this.idx * this.itemHeight)}px)`;
@@ -77,6 +71,16 @@ export default {
     }
   },
   methods: {
+    handle (data) {
+      var defDate = data.split(' ');
+      for (let i = 0; i < this.data.length; i++) {
+        for (let j = 0; j < defDate.length; j++) {
+          if (this.data[i] === defDate[j]) {
+            this.idx = i - 2;
+          }
+        }
+      }
+    },
     formatter () {
       var date = new Date();
       var year = date.getFullYear();
@@ -100,6 +104,7 @@ export default {
     },
     start (e) {
       this.flag = false;
+      this.lastFlag = true;
       if (this.idx) {
         this.currentIndex = this.idx;
       }
@@ -138,8 +143,10 @@ export default {
           }
         }
       }
+      this.lastDate = ''
+      this.lastFlag = false;
       this.selectIndex = this.idx + 2;
-      this.getSelectValue(this.selectIndex, index)
+      this.getSelectValue(this.selectIndex, index);
     },
     getSelectValue (selectIndex, index) {
       var data = document.getElementsByClassName('item-scroll')[index].getElementsByClassName('item')[selectIndex].getAttribute('data-value');

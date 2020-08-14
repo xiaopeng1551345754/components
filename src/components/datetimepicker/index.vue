@@ -12,6 +12,7 @@
                    :data="item"
                    :data-index="index"
                    :default-date="defaultDate"
+                   :last-date="lastDate"
                    @getselectvalue="getselectvalue"></date-time>
       </div>
       <div class="date-time-btn">
@@ -36,25 +37,77 @@ export default {
       type: Boolean,
       default: false
     },
-    // 日期列表
-    dateList: {
-      type: Array,
-      default: () => []
-    },
     // 默认的日期
     defaultDate: {
       type: String,
       default: ''
+    },
+    startDate: {
+      type: String,
+      default: ''
+    },
+    endDate: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    dateList () {
+      var arr = [];
+      arr.push(this.getBetweenDateStr(this.startDate, this.endDate));
+      arr.push(this.getTimeArr());
+      return arr;
     }
   },
   data () {
     return {
       seletedData: '',
       seletedDate: '',
-      seletedTime: ''
+      seletedTime: '',
+      lastDate: ''
     }
   },
   methods: {
+    getBetweenDateStr (start, end) {
+      var result = [];
+      var beginDay = start.split("-");
+      var endDay = end.split("-");
+      var diffDay = new Date();
+      var dateList = new Array;
+      var i = 0;
+      diffDay.setDate(beginDay[2]);
+      diffDay.setMonth(beginDay[1] - 1);
+      diffDay.setFullYear(beginDay[0]);
+      result.push(start);
+      while (i == 0) {
+        var countDay = diffDay.getTime() + 24 * 60 * 60 * 1000;
+        diffDay.setTime(countDay);
+        dateList[2] = diffDay.getDate();
+        dateList[1] = diffDay.getMonth() + 1;
+        dateList[0] = diffDay.getFullYear();
+        if (String(dateList[1]).length == 1) { dateList[1] = "0" + dateList[1] };
+        if (String(dateList[2]).length == 1) { dateList[2] = "0" + dateList[2] };
+        result.push(dateList[0] + "-" + dateList[1] + "-" + dateList[2]);
+        if (dateList[0] == endDay[0] && dateList[1] == endDay[1] && dateList[2] == endDay[2]) {          i = 1;
+        }
+      };
+      return result;
+    },
+    getTimeArr () {
+      var arr = [];
+      for (var i = 0; i < 24; i++) {
+        if (i < 10) {
+          i = '0' + i;
+        }
+        for (var j = 0; j < 60; j++) {
+          if (j < 10) {
+            j = '0' + j;
+          }
+          arr.push(i + ':' + j)
+        }
+      }
+      return arr;
+    },
     getselectvalue (data, index) {
       if (index === 0) {
         this.seletedDate = data
@@ -67,6 +120,7 @@ export default {
       this.visible = false;
     },
     cancel () {
+      this.lastDate = this.seletedData;
       this.visible = false;
       this.$emit('cancel');
     },
