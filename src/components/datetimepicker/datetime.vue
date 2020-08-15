@@ -60,14 +60,8 @@ export default {
         this.handle(this.lastDate);
       }
       this.selectIndex = this.idx + 2;
+      this.$emit('getselectvalue', this.data[this.idx + 2], this.domIndex);
       return `translateY(${-(this.idx * this.itemHeight)}px)`;
-    }
-  },
-  watch: {
-    selectIndex () {
-      if (this.selectIndex) {
-        this.getSelectValue(this.selectIndex, this.domIndex);
-      }
     }
   },
   methods: {
@@ -86,21 +80,13 @@ export default {
       var year = date.getFullYear();
       var month = date.getMonth() + 1;    //js从0开始取 
       var date1 = date.getDate();
-      var hour = date.getHours();
-      var minutes = date.getMinutes();
       if (month < 10) {
         month = `0${month}`;
       }
       if (date1 < 10) {
         data1 = `0${data1}`;
       }
-      if (hour < 10) {
-        hour = `0${hour}`;
-      }
-      if (minutes < 10) {
-        minutes = `0${minutes}`;
-      }
-      return `${year}-${month}-${date1} ${hour}:${minutes}`;
+      return `${year}-${month}-${date1} 00:00`;
     },
     start (e) {
       this.flag = false;
