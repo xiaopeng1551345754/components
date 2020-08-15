@@ -16,7 +16,7 @@ import menulist from "./components/menulist/index.vue";
 import customselect from "./components/custom_select/index.vue";
 import tablelist from './components/tablelist/index.vue';
 import ronglvtable from './components/ronglvtable/index.vue';
-
+import datetimepicker from './components/datetimepicker/index.vue';
 const Components = {
   navCate,
   waterfall,
@@ -34,7 +34,11 @@ const Components = {
   customselect,
   tablelist,
   ronglvtable,
+<<<<<<< HEAD
   r3checked,
+=======
+  datetimepicker
+>>>>>>> 71a36e5873212b401fb8f4cc6db9d7b941046cd4
 };
 
 const install = function (Vue, opts = {}) {

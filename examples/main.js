@@ -104,6 +104,11 @@ router.map({
     component: function (resolve) {
       require(['./routers/ronglvtable.vue'], resolve);
     }
+  },
+  '/datetimepicker': {
+    component: function (resolve) {
+      require(['./routers/datetimepicker.vue'], resolve);
+    }
   }
 });
 
