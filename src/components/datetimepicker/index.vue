@@ -1,8 +1,7 @@
 <template>
   <div class="date-time-picker">
     <div :class="{'date-time-mask':visible}"
-         @click="maskClick"
-         @mousedown="maskClick"></div>
+         @click="cancel"></div>
     <div class="date-time-dialog"
          :class="{'date-time-dialog-show':visible}">
       <div class="date-time-content">
@@ -112,10 +111,7 @@ export default {
       if (index === 1) {
         this.seletedTime = data
       }
-    },
-    maskClick () {
-      this.visible = false;
-      this.$emit('maskclick')
+      this.lastDate = ''
     },
     cancel () {
       if (this.seletedData) {

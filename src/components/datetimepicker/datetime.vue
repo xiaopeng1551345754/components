@@ -56,6 +56,7 @@ export default {
       if (!this.defaultDate && this.flag) {
         this.handle(this.formatter());
       }
+
       if (this.lastDate && !this.lastFlag) {
         this.handle(this.lastDate);
       }
@@ -67,6 +68,9 @@ export default {
   methods: {
     handle (data) {
       var defDate = data.split(' ');
+      if (!defDate[1]) {
+        defDate[1] = '00:00';
+      }
       for (let i = 0; i < this.data.length; i++) {
         for (let j = 0; j < defDate.length; j++) {
           if (this.data[i] === defDate[j]) {
@@ -129,10 +133,9 @@ export default {
           }
         }
       }
-      this.lastDate = ''
-      this.lastFlag = false;
       this.selectIndex = this.idx + 2;
-      this.getSelectValue(this.selectIndex, index);
+      this.getSelectValue(this.selectIndex, index)
+      this.lastFlag = false;
     },
     getSelectValue (selectIndex, index) {
       var data = document.getElementsByClassName('item-scroll')[index].getElementsByClassName('item')[selectIndex].getAttribute('data-value');

@@ -9,7 +9,6 @@
                     :start-date="startDate"
                     :end-date="endDate"
                     @confirm="confirm"
-                    @maskclick="maskClick"
                     @cancel="cancel"></datetimepicker>
   </div>
 </template>
@@ -52,8 +51,7 @@ export default {
       this.selectDate = date;
     },
     cancel () {
-    },
-    maskClick () {
+
     }
   }
 }
